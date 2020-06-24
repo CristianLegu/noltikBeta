@@ -1,0 +1,283 @@
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormGroup, Validators, FormBuilder, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../../../common/dialog/dialog.component';
+import { UsuarioService } from '../../../services/usuario/usuario.service'
+import { AuthService } from '../../../services/auth/auth.service';
+import { ActivatedRoute } from '@angular/router';
+import { Usuario, Rol, DialogDataEliminar } from '../../../common/interface';//'app/common/interface';
+import { DialogeliminarComponent } from '../../../common/dialogeliminar/dialogeliminar.component';//'src/app/common/dialogeliminar/dialogeliminar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ErrorStateMatcher } from '@angular/material/core';
+
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const invalidCtrl = !!(control && control.invalid && control.parent.dirty);
+    const invalidParent = !!(control && control.parent && control.parent.invalid && control.parent.dirty);
+
+    return (invalidCtrl || invalidParent);
+  }
+}
+
+export class MyErrorStateMatcherEmail implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
+
+@Component({
+  selector: 'app-altausuario',
+  templateUrl: './altausuario.component.html',
+  styleUrls: ['./altausuario.component.scss']
+})
+export class AltausuarioComponent implements OnInit, OnDestroy {
+
+  mensaje: string;
+  matcher = new MyErrorStateMatcher();
+  matcherEmail = new MyErrorStateMatcherEmail();
+  altauser: FormGroup;
+  actRoute: string;
+  load: boolean = false;
+  jwt: string;
+  usuario: Usuario;
+  mensajeBienvenida: string;
+  selected: string;
+  dataEliminar: DialogDataEliminar = { id: '', jwt: '', mensaje: '', tipo: '' };
+  valida = [Validators.required, Validators.minLength(6)];
+
+  habilitaNU: boolean = false;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private dialog: MatDialog,
+    private usuarioService: UsuarioService,
+    private fb: FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private snackBar: MatSnackBar
+  ) {
+
+    this.actRoute = this.activatedRoute.snapshot.params['id'];
+
+    if (this.actRoute != '0') {
+      this.valida = [Validators.minLength(6)];
+    }
+    //FormGroup
+    this.altauser = this.fb.group({
+      nombre: ['', [Validators.required]],
+      nombreUsuario: ['', [Validators.required, Validators.minLength(4)]],
+      contrasena: ['', this.valida],
+      confirmcontrasena: [''],
+      email: ['', [Validators.required, Validators.email]],
+      rol: ['ROLE_USUARIO', [Validators.required]],
+    },
+      {
+        //validator: this.checkPasswords
+      }
+    );
+
+  }
+
+  //Arreglo roles
+  roles: Rol[] = [
+    { value: 'se-0', viewValue: 'Sin Especificar' },
+    { value: 'ROLE_USUARIO', viewValue: 'ROL_USUARIO' },
+    { value: 'ROLE_ADMIN', viewValue: 'ROL_ADMIN' }
+  ];
+
+  color = 'accent';
+
+  ngOnDestroy() {
+    this.altauser.patchValue({
+      nombre: '',
+      nombreUsuario: '',
+      email: '',
+      rol: '',
+      contrasena: ''
+    });
+  }
+
+  ngOnInit() {
+    this.load = true;
+    this.jwt = localStorage.getItem('token');
+    this.altauser.get('rol').disable();
+
+    //Valida que sea un usuario válido
+    if (this.actRoute != '0') {
+      this.usuarioService.obtenerUsuario(this.jwt, this.actRoute).then(ok => {
+        this.usuario = ok.body;
+        this.load = false;
+        this.habilitaNU = true;
+        this.pasarValores(this.usuario);
+      }).catch(error => {
+        this.load = false;
+        this.mensaje = error.error.mensaje;
+        this.openDialog(this.mensaje);
+      });
+    }
+    else {
+      this.load = false;
+      this.mensajeBienvenida = 'Dar de alta usuario';
+    }
+  }
+
+  pasarValores(usuario: any) {
+    if (this.actRoute != '0') {
+      this.mensajeBienvenida = 'Usuario ' + usuario.nombre;
+    }
+
+    if (usuario.rol == 'ROLE_USUARIO')
+      this.selected = 'ROLE_USUARIO';
+
+    if (usuario.rol == 'ROLE_ADMIN')
+      this.selected = 'ROLE_ADMIN';
+
+    this.altauser.patchValue({
+      nombre: usuario.nombre,
+      nombreUsuario: usuario.nombreUsuario,
+      email: usuario.email,
+      rol: usuario.rol,
+
+      contrasena: ''
+    })
+
+    this.altauser.get('nombreUsuario').disable();
+    this.altauser.get('rol').disable();
+
+  }
+
+  guardar() {
+    this.load = true;
+    if (this.altauser.valid) {
+      if (this.actRoute == '0') {
+        if (this.altauser.value.contrasena != this.altauser.value.confirmcontrasena) {
+          this.load = false;
+          this.openSnackBar("Las contraseñas no coinciden, favor de revisar", "Aceptar");
+        }
+        else {
+          this.altauser.patchValue({
+            rol: 'ROLE_USUARIO',
+          });
+          this.usuarioService.setAlta(this.jwt, this.altauser)
+            .then(ok => {
+             // console.log(ok);
+              this.load = false;
+              this.mensaje = ok.mensaje;//"El usuario se creó correctamente";
+              this.openDialog(this.mensaje);
+            })
+            .catch(err => {
+             // console.log(err);
+              let mensaje: string;
+              mensaje = err.error.mensaje;
+              this.openDialog(mensaje);
+              this.load = false;
+            });
+        }
+      }
+      else {
+        this.load = false;
+        if (this.altauser.value.contrasena != this.altauser.value.confirmcontrasena) {
+          this.openSnackBar("Las contraseñas no coinciden, favor de revisar", "Aceptar");
+        }
+        else {
+          //console.log(this.altauser.get('nombreUsuario').touched);
+
+          this.usuarioService.modifica(this.jwt, this.altauser, this.actRoute)
+            .then(ok => {
+              this.load = false;
+              this.mensaje = ok.mensaje//"El usuario se actualizó correctamente";
+              this.openDialog(this.mensaje);
+            })
+            .catch(error => {
+             // console.log(error);
+              let mensaje: string;
+              mensaje = error.error.mensaje;
+              this.openDialog(mensaje);
+              this.load = false;
+            });
+
+        }
+      }
+
+    }
+    else {
+      this.load = false;
+      this.openSnackBar("Favor de llenar los campos obligatiorios", "Aceptar");
+    }
+  }
+
+  eliminar() {
+    this.load = true;
+    this.openDialogEliminar();
+  }
+
+  openDialogEliminar(): void {
+    this.load = false;
+    this.dataEliminar.mensaje = '¿Desea eliminar al usuario ' + this.usuario.nombre + '?';
+    this.dataEliminar.id = this.actRoute;
+    this.dataEliminar.jwt = this.jwt;
+    this.dataEliminar.tipo = 'usuarios'
+
+
+    const dialogRef = this.dialog.open(DialogeliminarComponent, {
+      width: '350px',
+      data: {
+        mensaje: this.dataEliminar.mensaje,
+        datos: this.dataEliminar
+      }
+
+    });
+
+  }
+
+  openDialog(mensaje: string): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '350px',
+      data: { mensaje: mensaje }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.router.navigate(["/usuarios"]);
+    });
+    /*
+        if (this.altauser.get('nombreUsuario').touched) {
+          this.authService.logout();
+          this.router.navigateByUrl('/ingresar');
+        } else {
+        }
+     */
+  }
+
+  get optionConfirm() {
+    return this.altauser.get('contrasena') as FormControl;
+  }
+
+  checkPasswords(group: FormGroup) {
+    let pass = group.get('contrasena').value;
+    let confirmPass = group.get('confirmcontrasena').value;
+
+    return null//pass === confirmPass ? null : { notSame: true }
+  }
+
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
+
+  ruta_usuario() {
+    this.altauser.patchValue({
+      nombre: '',
+      nombreUsuario: '',
+      email: '',
+      rol: '',
+      contrasena: ''
+    });
+    this.router.navigate(["/usuarios"]);
+  }
+
+}

@@ -1,0 +1,129 @@
+<div class="container">
+    <mat-toolbar class="mat-mod">
+        <span>
+            <a mat-flat-button (click)="backListA()" style="background: whitesmoke;">
+                <i class="material-icons">keyboard_backspace</i>
+            </a>
+        </span>
+        <span>{{mensaje}}</span>
+        <span class="space"></span>
+        <span *ngIf="idAnalisis != '0'"> <button mat-button (click)="eliminar()"><i class="material-icons">delete</i> Eliminar Análisis</button></span>
+    </mat-toolbar>
+
+    <form class="form-container" [formGroup]="altaAnalisis">
+        <!--Cuando el analisis ya está en la BD, mostramos estos inputs-->
+        <mat-form-field *ngIf="idAnalisis != '0'" appearance="outline" style="width: 50%;">
+            <mat-label>Médico</mat-label>
+            <input matInput formControlName="medico">
+        </mat-form-field>
+
+        <mat-form-field *ngIf="idAnalisis != '0'" appearance="outline" style="width: 25%;" disabled="true">
+            <mat-label>Área</mat-label>
+            <input matInput formControlName="area">
+        </mat-form-field>
+
+        <!--Cuando el análisis es nuevo, mostramos los inputs donde salen la lista   formControlName="medico"-->
+        <mat-form-field *ngIf="idAnalisis == '0'" appearance="outline" style="width: 50%;">
+            <input type="text" placeholder="Médico" matInput [formControl]="fControl" [matAutocomplete]="auto" />
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="(getArea($event))">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    {{option.nombre}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="idAnalisis == '0'" appearance="outline" style="width: 25%;" disabled="true">
+            <mat-label>Área</mat-label>
+            <input matInput value="{{areaM}}" formControlName="area">
+        </mat-form-field>
+
+        <!--Array de Estudio-->
+        <mat-grid-list cols="5" rowHeight="28px">
+            <div formArrayName="json">
+                <div *ngFor="let a of altaAnalisis.get('json')['controls']; let i=index; let total = index">
+                    <div [formGroupName]="i">
+                        <mat-grid-tile colspan="4" rowspan="2" class="title">
+                            <h4>{{a.value.analisis}}</h4>
+                        </mat-grid-tile>
+                        <mat-grid-tile colspan="1" rowspan="2">
+                            <button mat-flat-button color="warn" *ngIf="(i>0 || btn) && idAnalisis=='0'" (click)="eliminarEstudio(i)">
+                                <i class="material-icons">delete</i> 
+                            </button>
+                        </mat-grid-tile>
+                        <mat-grid-tile colspan="5" rowspan="2" class="title">
+                            {{a.value.subtitulo}}
+                        </mat-grid-tile>
+
+                        <div formArrayName="items">
+                            <div *ngFor="let items of a.get('items').controls; let j=index">
+                                <div [formGroupName]="j">
+                                    <mat-grid-tile colspan="1" rowspan="3">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Prueba</mat-label>
+                                            <input matInput formControlName="prueba">
+                                        </mat-form-field>
+                                    </mat-grid-tile>
+                                    <mat-grid-tile colspan="1" rowspan="3">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Resultados</mat-label>
+                                            <input matInput formControlName="resultados">
+                                        </mat-form-field>
+                                    </mat-grid-tile>
+                                    <mat-grid-tile colspan="1" rowspan="3">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Unidades</mat-label>
+                                            <input matInput formControlName="unidades">
+                                        </mat-form-field>
+                                    </mat-grid-tile>
+                                    <mat-grid-tile colspan="1" rowspan="3">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Referencia</mat-label>
+                                            <input matInput formControlName="referencia">
+                                        </mat-form-field>
+                                    </mat-grid-tile>
+                                    <mat-grid-tile colspan="1" rowspan="3">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Comentario </mat-label>
+                                            <input matInput formControlName="comentario">
+                                        </mat-form-field>
+                                    </mat-grid-tile>
+                                </div>
+                            </div>
+                        </div>
+                        <mat-grid-tile colspan="5" rowspan="4" *ngIf="a.value.subtitulo == this.subtitulofinal ">
+                            <mat-form-field appearance="outline" style="width: 30%;">
+                                <mat-label>Comentario </mat-label>
+                                <textarea matInput formControlName="comentario"></textarea>
+                            </mat-form-field>
+                        </mat-grid-tile>
+                        <!-- -->
+
+                    </div>
+                </div>
+            </div>
+        </mat-grid-list>
+
+        <!--Cuando el análisis es nuevo, mostramos el input para buscar los estudios-->
+        <div *ngIf="idAnalisis == '0'">
+            <mat-form-field appearance="outline" style="width: 50%;">
+                <input type="text" placeholder="Estudio" matInput [formControl]="fControlE" [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFnE" (optionSelected)="(getEstudio($event))">
+                    <mat-option *ngFor="let option of filteredEstudio | async" [value]="option">
+                        {{option.nombre}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+            <button mat-flat-button color="primary" style="margin-bottom: 1em; margin-left: 2em;" (click)="agregaEstudio()">
+                <fa-icon [icon]="faPlusSquare"></fa-icon>
+                Agregar Estudio
+            </button>
+        </div>
+
+        <button mat-flat-button (click)="guardar()" color="primary" style="margin: 3em 5em; width: 20%;">Guardar</button>
+
+    </form>
+
+</div>
+<div class='loading' *ngIf="load">
+    <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,103 @@
+<div class="container" >
+    <mat-toolbar class="mat-mod">
+        <span>
+            <a mat-flat-button (click)="ruta_usuario()" style="background: whitesmoke;">
+                <i class="material-icons">keyboard_backspace</i>
+            </a>
+        </span>
+        <span>{{mensajeBienvenida}}</span>
+        <span class="space"></span>
+        <span *ngIf="actRoute != '0'"> <button mat-button (click)="eliminar()"><i class="material-icons">delete</i>
+                Eliminar Paciente</button></span>
+    </mat-toolbar>
+    <form class="example-container" novalidate [formGroup]="altapac">
+        <mat-form-field appearance="outline" style="width: 70%;">
+            <mat-label>Nombre Completo</mat-label>
+            <input matInput formControlName="nombre" class="separacion">
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="width: 70%;">
+            <mat-label>Dirección</mat-label>
+            <input matInput formControlName="direccion">
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="width: 50%;">
+            <mat-label>Ciudad</mat-label>
+            <input matInput formControlName="ciudad">
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="width: 50%;">
+            <mat-label>Estado</mat-label>
+            <input matInput formControlName="estado">
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="width: 20%;">
+            <mat-label>Código Postal</mat-label>
+            <input matInput #postalCode formControlName="codigopostal">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width: 20%;">
+            <mat-label>Fecha de Nacimiento</mat-label>
+            <input matInput [matDatepicker]="picker" placeholder="Fecha de nacimiento" formControlName="nacimiento">
+            <!--[attr.disabled]="true"-->
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker disabled="false"></mat-datepicker>
+        </mat-form-field>
+        <div formArrayName="telefonos">
+            <button mat-flat-button (click)="agregarTel()" color="primary" style="margin-bottom: 1em;">
+                <fa-icon [icon]="faPlusSquare"></fa-icon>
+                Agregar Teléfono
+            </button>
+
+            <div *ngFor="let mob of telefonos.controls;let i=index">
+                <mat-form-field appearance="outline">
+                    <mat-label>Teléfono {{i + 1}}</mat-label>
+                    <input type="tel" matInput [formControlName]="i">
+                    <mat-icon matSuffix></mat-icon>
+                </mat-form-field>
+                <button mat-flat-button *ngIf="i>0" (click)="quitarTel(i)" color="accent" style="margin-left: 8px;">
+                    Quitar
+                </button>
+            </div>
+        </div>
+        <mat-form-field appearance="outline" style="width: 20%;">
+            <mat-label>Sexo</mat-label>
+            <mat-select formControlName="genero" [(value)]="selected">
+                <mat-option *ngFor="let sex of gen" [value]="sex.value">
+                    {{sex.viewValue}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="width: 20%;">
+            <mat-label>Tipo de sangre</mat-label>
+            <input matInput #postalCode formControlName="tiposangre">
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="width: 40%;">
+            <mat-label>Correo electrónico</mat-label>
+            <input matInput #postalCode formControlName="email">
+        </mat-form-field>
+        <div formGroupName="rfcjson">
+            <button mat-flat-button (click)="agregarRfc()" color="primary" *ngIf="buttonRFC">
+                <fa-icon [icon]="faFileInvoice" style="margin-right: 6px;"></fa-icon>RFC
+            </button>
+            <div [hidden]="buttonRFC == true">
+                <mat-form-field appearance="outline" class="separa">
+                    <mat-label>RFC</mat-label>
+                    <input matInput formControlName="rfc">
+                    <mat-icon matSuffix></mat-icon>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="separa">
+                    <mat-label>Razón Social</mat-label>
+                    <input matInput formControlName="razon">
+                    <mat-icon matSuffix></mat-icon>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="separa">
+                    <mat-label>Domicilio Fiscal</mat-label>
+                    <input matInput formControlName="fiscal">
+                    <mat-icon matSuffix></mat-icon>
+                </mat-form-field>
+                <button mat-flat-button (click)="quitarRfc()" color="accent" [disabled]="buttonRFCQuitar == false">Quitar RFC</button>
+            </div>
+        </div>
+        <button mat-flat-button (click)="guardar()" color="primary" style="margin: 3em 5em; width: 20%;">Guardar</button>
+    </form>
+</div>
+<div class='loading' *ngIf="load">
+    <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,55 @@
+.mat-mod {
+    display: flex;
+    box-sizing: border-box;
+    padding: 0 0 0 0;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.container {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    width: 100%;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    // background: #fff;
+    min-width: 150px;
+    // max-width: 800px;
+    max-width: 90%;
+    width: 100%;
+    margin: 2% 0 0 2%;
+    font-size: 14px;
+}
+
+.space {
+    flex: 1 1 auto;
+}
+
+.loading {
+    animation: fade-in 0.5s ease-out;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    top: 0;
+    background: rgba(170, 162, 162, 0.7);
+    overflow: hidden;
+    z-index: 1;
+    mat-spinner {
+        margin: auto;
+    }
+}
+
+.title{
+    font-family: Arial;
+}

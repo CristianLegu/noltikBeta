@@ -1,0 +1,102 @@
+<div class="container">
+    <mat-toolbar class="mat-mod">
+        <span>
+            <a mat-flat-button (click)="ruta_usuario()" style="background: whitesmoke;">
+                <i class="material-icons">keyboard_backspace</i>
+            </a>
+        </span>
+        <span>{{mensajeBienvenida}}</span>
+        <span class="space"></span>
+    </mat-toolbar>
+    <form class="example-container" novalidate [formGroup]="altaMedico">
+
+        <mat-form-field appearance="outline" style="width: 70%;">
+            <mat-label>Área</mat-label>
+            <input matInput formControlName="area" class="separacion">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width: 70%;">
+            <mat-label>Nombre Completo</mat-label>
+            <input matInput formControlName="nombre" class="separacion">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width: 70%;">
+            <mat-label>Dirección</mat-label>
+            <input matInput formControlName="domicilio">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width: 50%;">
+            <mat-label>Ciudad</mat-label>
+            <input matInput formControlName="ciudad">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width: 50%;">
+            <mat-label>Estado</mat-label>
+            <input matInput formControlName="estado">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width: 40%;">
+            <mat-label>Correo electronico</mat-label>
+            <input matInput #postalCode formControlName="email">
+        </mat-form-field>
+
+        <div formArrayName="telefonos">
+            <button mat-flat-button (click)="agregarTel()" color="primary" style="margin: 1.5%">
+                <fa-icon [icon]="faPlusSquare" style="padding: 2%;"></fa-icon>
+                Agregar Teléfono
+            </button>
+            <div *ngFor="let mob of telefonos.controls;let i=index">
+                <mat-form-field appearance="outline">
+                    <mat-label>Teléfono {{i + 1}}</mat-label>
+                    <input type="tel" matInput [formControlName]="i">
+                    <mat-icon matSuffix></mat-icon>
+                </mat-form-field>
+                <button mat-flat-button *ngIf="i>0" (click)="quitarTel(i)" color="accent" style="margin-left: 8px;">
+                    Quitar
+                </button>
+            </div>
+        </div>
+
+        <mat-toolbar class="mat-mod">
+            <span>Información del Hospital</span>
+        </mat-toolbar>
+
+        <mat-divider style="padding: 0 0 2% 0;"></mat-divider>
+        <div formGroupName="infoHosp">
+            <mat-form-field appearance="outline" class="separa">
+                <mat-label>Hospital</mat-label>
+                <input matInput formControlName="nombre">
+                <mat-icon matSuffix></mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="separa">
+                <mat-label>Domicilio</mat-label>
+                <input matInput formControlName="direccion">
+                <mat-icon matSuffix></mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="separa">
+                <mat-label>Teléfono</mat-label>
+                <input matInput formControlName="telefono">
+                <mat-icon matSuffix></mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="separa">
+                <mat-label>Ciudad</mat-label>
+                <input matInput formControlName="ciudad">
+                <mat-icon matSuffix></mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="separa">
+                <mat-label>Estado</mat-label>
+                <input matInput formControlName="estado">
+                <mat-icon matSuffix></mat-icon>
+            </mat-form-field>
+        </div>
+        <button mat-flat-button (click)="guardar()" color="primary"
+            style="margin: 3em 5em; width: 20%;">Guardar</button>
+    </form>
+</div>
+<div class='loading' *ngIf="load">
+    <mat-spinner></mat-spinner>
+</div>

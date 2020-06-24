@@ -1,0 +1,159 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+
+import { faPlusCircle, faSearch, faSync } from '@fortawesome/free-solid-svg-icons';
+import { CustomPaginator } from 'src/app/CustomPaginator';
+import { EstudiosService } from 'src/app/services/estudios/estudios.service';
+import { Estudio } from 'src/app/common/interface';
+import { DialogComponent } from 'src/app/common/dialog/dialog.component';
+import { Router } from '@angular/router';
+import { MatPaginatorIntl, MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+
+@Component({
+  selector: 'app-estudios',
+  templateUrl: './estudios.component.html',
+  styleUrls: ['./estudios.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useValue: CustomPaginator('Estudios por página') }]
+})
+export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
+
+  length: number = 10;
+  page_size: number = 30;
+  page_number: number = 0;
+  dataSource: Estudio;
+  displayedColumns: string[] = ['id', 'estudio', 'detalles'];
+  faPlusCircle = faPlusCircle;
+  faSync = faSync;
+  faSearch = faSearch;
+  token: string;
+  load: boolean = false;
+  nombre: string;
+  mensaje: string;
+
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
+  constructor(
+    private estudiosServices: EstudiosService,
+    private dialog: MatDialog,
+    private router: Router) {
+    super();
+  }
+
+  ngOnInit() {
+    this.load = true;
+    this.token = localStorage.getItem('token');
+    this.nombre = '';
+    this.estudiosServices.obtenerTotal(this.token, this.nombre)
+      .then(ok => {
+        this.length = ok;
+        this.estudiosServices.obtenerEstudios(this.token, this.page_number, this.page_size, this.nombre)
+          .then(ok => {
+            this.dataSource = ok.body;
+            this.load = false;
+          })
+          .catch((err => {
+            let mensaje: string;
+            this.load = false;
+            mensaje = err.error.mensaje;
+            this.openDialog(mensaje);
+          }))
+      })
+      .catch(err => {
+        let mensaje: string;
+        this.load = false;
+        mensaje = err.mensaje;
+        this.openDialog(mensaje);
+      });
+  }
+
+  handlePage(e: PageEvent) {
+    this.load = true;
+    this.page_size = e.pageSize;
+    this.page_number = e.pageIndex;
+
+    this.estudiosServices.obtenerEstudios(this.token, this.page_number, this.page_size, this.nombre)
+      .then(ok => {
+
+        this.dataSource = ok.body;
+        this.load = false;
+      })
+      .catch(err => {
+        let mensaje: string;
+        this.load = false;
+        mensaje = err.error.mensaje;
+        this.openDialog(mensaje);
+      });
+
+  }
+
+  buscar(nombre: string) {
+
+    this.paginator.pageIndex = 0;
+    this.page_number = 0;
+    this.page_size = 50;
+
+    this.load = true;
+    this.estudiosServices.obtenerTotal(this.token, this.nombre)
+      .then(ok => {
+        this.length = ok;
+        this.estudiosServices.obtenerEstudios(this.token, this.page_number, this.page_size, nombre)
+          .then(ok => {
+            this.dataSource = ok.body;
+            this.load = false;
+          })
+          .catch(err => {
+            let mensaje: string;
+            this.load = false;
+            mensaje = err.error.mensaje;
+            this.openDialog(mensaje);
+          })
+      })
+      .catch(error => {
+        let mensaje: string;
+        this.load = false;
+        mensaje = error.error.mensaje;
+        this.openDialog(mensaje);
+      })
+      ;
+  }
+
+  refresh() {
+    this.nombre = '';
+    this.page_size = 30;
+    this.load = true;
+    this.estudiosServices.obtenerTotal(this.token, this.nombre)
+      .then(ok => {
+        this.length = ok;
+        this.estudiosServices.obtenerEstudios(this.token, this.page_number, this.page_size, '')
+          .then(ok => {
+            this.dataSource = ok.body;
+            this.load = false;
+          })
+          .catch(err => {
+            let mensaje: string;
+            this.load = false;
+            mensaje = err.error.mensaje;
+            this.openDialog(mensaje);
+          });
+      })
+      .catch(error => {
+        let mensaje: string;
+        this.load = false;
+        mensaje = error.error.mensaje;
+        this.openDialog(mensaje);
+      });
+  }
+
+  openDialog(mensaje: string): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '350px',
+      data: { mensaje: mensaje }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.router.navigate(["/estudios"]);
+    });
+  }
+
+  pageSizeOptions = [10, 30, 50, 100];
+}
