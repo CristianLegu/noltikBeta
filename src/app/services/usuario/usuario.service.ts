@@ -18,10 +18,10 @@ export class UsuarioService {
 
 
 
-  setAlta(jwt: string, user: FormGroup): Promise<any> {
+  setAlta(jwt: string, prefix: string, user: FormGroup): Promise<any> {
     if (user.valid) {
       return new Promise((ok, error) => {
-        this.http.post(ApiUrl + 'usuarios', user.value,
+        this.http.post(ApiUrl + prefix + '/usuarios', user.value,
           {
             headers: {
               'Authorization': 'Bearer ' + jwt
@@ -41,9 +41,9 @@ export class UsuarioService {
   }
 
   //Modifica
-  modifica(jwt: string, mod: FormGroup, id: any): Promise<any> {
+  modifica(jwt: string, prefix: string, mod: FormGroup, id: any): Promise<any> {
     return new Promise((ok, error) => {
-      this.http.put(ApiUrl + 'usuarios/' + id, mod.getRawValue(),//value,
+      this.http.put(ApiUrl + prefix + '/usuarios/' + id, mod.getRawValue(),//value,
         {
           headers: { 'Authorization': 'Bearer ' + jwt }
         })
@@ -58,11 +58,11 @@ export class UsuarioService {
   }
 
 
-  obtenerLista(jwt: string, page: number, size: number, name: string): Promise<any> {
+  obtenerLista(jwt: string, prefix: string, page: number, size: number, name: string): Promise<any> {
 
     return new Promise((ok, error) => {
       this.http
-        .get(ApiUrl + 'usuarios',
+        .get(ApiUrl + prefix + '/usuarios',
           {
             headers: { 'Authorization': 'Bearer ' + jwt },
             responseType: 'json',
@@ -83,9 +83,9 @@ export class UsuarioService {
   }
 
   //Elimina
-  eliminar(jwt: string, id: any): Promise<any> {
+  eliminar(jwt: string, prefix: string, id: any): Promise<any> {
     return new Promise((ok, error) => {
-      this.http.delete(ApiUrl + 'usuarios/' + id,
+      this.http.delete(ApiUrl + prefix + '/usuarios/' + id,
         {
           headers: { 'Authorization': 'Bearer ' + jwt }
         })
@@ -100,9 +100,9 @@ export class UsuarioService {
   }
 
 
-  obtenerTotal(jwt: string, name: string): Promise<any> {
+  obtenerTotal(jwt: string, prefix: string, name: string): Promise<any> {
     return new Promise((ok, error) => {
-      this.http.get(ApiUrl + 'usuarios/total',
+      this.http.get(ApiUrl + prefix + '/usuarios/total',
         {
           headers: { 'Authorization': 'Bearer ' + jwt },
           params: { 'name': name }
@@ -117,11 +117,11 @@ export class UsuarioService {
     });
   }
 
-  obtenerUsuario(jwt: string, id: any): Promise<any> {
+  obtenerUsuario(jwt: string, prefix: string, id: any): Promise<any> {
 
     return new Promise((ok, error) => {
       this.http
-        .get(ApiUrl + 'usuarios/' + id,
+        .get(ApiUrl + prefix + '/usuarios/' + id,
           {
             headers: { 'Authorization': 'Bearer ' + jwt },
             responseType: 'json'

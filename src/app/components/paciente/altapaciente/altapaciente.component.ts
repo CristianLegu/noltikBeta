@@ -24,13 +24,16 @@ export class AltapacienteComponent implements OnInit {
 
   actRoute: string;
   jwt: string;
+  prefix: string;
   mensajeBienvenida: string;
   paciente: Patient;
   load: boolean = false;
   selected: string;
-  dataEliminar: DialogDataEliminar = { id: "", jwt: "", mensaje: "", tipo: "" };
+  dataEliminar: DialogDataEliminar = { id: "", jwt: "", prefix: "", mensaje: "", tipo: "" };
   faPlusSquare = faPlusSquare;
   faFileInvoice = faFileInvoice;
+  rol: string;
+  UserPerm: boolean;
 
   constructor(
     private router: Router,
@@ -52,8 +55,8 @@ export class AltapacienteComponent implements OnInit {
 
   gen: Sexo[] = [
     { value: "se-0", viewValue: "Sin Especificar" },
-    { value: "h-1", viewValue: "Hombre" },
-    { value: "m-2", viewValue: "Mujer" }
+    { value: "H", viewValue: "Hombre" },
+    { value: "M", viewValue: "Mujer" }
   ];
 
   altapac = this.fb.group({
@@ -77,9 +80,17 @@ export class AltapacienteComponent implements OnInit {
   ngOnInit() {
     this.load = true;
     this.jwt = localStorage.getItem("token");
+    this.prefix = localStorage.getItem('prefix');
     if (this.actRoute != "0") {
+
+      //Valida Rol
+      this.rol = localStorage.getItem('role');
+      if (this.rol == 'ROLE_ADMIN') {
+        this.UserPerm = true;
+      }
+
       this.altapaciente
-        .getPaciente(this.jwt, this.actRoute)
+        .getPaciente(this.jwt, this.prefix, this.actRoute)
         .then(ok => {
           this.paciente = ok.body;
           this.load = false;
@@ -137,9 +148,9 @@ export class AltapacienteComponent implements OnInit {
     });
 
 
-    this.altapac.get('genero').disable();
+    /*this.altapac.get('genero').disable();
     this.altapac.get('rfcjson').disable();
-    this.altapac.get('tiposangre').disable();
+    this.altapac.get('tiposangre').disable();*/
   }
 
   get telefonos() {
@@ -168,7 +179,7 @@ export class AltapacienteComponent implements OnInit {
     this.load = true;
     if (this.actRoute != "0") {
       this.altapaciente
-        .modifica(this.jwt, this.altapac, this.actRoute)
+        .modifica(this.jwt, this.prefix, this.altapac, this.actRoute)
         .then(ok => {
           this.load = false;
           this.mensaje = ok.mensaje;//"El paciente se actualizó correctamente";
@@ -183,7 +194,7 @@ export class AltapacienteComponent implements OnInit {
       if (this.altapac.valid) {
         //console.log(this.altapac)
         this.altapaciente
-          .setAlta(this.jwt, this.altapac)
+          .setAlta(this.jwt, this.prefix, this.altapac)
           .then(ok => {
             this.mensaje = ok.mensaje;//"El paciente se creó correctamente";
             this.load = false;
@@ -215,6 +226,7 @@ export class AltapacienteComponent implements OnInit {
       "¿Desea eliminar el paciente " + this.paciente.nombre + "?";
     this.dataEliminar.id = this.actRoute;
     this.dataEliminar.jwt = this.jwt;
+    this.dataEliminar.prefix = this.prefix;
     this.dataEliminar.tipo = "pacientes";
 
     const dialogRef = this.dialog.open(DialogeliminarComponent, {

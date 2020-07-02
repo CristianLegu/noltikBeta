@@ -59,13 +59,8 @@ export class IngresarComponent implements OnInit, OnDestroy {
       .catch(error => {
         this.loading = false;
         let mensaje: string;
-        if (error.status == 401) {
-          mensaje = "Usuario o contraseña invalida";
-          this.openDialog(mensaje);
-        }
-        else {
-          this.openDialog(error.error.mensaje);
-        }
+        console.log(error);
+        this.openDialog(error.error.mensaje);
       });
   }
 

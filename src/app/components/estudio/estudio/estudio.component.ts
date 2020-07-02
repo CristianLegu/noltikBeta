@@ -33,6 +33,7 @@ export class EstudioComponent implements OnInit {
 
   actRoute: string;
   jwt: string;
+  prefix: string;
   mensajeBienvenida: string;
   load: boolean = false;
   estudio: Estudio;
@@ -40,7 +41,11 @@ export class EstudioComponent implements OnInit {
   faPlus = faPlus;
   altaEstudio: FormGroup;
   mensaje: string;
-  dataEliminar: DialogDataEliminar = { id: "", jwt: "", mensaje: "", tipo: "" };
+  dataEliminar: DialogDataEliminar = { id: "", jwt: "", prefix: "", mensaje: "", tipo: "" };
+
+  //Variables Rol
+  UserPerm: boolean;
+  rol: string;
 
   constructor(
     private router: Router,
@@ -63,9 +68,18 @@ export class EstudioComponent implements OnInit {
   ngOnInit() {
     this.load = true;
     this.jwt = localStorage.getItem("token");
+    this.prefix = localStorage.getItem('prefix');
     if (this.actRoute != "0") {
-      this.estudioService.obtenerEstudio(this.jwt, this.actRoute)
+      
+      //Valida Rol
+      this.rol = localStorage.getItem('role');
+      if (this.rol == 'ROLE_ADMIN') {
+        this.UserPerm = true;
+      }
+      
+      this.estudioService.obtenerEstudio(this.jwt, this.prefix, this.actRoute)
         .then(ok => {
+          console.log(ok);
           this.estudio = ok.body;
           this.load = false;
           this.pasarValores(this.estudio);
@@ -87,18 +101,24 @@ export class EstudioComponent implements OnInit {
     this.altaEstudio.patchValue({
       nombre: estudio.nombre
     });
+    console.log(estudio.json_estudio);
 
-    estudio.json_estudio.forEach(x => {
-      let control = <FormArray>this.altaEstudio.controls.json_estudio;
-      control.push(
-        this.fb.group({
-          subtitulo: [x.subtitulo],
-          //ITEMS
-          items: this.setItemsCrud(x.items)
-          //ITEMS
-        })
-      );
-    });
+    //VALIDAR JSON
+    if (estudio.json_estudio != null) {
+
+      estudio.json_estudio.forEach(x => {
+        let control = <FormArray>this.altaEstudio.controls.json_estudio;
+        control.push(
+          this.fb.group({
+            subtitulo: [x.subtitulo],
+            //ITEMS
+            items: this.setItemsCrud(x.items)
+            //ITEMS
+          })
+        );
+      });
+    }
+
   }
 
   //Realiza el seteo de los items cuando lee registro
@@ -187,10 +207,11 @@ export class EstudioComponent implements OnInit {
 
   guardar() {
     this.load = true;
+    console.log(this.altaEstudio);
     if (this.altaEstudio.valid) {
       if (this.actRoute == "0") {
         this.estudioService
-          .crearEstudio(this.jwt, this.altaEstudio)
+          .crearEstudio(this.jwt, this.prefix, this.altaEstudio)
           .then(ok => {
             this.load = false;
             this.mensaje = ok.mensaje;//"El estudio se guardó correctamente";
@@ -204,7 +225,7 @@ export class EstudioComponent implements OnInit {
           });
       } else {
         this.estudioService
-          .modifica(this.jwt, this.altaEstudio, this.actRoute)
+          .modifica(this.jwt, this.prefix, this.altaEstudio, this.actRoute)
           .then(ok => {
             this.load = false;
             this.mensaje = ok.mensaje;// "El estudio se actualizó correctamente";
@@ -233,6 +254,7 @@ export class EstudioComponent implements OnInit {
       "¿Desea eliminar el estudio " + this.estudio.nombre + "?";
     this.dataEliminar.id = this.actRoute;
     this.dataEliminar.jwt = this.jwt;
+    this.dataEliminar.prefix = this.prefix;
     this.dataEliminar.tipo = "estudios";
 
     const dialogRef = this.dialog.open(DialogeliminarComponent, {
@@ -247,9 +269,9 @@ export class EstudioComponent implements OnInit {
       data: { mensaje: mensaje }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.router.navigate(["/estudios"]);
-    });
+    /* dialogRef.afterClosed().subscribe(result => {
+       this.router.navigate(["/estudios"]);
+     });*/
   }
 
   ruta_usuario() {

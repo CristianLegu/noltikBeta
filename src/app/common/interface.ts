@@ -19,6 +19,7 @@ export interface DialogMembreteData {
 
 export interface DialogDataEliminar {
   jwt: string;
+  prefix: string;
   id: any,
   mensaje: string,
   tipo: string,

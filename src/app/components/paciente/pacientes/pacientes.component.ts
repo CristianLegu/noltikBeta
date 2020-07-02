@@ -26,6 +26,7 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
   dataSource: Patient[] = [];
   displayedColumns: string[] = ['id', 'nombre', 'perfil', 'analisis'];
   token: string;
+  prefix: string;
   load: boolean = false;
   faSearch = faSearch;
   faSync = faSync;
@@ -54,11 +55,12 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
 
     this.load = true;
     this.token = localStorage.getItem('token');
+    this.prefix = localStorage.getItem('prefix');
     this.nombre = '';
-    this.service.obtenerTotal(this.token, this.nombre)
+    this.service.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
         this.length = ok;
-        this.service.getpacientes(this.token, this.page_number, this.page_size, this.nombre)
+        this.service.getpacientes(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
           .then(ok => {
             // console.log(ok);
             this.dataSource = ok.body;
@@ -66,6 +68,7 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
           })
           .catch(err => {
             this.load = false;
+            console.log(err);
             this.mensaje = err.error.mensaje;//err.error.message;
             this.openDialog(this.mensaje);
           });
@@ -88,7 +91,7 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
     this.load = true;
     this.page_size = e.pageSize;
     this.page_number = e.pageIndex;
-    this.service.getpacientes(this.token, this.page_number, this.page_size, this.nombre)
+    this.service.getpacientes(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
       .then(ok => {
         this.dataSource = ok.body;
         this.load = false;
@@ -104,10 +107,10 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
     this.nombre = '';
     this.page_size = 30;
     this.load = true;
-    this.service.obtenerTotal(this.token, this.nombre)
+    this.service.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
         this.length = ok;
-        this.service.getpacientes(this.token, this.page_number, this.page_size, this.nombre)
+        this.service.getpacientes(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
           .then(ok => {
             this.dataSource = ok.body;
             this.load = false;
@@ -133,10 +136,10 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
     this.page_size = 50;
 
     this.load = true;
-    this.service.obtenerTotal(this.token, this.nombre)
+    this.service.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
         this.length = ok;
-        this.service.getpacientes(this.token, this.page_number, this.page_size, nombre)
+        this.service.getpacientes(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
           .then(ok => {
             this.dataSource = ok.body;
             this.load = false;

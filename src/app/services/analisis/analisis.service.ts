@@ -12,9 +12,9 @@ export class AnalisisService {
     private http: HttpClient
   ) { }
 
-  getLista(jwt: string, page: number, size: number, id: any): Promise<any> {
+  getLista(jwt: string, prefix: string, page: number, size: number, id: any): Promise<any> {
     return new Promise((ok, error) => {
-      this.http.get(ApiUrl + 'pacientes/' + id + '/analisis',
+      this.http.get(ApiUrl + prefix + '/pacientes/' + id + '/analisis',
         {
           headers: { 'Authorization': 'Bearer ' + jwt },
           responseType: 'json',
@@ -33,9 +33,9 @@ export class AnalisisService {
     });
   }
 
-  obtenerTotal(jwt: string, id: any): Promise<any> {
+  obtenerTotal(jwt: string, prefix: string, id: any): Promise<any> {
     return new Promise((ok, error) => {
-      this.http.get(ApiUrl + 'pacientes/' + id + '/analisis/total',
+      this.http.get(ApiUrl + prefix + '/pacientes/' + id + '/analisis/total',
         {
           headers: { 'Authorization': 'Bearer ' + jwt }
         })
@@ -49,9 +49,9 @@ export class AnalisisService {
     });
   }
 
-  getUnAnalisis(jwt: string, idp: any, ida: any): Promise<any> {
+  getUnAnalisis(jwt: string, prefix: string, idp: any, ida: any): Promise<any> {
     return new Promise((ok, error) => {
-      this.http.get(ApiUrl + 'pacientes/' + idp + '/analisis/' + ida,
+      this.http.get(ApiUrl + prefix + '/pacientes/' + idp + '/analisis/' + ida,
         {
           headers: { 'Authorization': 'Bearer ' + jwt }
         })
@@ -65,9 +65,9 @@ export class AnalisisService {
     });
   }
 
-  crear(jwt: string, idp: any, analisis: any, timeZone: string): Promise<any> {
+  crear(jwt: string, prefix: string, idp: any, analisis: any, timeZone: string): Promise<any> {
     return new Promise((ok, error) => {
-      this.http.post(ApiUrl + 'pacientes/' + idp + '/analisis/', analisis,
+      this.http.post(ApiUrl + prefix + '/pacientes/' + idp + '/analisis/', analisis,
         {
           headers: {
             'Authorization': 'Bearer ' + jwt,
@@ -84,9 +84,9 @@ export class AnalisisService {
     });
   }
 
-  modificar(jwt: string, idp: any, ida: any, analisis: any, timeZone: string): Promise<any> {
+  modificar(jwt: string, prefix: string, idp: any, ida: any, analisis: any, timeZone: string): Promise<any> {
     return new Promise((ok, error) => {
-      this.http.put(ApiUrl + 'pacientes/' + idp + '/analisis/' + ida,
+      this.http.put(ApiUrl + prefix + '/pacientes/' + idp + '/analisis/' + ida,
         analisis,
         {
           headers: {
@@ -105,9 +105,9 @@ export class AnalisisService {
     });
   }
 
-  eliminar(jwt: string, idp: any, ida: any): Promise<any> {
+  eliminar(jwt: string, prefix: string, idp: any, ida: any): Promise<any> {
     return new Promise((ok, error) => {
-      this.http.delete(ApiUrl + 'pacientes/' + idp + '/analisis/' + ida,
+      this.http.delete(ApiUrl + prefix + '/pacientes/' + idp + '/analisis/' + ida,
         {
           headers: {
             'Authorization': 'Bearer ' + jwt

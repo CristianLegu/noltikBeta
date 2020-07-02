@@ -18,13 +18,14 @@ export class AltamedicoComponent implements OnInit {
   //Variables
   actRoute: string;
   jwt: string;
+  prefix: string;
   mensajeBienvenida: string;
   load: boolean = false;
   faPhone = faPhone;
   medico: Medico;
   faPlusSquare = faPlusSquare;
   mensaje: string;
-  dataEliminar: DialogDataEliminar = { id: "", jwt: "", mensaje: "", tipo: "" };
+  dataEliminar: DialogDataEliminar = { id: "", jwt: "", prefix: '', mensaje: "", tipo: "" };
 
   constructor(
     private router: Router,
@@ -48,7 +49,7 @@ export class AltamedicoComponent implements OnInit {
     ciudad: ["", []],
     estado: ["", []],
     email: ["", []],
-    telefonos: this.fb.array([this.fb.control("",[Validators.required])]),
+    telefonos: this.fb.array([this.fb.control("")]),
     infoHosp: this.fbTel.group({
       nombre: ["", []],
       direccion: ["", []],
@@ -61,9 +62,10 @@ export class AltamedicoComponent implements OnInit {
   ngOnInit() {
     this.load = true;
     this.jwt = localStorage.getItem("token");
+    this.prefix = localStorage.getItem('prefix');
     if (this.actRoute != "0") {
       this.medicoService
-        .obtenerMedico(this.jwt, this.actRoute)
+        .obtenerMedico(this.jwt, this.prefix, this.actRoute)
         .then(ok => {
           this.medico = ok.body;
           this.load = false;
@@ -90,7 +92,7 @@ export class AltamedicoComponent implements OnInit {
     if (this.altaMedico.valid) {
       if (this.actRoute == "0") {
         this.medicoService
-          .crearMedico(this.jwt, this.altaMedico)
+          .crearMedico(this.jwt, this.prefix, this.altaMedico)
           .then(ok => {
             this.load = false;
             this.mensaje = ok.mensaje;//"El médico se guardó correctamente";
@@ -104,7 +106,7 @@ export class AltamedicoComponent implements OnInit {
           });
       } else {
         this.medicoService
-          .modifica(this.jwt, this.altaMedico, this.actRoute)
+          .modifica(this.jwt, this.prefix, this.altaMedico, this.actRoute)
           .then(ok => {
             this.load = false;
             this.mensaje = ok.mensaje;//"El médico se actualizó correctamente";

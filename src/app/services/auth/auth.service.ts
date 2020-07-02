@@ -40,6 +40,8 @@ export class AuthService {
           ok(response);
           this.token = response;
           this.jwtSave(this.token.token);
+          this.prefijoSave(this.token.prefix);
+          this.roleSave(this.token.role);
           this.loggedIn.next(true);
         })
         .catch(err => {
@@ -60,5 +62,13 @@ export class AuthService {
   jwtSave(token: string){
     localStorage.setItem('token', token);
 
+  }
+
+  prefijoSave(prefijo: string) {
+    localStorage.setItem('prefix', prefijo);
+  }
+
+  roleSave(rol: string){
+    localStorage.setItem('role', rol);
   }
 }

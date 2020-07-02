@@ -12,6 +12,9 @@ import { faHospital, faUsers, faStethoscope, faProcedures, faSignOutAlt, faFileI
 export class SidenavComponent implements OnInit {
 
   isLoggedIn$: Observable<boolean>;
+  rol: string;
+  UserPerm: boolean;
+
  
   faHospital = faHospital;
   faUsers = faUsers;
@@ -26,6 +29,10 @@ export class SidenavComponent implements OnInit {
 
   ngOnInit() {
     this.isLoggedIn$ = this.authService.isLoggedIn;
+    this.rol = localStorage.getItem('role');
+    if(this.rol == 'ROLE_ADMIN'){
+      this.UserPerm = true;
+    }
   }
 
   logout() {

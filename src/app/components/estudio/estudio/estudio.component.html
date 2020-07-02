@@ -7,7 +7,7 @@
         </span>
         <span>{{mensajeBienvenida}}</span>
         <span class="space"></span>
-        <span *ngIf="actRoute != '0'"> <button mat-button (click)="eliminar()"><i class="material-icons">delete</i>
+        <span *ngIf="actRoute != '0' && UserPerm"> <button mat-button (click)="eliminar()"><i class="material-icons">delete</i>
                 Eliminar Estudio</button></span>
     </mat-toolbar>
 

@@ -4,8 +4,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AnalisisService } from "../../services/analisis/analisis.service";
 import { imgData } from "../../globals";
 
-import { DomSanitizer } from "@angular/platform-browser";
-import { IfStmt } from "@angular/compiler";
 import { Analisis } from "src/app/common/interface";
 import { DialogmembreteComponent } from "src/app/common/dialogmembrete/dialogmembrete.component";
 import { MatDialog } from '@angular/material/dialog';
@@ -17,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class ImprimirComponent implements OnInit {
   jwt: string;
+  prefix: string;
   actID: number;
   actString: string;
   actRoute: Array<string> = [];
@@ -25,7 +24,7 @@ export class ImprimirComponent implements OnInit {
   fecha: string;
   doc = new jsPDF();
   mensaje: string = "¿Desea que el reporte tenga membrete?";
-  desicion: string;
+  decision: string;
   sangria: number;
   altura: number;
   alturaItems: number;
@@ -36,16 +35,18 @@ export class ImprimirComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router
   ) {
+    console.log(this.activatedRoute);
     this.actString = this.activatedRoute.snapshot.params["an"];
     this.actID = this.activatedRoute.snapshot.params["id"];
   }
 
   ngOnInit() {
     this.jwt = localStorage.getItem("token");
+    this.prefix = localStorage.getItem('prefix');
     this.actRoute = JSON.parse("[" + this.actString + "]");
     for (var i = 0; i < this.actRoute.length; i++) {
       this.serviceA
-        .getUnAnalisis(this.jwt, this.actID, this.actRoute[i])
+        .getUnAnalisis(this.jwt, this.prefix, this.actID, this.actRoute[i])
         .then(ok => {
           this.analisisImp.push(ok.body);
         })
@@ -59,12 +60,12 @@ export class ImprimirComponent implements OnInit {
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogmembreteComponent, {
       width: "350px",
-      data: { mensaje: this.mensaje, desicion: this.desicion }
+      data: { mensaje: this.mensaje, decision: this.decision }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.desicion = result;
-      this.downloadPDF(this.desicion);
+      this.decision = result;
+      this.downloadPDF(this.decision);
       this.router.navigate(["/pacientes/" + this.actID + "/analisis"]);
     });
   }

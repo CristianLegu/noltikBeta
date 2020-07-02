@@ -3,14 +3,12 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AnalisisService } from "../../../services/analisis/analisis.service";
 import {
   Analisis,
-  Estudio,
   JSONEstudio,
   ItemsEstudio,
   Patient,
   DialogDataEliminar
 } from "../../../common/interface";
 import {
-  Validators,
   FormBuilder,
   FormArray,
   FormControl,
@@ -27,6 +25,7 @@ import { DialogeliminarComponent } from "../../../common/dialogeliminar/dialogel
 import { DialogComponent } from "../../../common/dialog/dialog.component";
 import * as moment from 'moment-timezone';
 import { DatePipe } from '@angular/common';
+
 export interface NombreMedico {
   nombre: string;
   area: string;
@@ -79,7 +78,7 @@ export class UnanalisisComponent implements OnInit {
   btn: boolean = false;
 
   altaAnalisis: FormGroup;
-  fecha1:string;
+  fecha1: string;
   myDate = new Date();
   analisisNuevo: Analisis = {
     analisis: "",
@@ -95,6 +94,7 @@ export class UnanalisisComponent implements OnInit {
   dataEliminar: DialogDataEliminar = {
     id: "",
     jwt: "",
+    prefix: "",
     mensaje: "",
     tipo: "",
     idpaciente: ""
@@ -119,6 +119,7 @@ export class UnanalisisComponent implements OnInit {
   fControlE = new FormControl();
 
   jwt: string;
+  prefix: string;
   load: boolean = false;
   mensaje: string;
   mensajeDialog: string;
@@ -139,6 +140,10 @@ export class UnanalisisComponent implements OnInit {
 
   timeZone: string;
 
+  //Variables rol
+  rol: string;
+  UserPerm: boolean;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private service: AnalisisService,
@@ -158,24 +163,32 @@ export class UnanalisisComponent implements OnInit {
 
     this.altaAnalisis = this.fb.group({
       analisis: [""],
-      area: [""],
+      area: ["",],
       comentario: [""],
       fecha: [""],
       paciente: [""],
       medico: [""],
       json: this.fb.array([])
     });
-   
+
   }
 
   ngOnInit() {
     this.jwt = localStorage.getItem("token");
+    this.prefix = localStorage.getItem('prefix');
+    this.rol = localStorage.getItem('role');
+    
     this.timeZone = moment.tz.guess();
     this.load = true;
 
+    //Valida rol
+    if(this.rol == 'ROLE_ADMIN'){
+      this.UserPerm = true;
+    }
+
     if (this.idAnalisis != "0") {
       this.service
-        .getUnAnalisis(this.jwt, this.idPaciente, this.idAnalisis)
+        .getUnAnalisis(this.jwt, this.prefix, this.idPaciente, this.idAnalisis)
         .then(ok => {
           this.analisis = ok.body;
 
@@ -216,7 +229,7 @@ export class UnanalisisComponent implements OnInit {
 
   paciente(id: any) {
     this.servicePaciente
-      .getPaciente(this.jwt, id)
+      .getPaciente(this.jwt, this.prefix, id)
       .then(respose => {
         this.pacienteE = respose.body;
       })
@@ -270,7 +283,6 @@ export class UnanalisisComponent implements OnInit {
         })
       );
     });
-
     return arr;
   }
 
@@ -301,7 +313,7 @@ export class UnanalisisComponent implements OnInit {
         analisis: a.analisis,
         comentario: a.comentario
       });
-      this.subtitulofinal  = is.subtitulo;
+      this.subtitulofinal = is.subtitulo;
       this.itemMod = [];
     });
 
@@ -319,10 +331,10 @@ export class UnanalisisComponent implements OnInit {
 
     //Igual que estudios, traemos todos los medicos
     this.serviceM
-      .obtenerTotal(this.jwt, "")
+      .obtenerTotal(this.jwt, this.prefix, "")
       .then(ok => {
         this.serviceM
-          .obtenerMedicos(this.jwt, 0, ok, "")
+          .obtenerMedicos(this.jwt, this.prefix, 0, ok, "")
           .then(ok => {
             //Creamos JSON de array con 'nombre', 'area'
             ok.body.forEach(valor => {
@@ -356,10 +368,10 @@ export class UnanalisisComponent implements OnInit {
     this.load = true;
     //Obtenemos los estudios, todos, por ahora es como lo haremos
     this.serviceEstudio
-      .obtenerTotal(this.jwt, "")
+      .obtenerTotal(this.jwt, this.prefix, "")
       .then(ok => {
         this.serviceEstudio
-          .obtenerEstudios(this.jwt, 0, ok, "")
+          .obtenerEstudios(this.jwt, this.prefix, 0, ok, "")
           .then(response => {
             //Creamos un JSON de Array de los estudios,
             response.body.forEach(valor => {
@@ -423,7 +435,7 @@ export class UnanalisisComponent implements OnInit {
     this.estudio = event.option.value.nombre;
     this.idEstudio = event.option.value.id;
     //console.log(this.idEstudio)
-    this.serviceEstudio.obtenerEstudio(this.jwt, this.idEstudio)
+    this.serviceEstudio.obtenerEstudio(this.jwt, this.prefix, this.idEstudio)
       .then(response => {
         this.load = false;
         //Pasamos la respuesta a la variable
@@ -457,7 +469,7 @@ export class UnanalisisComponent implements OnInit {
     this.areaM = event.option.value.area;
     this.medico = event.option.value.nombre;
   }
-//
+  //
   agregaEstudio() {
     this.btn = true;
     this.analisis = {
@@ -472,9 +484,9 @@ export class UnanalisisComponent implements OnInit {
     };
 
     this.fControlE.setValue('');
- 
+
     this.com = 1;
-   
+
     this.estudioI.json_estudio.forEach(is => {
       is.items.forEach(i => {
         this.itemE.push({
@@ -484,7 +496,7 @@ export class UnanalisisComponent implements OnInit {
           referencia: i.referencia,
           comentario: i.comentario
         });
-     
+
       });
 
       this.jsonE.push({
@@ -501,37 +513,6 @@ export class UnanalisisComponent implements OnInit {
     this.analisis.analisis = this.estudio;
 
     this.jsonE = [];
-
-
-    /*
-    this.estudioI.forEach(e => {
-      e.json_estudio.forEach(is => {
-        is.items.forEach(i => {
-          this.itemE.push({
-            prueba: i.prueba,
-            resultados: i.resultados,
-            unidades: i.unidades,
-            referencia: i.referencia,
-            comentario: i.comentario
-          });
-        });
-
-        this.jsonE.push({
-          subtitulo: is.subtitulo,
-          items: this.itemE
-        });
-
-        this.itemE = [];
-      });
-
-      this.analisis.area = this.areaM;
-      this.analisis.json = this.jsonE;
-      this.analisis.medico = this.medico;
-      this.analisis.analisis = this.estudio;
-
-      this.jsonE = [];
-    });
-*/
     this.itemE = [];
 
     let an = this.analisisMod(this.analisis);
@@ -559,7 +540,7 @@ export class UnanalisisComponent implements OnInit {
     this.load = true;
     let response: string = "";
     if (this.idAnalisis == "0") {
-       console.log(this.analisis);
+      console.log(this.analisis);
       let valor = <FormArray>this.altaAnalisis.controls.json;
       let total: number = 0;
 
@@ -575,17 +556,15 @@ export class UnanalisisComponent implements OnInit {
 
         a.forEach((i, index) => {
           this.service
-            .crear(this.jwt, this.idPaciente, i, this.timeZone)
+            .crear(this.jwt, this.prefix, this.idPaciente, i, this.timeZone)
             .then(ok => {
               response = ok.mensaje;
               this.load = false;
-             // console.log(total);
+              // console.log(total);
               // console.log(index);
-             // console.log(ok);
-              if (
-                // total === index &&
-                ok.statusCode == "OK"
-              ) {
+              // console.log(ok);
+              if (ok.statusCode == "OK") {
+                this.openDialog(response);
                 this.router.navigate([
                   "pacientes",
                   this.idPaciente,
@@ -615,13 +594,11 @@ export class UnanalisisComponent implements OnInit {
       let a = this.generaNvaEstAnalisis(valor, this.altaAnalisis);
       a.forEach((i, index) => {
         this.service
-          .modificar(this.jwt, this.idPaciente, this.idAnalisis, i, this.timeZone)
+          .modificar(this.jwt, this.prefix, this.idPaciente, this.idAnalisis, i, this.timeZone)
           .then(ok => {
             this.load = false;
-            if (
-              // total == index &&
-              ok.statusCode == "OK"
-            ) {
+            if (ok.statusCode == "OK") {
+              this.openDialog(ok.mensaje);
               this.router.navigate(["pacientes", this.idPaciente, "analisis"]);
             }
           })
@@ -647,6 +624,7 @@ export class UnanalisisComponent implements OnInit {
         paciente: ""
       }
     ];
+
     let name: string = "";
     // let arreglo: number[] = [];
     let i: number = 0;
@@ -679,13 +657,13 @@ export class UnanalisisComponent implements OnInit {
           subtitulo: analisis.value.json[index].subtitulo,
           items: itemsEstudio
         });
-       // console.log(a);
+        // console.log(a);
       } else {
         i = 0;
         i = i + 1;
         numarreglos = numarreglos + 1;
         name = analisis.value.json[index].analisis;
-       // console.log(a);
+        // console.log(a);
         a.push({
           analisis: "",
           area: "",
@@ -720,30 +698,6 @@ export class UnanalisisComponent implements OnInit {
           items: itemsEstudio
         });
       }
-      /*
-      a.paciente = this.pacienteE.nombre;
-      a.medico = analisis.get("medico").value;
-      a.area = analisis.get("area").value;
-      if (this.idAnalisis != "0") a.id = +this.idAnalisis;
-
-      let itemsEstudio: ItemsEstudio[] = [];
-      a.analisis = analisis.value.json[index].analisis;
-      a.comentario = analisis.value.json[index].comentario;
-
-      analisis.value.json[index].items.forEach(i => {
-        itemsEstudio.push({
-          prueba: i.prueba,
-          referencia: i.referencia,
-          resultados: i.resultados,
-          unidades: i.unidades,
-          comentario: i.comentario
-        });
-      });
-
-      a.json.push({
-        subtitulo: analisis.value.json[index].subtitulo,
-        items: itemsEstudio
-      });*/
     });
     return a;
   }
@@ -760,6 +714,7 @@ export class UnanalisisComponent implements OnInit {
       "¿Desea eliminar el análisis " + this.analisis.analisis + "?";
     this.dataEliminar.id = this.idAnalisis;
     this.dataEliminar.jwt = this.jwt;
+    this.dataEliminar.prefix = this.prefix;
     this.dataEliminar.tipo = "analisis";
     this.dataEliminar.idpaciente = this.idPaciente;
 

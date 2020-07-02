@@ -2,28 +2,34 @@
     Laboratorios LACE
 </mat-toolbar>
 <mat-sidenav-container class="container">
-    <mat-sidenav #drawer mode="side" opened role="navigation" *ngIf="isLoggedIn$ | async as isLoggedIn" style="width: 15%;">
+    <mat-sidenav #drawer mode="side" opened role="navigation" *ngIf="isLoggedIn$ | async as isLoggedIn"
+        style="width: 15%;">
         <mat-nav-list>
 
             <a mat-list-item routerLink='/pacientes'>
-                <fa-icon [icon]="faProcedures" style="margin-right: 6px;"></fa-icon>Pacientes</a>
+                <fa-icon [icon]="faProcedures" style="margin-right: 6px;"></fa-icon>Pacientes
+            </a>
             <mat-divider></mat-divider>
-            
+
             <a mat-list-item routerLink='/medicos'>
-                <fa-icon [icon]="faStethoscope" style="margin-right: 6px;"></fa-icon>Médicos</a>
+                <fa-icon [icon]="faStethoscope" style="margin-right: 6px;"></fa-icon>Médicos
+            </a>
             <mat-divider></mat-divider>
 
             <a mat-list-item routerLink='/estudios'>
-                <fa-icon [icon]="faFileInvoice" style="margin-right: 6px;"></fa-icon>Estudios</a>
+                <fa-icon [icon]="faFileInvoice" style="margin-right: 6px;"></fa-icon>Estudios
+            </a>
             <mat-divider></mat-divider>
 
-            <a mat-list-item routerLink='/usuarios'>
-                <fa-icon [icon]="faUsers" style="margin-right: 6px;"></fa-icon> Usuarios</a>
+            <a mat-list-item routerLink='/usuarios' *ngIf="UserPerm">
+                <fa-icon [icon]="faUsers" style="margin-right: 6px;"></fa-icon> Usuarios
+            </a>
             <mat-divider></mat-divider>
 
             <a mat-list-item (click)="logout()">
-                <fa-icon [icon]="faSignOutAlt" style="margin-right: 6px;"></fa-icon>Salir</a>
-            
+                <fa-icon [icon]="faSignOutAlt" style="margin-right: 6px;"></fa-icon>Salir
+            </a>
+
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>

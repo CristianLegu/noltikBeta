@@ -7,7 +7,7 @@
         </span>
         <span>{{mensaje}}</span>
         <span class="space"></span>
-        <span *ngIf="idAnalisis != '0'"> <button mat-button (click)="eliminar()"><i class="material-icons">delete</i> Eliminar Análisis</button></span>
+        <span *ngIf="idAnalisis != '0' && UserPerm"> <button mat-button (click)="eliminar()"><i class="material-icons">delete</i> Eliminar Análisis</button></span>
     </mat-toolbar>
 
     <form class="form-container" [formGroup]="altaAnalisis">

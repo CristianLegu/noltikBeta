@@ -26,6 +26,7 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
   faSync = faSync;
   faSearch = faSearch;
   token: string;
+  prefix: string;
   load: boolean = false;
   nombre: string;
   mensaje: string;
@@ -42,11 +43,13 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
   ngOnInit() {
     this.load = true;
     this.token = localStorage.getItem('token');
+    this.prefix = localStorage.getItem('prefix');
     this.nombre = '';
-    this.estudiosServices.obtenerTotal(this.token, this.nombre)
+    this.estudiosServices.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
+        console.log(ok);
         this.length = ok;
-        this.estudiosServices.obtenerEstudios(this.token, this.page_number, this.page_size, this.nombre)
+        this.estudiosServices.obtenerEstudios(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
           .then(ok => {
             this.dataSource = ok.body;
             this.load = false;
@@ -60,8 +63,9 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
       })
       .catch(err => {
         let mensaje: string;
+        console.log(err);
         this.load = false;
-        mensaje = err.mensaje;
+        mensaje = err.error.mensaje;
         this.openDialog(mensaje);
       });
   }
@@ -71,7 +75,7 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
     this.page_size = e.pageSize;
     this.page_number = e.pageIndex;
 
-    this.estudiosServices.obtenerEstudios(this.token, this.page_number, this.page_size, this.nombre)
+    this.estudiosServices.obtenerEstudios(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
       .then(ok => {
 
         this.dataSource = ok.body;
@@ -93,10 +97,10 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
     this.page_size = 50;
 
     this.load = true;
-    this.estudiosServices.obtenerTotal(this.token, this.nombre)
+    this.estudiosServices.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
         this.length = ok;
-        this.estudiosServices.obtenerEstudios(this.token, this.page_number, this.page_size, nombre)
+        this.estudiosServices.obtenerEstudios(this.token, this.prefix, this.page_number, this.page_size, nombre)
           .then(ok => {
             this.dataSource = ok.body;
             this.load = false;
@@ -121,10 +125,10 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
     this.nombre = '';
     this.page_size = 30;
     this.load = true;
-    this.estudiosServices.obtenerTotal(this.token, this.nombre)
+    this.estudiosServices.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
         this.length = ok;
-        this.estudiosServices.obtenerEstudios(this.token, this.page_number, this.page_size, '')
+        this.estudiosServices.obtenerEstudios(this.token, this.prefix, this.page_number, this.page_size, '')
           .then(ok => {
             this.dataSource = ok.body;
             this.load = false;

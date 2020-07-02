@@ -23,6 +23,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
   dataSource: Usuario[] = [];
   displayedColumns: string[] = ['id', 'usuario', 'perfil'];
   token: string;
+  prefix: string;
   load: boolean = false;
   faSearch = faSearch;
   faSync = faSync;
@@ -43,21 +44,23 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
   ngOnInit() {
     this.load = true;
     this.token = localStorage.getItem('token');
+    this.prefix = localStorage.getItem('prefix');
     this.nombre = '';
 
-    this.service.obtenerTotal(this.token, this.nombre)
+    this.service.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
         this.length = ok;
-        this.load = false;
 
-        this.service.obtenerLista(this.token, this.page_number, this.page_size,
+        this.service.obtenerLista(this.token, this.prefix, this.page_number, this.page_size,
           this.nombre)
           .then(ok => {
+            console.log(ok);
             this.dataSource = ok.body;
             this.load = false;
           })
           .catch(err => {
             let mensaje: string;
+            console.log(err);
             mensaje = err.error.mensaje;
             this.openDialog(mensaje);
             this.load = false;
@@ -66,8 +69,15 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
       })
       .catch(err => {
         let mensaje: string;
-        mensaje = err.error.mensaje;
-        this.openDialog(mensaje);
+        if (err.status == 401) {
+          mensaje = 'Sesión ha expirado, intenta acceder de nuevo';
+          this.openDialog(mensaje);
+          this.router.navigate(["/ingresar"]);
+        }
+        else {
+          mensaje = err.error.mensaje;
+          this.openDialog(mensaje);
+        }
         this.load = false;
       })
   }
@@ -76,7 +86,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
     this.load = true;
     this.page_size = e.pageSize;
     this.page_number = e.pageIndex;
-    this.service.obtenerLista(this.token, this.page_number, this.page_size, this.nombre)
+    this.service.obtenerLista(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
       .then(ok => {
         this.dataSource = ok.body;
         this.load = false;
@@ -93,10 +103,10 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
     this.nombre = '';
     this.page_size = 30;
     this.load = true;
-    this.service.obtenerTotal(this.token, this.nombre)
+    this.service.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
         this.length = ok;
-        this.service.obtenerLista(this.token, this.page_number, this.page_size, this.nombre)
+        this.service.obtenerLista(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
           .then(ok => {
             this.dataSource = ok.body;
             this.load = false;
@@ -123,16 +133,17 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
     this.page_number = 0;
     this.page_size = 50;
     this.load = true;
-    this.service.obtenerTotal(this.token, this.nombre)
+    this.service.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
         this.length = ok;
-        this.service.obtenerLista(this.token, this.page_number, this.page_size, nombre)
+        this.service.obtenerLista(this.token, this.prefix, this.page_number, this.page_size, nombre)
           .then(ok => {
             this.dataSource = ok.body;
             this.load = false;
           })
           .catch(err => {
             let mensaje: string;
+            console.log(err);
             mensaje = err.error.mensaje;
             this.openDialog(mensaje);
             this.load = false;
@@ -140,6 +151,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
       })
       .catch(error => {
         let mensaje: string;
+        console.log(error);
         mensaje = error.error.mensaje;
         this.openDialog(mensaje);
         this.load = false;

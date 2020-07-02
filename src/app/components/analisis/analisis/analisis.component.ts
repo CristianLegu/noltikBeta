@@ -24,6 +24,7 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
   page_number: number = 0;
   displayedColumns: string[] = ['id', 'analisis', 'fecha', 'medico', 'imprimir'];
   token: string;
+  prefix: string;
   load: boolean = false;
   actRoute: number;
   dataSource: Analisis[] = [];
@@ -32,6 +33,8 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
   selected: boolean;
   mensaje: string;
   paciente: string;
+
+  ruta: string;
 
   constructor(
     private altapaciente: PacienteService,
@@ -49,9 +52,10 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
 
     this.load = true;
     this.token = localStorage.getItem('token');
+    this.prefix = localStorage.getItem('prefix');
 
     this.altapaciente
-      .getPaciente(this.token, this.actRoute)
+      .getPaciente(this.token, this.prefix, this.actRoute)
       .then(ok => {
         this.paciente = ok.body.nombre;
       })
@@ -61,10 +65,10 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
         this.openDialog();
       });
 
-    this.serviceA.obtenerTotal(this.token, this.actRoute)
+    this.serviceA.obtenerTotal(this.token, this.prefix, this.actRoute)
       .then(ok => {
         this.length = ok;
-        this.serviceA.getLista(this.token, this.page_number, this.page_size, this.actRoute)
+        this.serviceA.getLista(this.token, this.prefix, this.page_number, this.page_size, this.actRoute)
           .then(ok => {
             this.dataSource = ok.body;
             this.load = false;
@@ -90,7 +94,7 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      //this.router.navigate(["/analisis"]);
+      this.router.navigate(["/pacientes"]);
     });
   }
 
@@ -99,7 +103,7 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
     this.load = true;
     this.page_size = e.pageSize;
     this.page_number = e.pageIndex;
-    this.serviceA.getLista(this.token, this.page_number, this.page_size, this.actRoute)
+    this.serviceA.getLista(this.token, this.prefix, this.page_number, this.page_size, this.actRoute)
       .then(ok => {
         this.dataSource = ok.body;
         //console.log(ok.body)
@@ -132,6 +136,8 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
     } else {
       this.buttonImp = false;
     }
+    this.ruta = "/pacientes/" + this.actRoute + "/analisis/imprimir/" + this.analisisImp;
+    console.log(this.ruta);
   }
 
   onActivate(event) {

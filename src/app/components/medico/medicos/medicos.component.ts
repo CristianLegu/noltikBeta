@@ -22,6 +22,7 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
   dataSource: Medico[] = [];
   displayedColumns: string[] = ['id', 'nombre', 'area', 'perfil'];
   token: string;
+  prefix: string;
   load: boolean = false;
   faSearch = faSearch;
   faSync = faSync;
@@ -42,11 +43,12 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
   ngOnInit() {
     this.load = true;
     this.token = localStorage.getItem('token');
+    this.prefix = localStorage.getItem('prefix');
     this.nombre = '';
-    this.serviceM.obtenerTotal(this.token, this.nombre)
+    this.serviceM.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
         this.length = ok;
-        this.serviceM.obtenerMedicos(this.token, this.page_number, this.page_size, this.nombre)
+        this.serviceM.obtenerMedicos(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
           .then(ok => {
             this.dataSource = ok.body;
             this.load = false;
@@ -73,7 +75,7 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
     this.page_size = e.pageSize;
     this.page_number = e.pageIndex;
 
-    this.serviceM.obtenerMedicos(this.token, this.page_number, this.page_size, this.nombre)
+    this.serviceM.obtenerMedicos(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
       .then(ok => {
 
         this.dataSource = ok.body;
@@ -93,10 +95,10 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
     this.nombre = '';
     this.page_size = 30;
     this.load = true;
-    this.serviceM.obtenerTotal(this.token, this.nombre)
+    this.serviceM.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
         this.length = ok;
-        this.serviceM.obtenerMedicos(this.token, this.page_number, this.page_size, '')
+        this.serviceM.obtenerMedicos(this.token, this.prefix, this.page_number, this.page_size, '')
           .then(ok => {
             this.dataSource = ok.body;
             this.load = false;
@@ -123,10 +125,10 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
     this.page_size = 50;
 
     this.load = true;
-    this.serviceM.obtenerTotal(this.token, this.nombre)
+    this.serviceM.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
         this.length = ok;
-        this.serviceM.obtenerMedicos(this.token, this.page_number, this.page_size, nombre)
+        this.serviceM.obtenerMedicos(this.token, this.prefix, this.page_number, this.page_size, nombre)
           .then(ok => {
             this.dataSource = ok.body;
             this.load = false;
@@ -134,14 +136,14 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
           .catch(err => {
             let mensaje: string;
             this.load = false;
-            mensaje = err.error.mensaje;//err.error.message;
+            mensaje = err.error.mensaje;
             this.openDialog(mensaje);
           })
       })
       .catch(error => {
         let mensaje: string;
         this.load = false;
-        mensaje = error.error.mensaje;  //error.error.message;
+        mensaje = error.error.mensaje;
         this.openDialog(mensaje);
       })
       ;

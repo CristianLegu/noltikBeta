@@ -11,10 +11,10 @@ export class EstudiosService {
   constructor(private http: HttpClient) { }
 
   //Obtener listado estudios
-  obtenerEstudios(jwt: string, page: number, size: number, name: string): Promise<any> {
+  obtenerEstudios(jwt: string, prefix: string, page: number, size: number, name: string): Promise<any> {
     return new Promise((ok, error) => {
       this.http
-        .get(ApiUrl + 'estudios',
+        .get(ApiUrl + prefix + '/estudios',
           {
             headers: { 'Authorization': 'Bearer ' + jwt },
             responseType: 'json',
@@ -35,9 +35,9 @@ export class EstudiosService {
   }
 
   //Obtener total de estudios
-  obtenerTotal(jwt: string, name: string): Promise<any> {
+  obtenerTotal(jwt: string, prefix: string, name: string): Promise<any> {
     return new Promise((ok, error) => {
-      this.http.get(ApiUrl + 'estudios/total',
+      this.http.get(ApiUrl + prefix + '/estudios/total',
         {
           headers: { 'Authorization': 'Bearer ' + jwt },
           params: { 'name': name }
@@ -53,9 +53,9 @@ export class EstudiosService {
   }
 
   //Obtener estudio
-  obtenerEstudio(jwt: string, id: any): Promise<any> {
+  obtenerEstudio(jwt: string, prefix: string, id: any): Promise<any> {
     return new Promise((ok, error) => {
-      this.http.get(ApiUrl + 'estudios/' + id,
+      this.http.get(ApiUrl + prefix + '/estudios/' + id,
         {
           headers: { 'Authorization': 'Bearer ' + jwt },
           responseType: 'json'
@@ -71,9 +71,9 @@ export class EstudiosService {
   }
 
   //Guardar
-  crearEstudio(jwt: string, estudio: FormGroup): Promise<any> {
+  crearEstudio(jwt: string, prefix: string, estudio: FormGroup): Promise<any> {
     return new Promise((ok, error) => {
-      this.http.post(ApiUrl + 'estudios', estudio.value,
+      this.http.post(ApiUrl + prefix + '/estudios', estudio.value,
         {
           headers: {
             'Authorization': 'Bearer ' + jwt
@@ -89,9 +89,9 @@ export class EstudiosService {
     });
   }
 
-  modifica(jwt: string, mod: FormGroup, id: any): Promise<any> {
+  modifica(jwt: string, prefix: string, mod: FormGroup, id: any): Promise<any> {
     return new Promise((ok, error) => {
-      this.http.put(ApiUrl + 'estudios/' + id, mod.value,
+      this.http.put(ApiUrl + prefix + '/estudios/' + id, mod.value,
         {
           headers: { 'Authorization': 'Bearer ' + jwt }
         })
@@ -105,9 +105,9 @@ export class EstudiosService {
     });
   }
 
-  eliminar(jwt: string, id: any): Promise<any> {
+  eliminar(jwt: string, prefix: string, id: any): Promise<any> {
     return new Promise((ok, error) => {
-      this.http.delete(ApiUrl + 'estudios/' + id,
+      this.http.delete(ApiUrl + prefix + '/estudios/' + id,
         {
           headers: { 'Authorization': 'Bearer ' + jwt }
         })

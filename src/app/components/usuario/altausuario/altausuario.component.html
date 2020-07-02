@@ -7,13 +7,14 @@
         </span>
         <span>{{mensajeBienvenida}}</span>
         <span class="space"></span>
-        <span *ngIf="actRoute != '0'"> <button mat-button (click)="eliminar()"><i class="material-icons">delete</i>
+        <span *ngIf="actRoute != '0' && UserPerm"> <button mat-button (click)="eliminar()"><i
+                    class="material-icons">delete</i>
                 Eliminar Usuario</button></span>
     </mat-toolbar>
     <form class="example-container" novalidate [formGroup]="altauser">
 
         <!--Nombre-->
-        <mat-form-field appearance="outline" style="width: 70%;">
+        <mat-form-field appearance="outline" style="width: 40%;">
             <mat-label>Nombre</mat-label>
             <input matInput formControlName="nombre" class="separacion">
             <mat-error *ngIf="altauser.hasError('required','nombre')">
@@ -22,9 +23,10 @@
         </mat-form-field>
 
         <!--Usuario-->
-        <mat-form-field appearance="outline" style="width: 40%;">
+        <mat-form-field appearance="outline" style="width: 30%;">
             <mat-label>Usuario</mat-label>
-            <input matInput formControlName="nombreUsuario">
+            <input matInput formControlName="nombreusuario">
+            <span matPrefix>{{prefijo}}_</span>
             <mat-error *ngIf="altauser.hasError('required','nombreUsuario')">
                 Ingresar un nombre de usuario
             </mat-error>
@@ -32,7 +34,7 @@
         </mat-form-field>
 
         <!--EMAIL-->
-        <mat-form-field appearance="outline" style="width: 40%;">
+        <mat-form-field appearance="outline" style="width: 25%;">
             <mat-label>Correo electrónico</mat-label>
             <input matInput formControlName="email" [errorStateMatcher]="matcherEmail">
             <mat-error *ngIf="altauser.hasError('email','email') 
@@ -55,7 +57,7 @@
         </mat-form-field>
 
         <!--Contraseña-->
-        <mat-form-field appearance="outline" style="width: 50%;">
+        <mat-form-field *ngIf="ocultar" appearance="outline" style="width: 50%;">
             <mat-label>Contraseña</mat-label>
             <input matInput formControlName="contrasena" type="password">
             <mat-hint>La contraseña debe ser minimo de 6 caracteres</mat-hint>
@@ -65,7 +67,7 @@
         </mat-form-field>
 
         <!--Contraseña 2-->
-        <mat-form-field appearance="outline" style="width: 50%;">
+        <mat-form-field *ngIf="ocultar" appearance="outline" style="width: 50%;">
             <mat-label>Repetir contraseña</mat-label>
             <!--<input matInput formControlName="confirmcontrasena" [errorStateMatcher]="matcher">
             <mat-error *ngIf="altauser.hasError('notSame','confirmcontrasena')">
@@ -78,7 +80,8 @@
         </mat-form-field>
 
 
-        <button mat-flat-button (click)="guardar()" color="primary" style="margin: 3em 5em; width: 20%;">Guardar</button>
+        <button mat-flat-button (click)="guardar()" color="primary"
+            style="margin: 3em 5em; width: 20%;">Guardar</button>
     </form>
 </div>
 <div class='loading' *ngIf="load">
