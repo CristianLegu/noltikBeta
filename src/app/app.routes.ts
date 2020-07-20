@@ -13,9 +13,11 @@ import { ImprimirComponent } from './components/imprimir/imprimir.component'
 import { UnanalisisComponent } from './components/analisis/unanalisis/unanalisis.component';
 
 import { AuthGuard } from './services/auth/auth.guard';
+import { RegistroComponent } from './components/registro/registro.component';
 
 
 const APP_ROUTES: Routes = [
+    { path: 'registro', component: RegistroComponent },
     { path: 'ingresar', component: IngresarComponent },
     { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
     { path: 'usuarios/:id', component: AltausuarioComponent, canActivate: [AuthGuard] },

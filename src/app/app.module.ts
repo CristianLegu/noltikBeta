@@ -54,6 +54,8 @@ import { EstudiosComponent } from './components/estudio/estudios/estudios.compon
 import { UnanalisisComponent } from './components/analisis/unanalisis/unanalisis.component';
 import { DialogmembreteComponent } from './common/dialogmembrete/dialogmembrete.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+//Módulo registro
+import { RegistroModule } from './components/registro/registro.module';
 
 
 
@@ -104,7 +106,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatSidenavModule,
     MatPaginatorModule,
     MatCheckboxModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    RegistroModule
   ],
   providers: [
     AuthService, AuthGuard, DatePipe,

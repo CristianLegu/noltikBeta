@@ -58,9 +58,14 @@ export class IngresarComponent implements OnInit, OnDestroy {
       })
       .catch(error => {
         this.loading = false;
-        let mensaje: string;
+        //Error no conexión
+        if (error.status == "0") {
+          this.openDialog(error.message);
+        }
+        else {
+          this.openDialog(error.error.mensaje);
+        }
         console.log(error);
-        this.openDialog(error.error.mensaje);
       });
   }
 

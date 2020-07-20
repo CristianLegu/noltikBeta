@@ -53,6 +53,8 @@ export class AuthService {
   logout() {
     this.loggedIn.next(false);
     localStorage.removeItem('token');
+    localStorage.removeItem('prefix');
+    localStorage.removeItem('role');
   }
 
   carga() {

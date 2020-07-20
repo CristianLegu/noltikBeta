@@ -54,13 +54,11 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
         this.service.obtenerLista(this.token, this.prefix, this.page_number, this.page_size,
           this.nombre)
           .then(ok => {
-            console.log(ok);
             this.dataSource = ok.body;
             this.load = false;
           })
           .catch(err => {
             let mensaje: string;
-            console.log(err);
             mensaje = err.error.mensaje;
             this.openDialog(mensaje);
             this.load = false;
@@ -69,10 +67,15 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
       })
       .catch(err => {
         let mensaje: string;
+        console.log(err);
         if (err.status == 401) {
           mensaje = 'Sesión ha expirado, intenta acceder de nuevo';
           this.openDialog(mensaje);
           this.router.navigate(["/ingresar"]);
+        }
+        if (err.status == 403) {
+          mensaje = 'Acceso denegado';
+          this.openDialog(mensaje);
         }
         else {
           mensaje = err.error.mensaje;
@@ -167,7 +170,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.router.navigate(["/pacientes"]);
+      this.router.navigate(["/"]);
     });
   }
 

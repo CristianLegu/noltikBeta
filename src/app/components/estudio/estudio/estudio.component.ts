@@ -70,13 +70,13 @@ export class EstudioComponent implements OnInit {
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
     if (this.actRoute != "0") {
-      
+
       //Valida Rol
       this.rol = localStorage.getItem('role');
       if (this.rol == 'ROLE_ADMIN') {
         this.UserPerm = true;
       }
-      
+
       this.estudioService.obtenerEstudio(this.jwt, this.prefix, this.actRoute)
         .then(ok => {
           console.log(ok);
@@ -269,9 +269,9 @@ export class EstudioComponent implements OnInit {
       data: { mensaje: mensaje }
     });
 
-    /* dialogRef.afterClosed().subscribe(result => {
-       this.router.navigate(["/estudios"]);
-     });*/
+    dialogRef.afterClosed().subscribe(result => {
+      this.router.navigate(["/estudios"]);
+    });
   }
 
   ruta_usuario() {

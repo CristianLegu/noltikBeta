@@ -75,7 +75,14 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
       })
       .catch(error => {
         this.load = false;
-        this.mensaje = error.error.mensaje; //error.error.message;
+        console.log(error);
+        if (error.error == null) {
+          this.mensaje = error.message;
+        }
+        else {
+          this.mensaje = error.error.mensaje;
+        }
+        
         if (error.status == 401) {
           let m = "Sesión expiró, debe de iniciar sesión nuevamente.";
           this.openDialog(m, error.status);

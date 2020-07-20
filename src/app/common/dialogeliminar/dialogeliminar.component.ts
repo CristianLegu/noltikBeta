@@ -75,11 +75,15 @@ export class DialogeliminarComponent {
 
       this.serviceUsuarios.eliminar(dataI.datos.jwt, dataI.datos.prefix, dataI.datos.id)
         .then(ok => {
-          this.dialogRef.close();
-          this.router.navigateByUrl('/usuarios')
+          console.log(ok);
+          this.mensajeSnack(ok.mensaje);
         })
         .catch(error => {
+          this.mensajeSnack(error.message);
         });
+
+      this.dialogRef.close();
+      this.router.navigateByUrl('/usuarios')
     }
 
     if (dataI.datos.tipo == 'analisis') {
@@ -90,7 +94,7 @@ export class DialogeliminarComponent {
         .catch(error => {
           this.mensajeSnack(error.message);
         });
-      
+
       this.dialogRef.close();
       this.router.navigate(['pacientes', dataI.datos.idpaciente, 'analisis']);
     }

@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../common/dialog/dialog.component';
 import { Router } from '@angular/router';
 import { MatPaginatorIntl, MatPaginator, PageEvent } from '@angular/material/paginator';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-medicos',
@@ -32,6 +33,7 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
 
   constructor(
     private serviceM: MedicosService,
+    private authService: AuthService,
     private dialog: MatDialog,
     private router: Router) {
     super();
@@ -64,8 +66,21 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
 
         let mensaje: string;
         this.load = false;
-        mensaje = err.error.mensaje;//err.error.message;
-        this.openDialog(mensaje);
+        if (err.error == null) {
+          mensaje = err.message;
+        }
+        else {
+          mensaje = err.error.mensaje;
+        }
+
+        //Valida el tipo de error
+        if (err.status == 401) {
+          let m = "Sesión expiró, debe de iniciar sesión nuevamente.";
+          this.openDialog(m, err.status);
+        }
+        else {
+          this.openDialog(mensaje);
+        }
 
       });
   }
@@ -151,15 +166,23 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
 
   pageSizeOptions = [10, 30, 50, 100];
 
-  openDialog(mensaje: string): void {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '400px',
       data: { mensaje: mensaje }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.router.navigate(["/"]);
-      this.load = false;
-    });
+    if (status == 401) {
+      dialogRef.afterClosed().subscribe(result => {
+        this.authService.logout();
+        this.router.navigate(["/ingresar"]);
+      });
+    } else {
+      dialogRef.afterClosed().subscribe(result => {
+        this.router.navigate(["/medicos"]);
+        this.load = false;
+      });
+    }
+
   }
 }

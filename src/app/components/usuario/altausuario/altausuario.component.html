@@ -7,7 +7,7 @@
         </span>
         <span>{{mensajeBienvenida}}</span>
         <span class="space"></span>
-        <span *ngIf="actRoute != '0' && UserPerm"> <button mat-button (click)="eliminar()"><i
+        <span *ngIf="(actRoute != '0' && UserPerm)"> <button mat-button (click)="eliminar()"><i
                     class="material-icons">delete</i>
                 Eliminar Usuario</button></span>
     </mat-toolbar>
@@ -25,8 +25,8 @@
         <!--Usuario-->
         <mat-form-field appearance="outline" style="width: 30%;">
             <mat-label>Usuario</mat-label>
-            <input matInput formControlName="nombreusuario">
-            <span matPrefix>{{prefijo}}_</span>
+            <input matInput formControlName="nombreusuario" pattern="[a-zA-Z ]*" maxlength="8">
+            <span matPrefix>{{prefijo}}</span>
             <mat-error *ngIf="altauser.hasError('required','nombreUsuario')">
                 Ingresar un nombre de usuario
             </mat-error>

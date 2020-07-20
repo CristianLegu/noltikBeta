@@ -4,7 +4,7 @@
             <form class="example-form" novalidate [formGroup]="logon">
                 <div class="div_imagen">
 
-                    <img class="responsiveimagen" mat-card-image src="https://lablace.com/logo2.png" alt="Logo">
+                    <img class="responsiveimagen" mat-card-image src="https://lablace.com/ZLOGOS/noltik.png" alt="Logo">
                 </div>
                 <mat-form-field class="center " appearance="outline">
                     <mat-label>Usuario</mat-label>
@@ -28,6 +28,9 @@
                                 </form>
                             </mat-chip-list> -->
             </form>
+            <mat-card-actions class="center">
+                <button mat-button color="accent" routerLink="/registro" type="submit">¿No tienes cuenta? ¡Crea una!</button>
+            </mat-card-actions>
         </mat-card-content>
     </mat-card>
     <div class='loading' *ngIf="loading">

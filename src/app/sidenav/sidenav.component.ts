@@ -13,9 +13,7 @@ export class SidenavComponent implements OnInit {
 
   isLoggedIn$: Observable<boolean>;
   rol: string;
-  UserPerm: boolean;
 
- 
   faHospital = faHospital;
   faUsers = faUsers;
   faStethoscope = faStethoscope;
@@ -25,19 +23,27 @@ export class SidenavComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private authService: AuthService) { }
+    private authService: AuthService) {
+
+  }
 
   ngOnInit() {
     this.isLoggedIn$ = this.authService.isLoggedIn;
-    this.rol = localStorage.getItem('role');
-    if(this.rol == 'ROLE_ADMIN'){
-      this.UserPerm = true;
-    }
   }
 
   logout() {
     this.authService.logout();
     this.router.navigateByUrl('/ingresar');
+  }
+
+  checkRol() {
+    this.rol = localStorage.getItem('role');
+    if (this.rol == 'ROLE_ADMIN') {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
 

@@ -4,7 +4,6 @@ import { FormGroup, Validators, FormBuilder, FormControl, FormGroupDirective, Ng
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../common/dialog/dialog.component';
 import { UsuarioService } from '../../../services/usuario/usuario.service'
-import { AuthService } from '../../../services/auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { Usuario, Rol, DialogDataEliminar } from '../../../common/interface';//'app/common/interface';
 import { DialogeliminarComponent } from '../../../common/dialogeliminar/dialogeliminar.component';//'src/app/common/dialogeliminar/dialogeliminar.component';
@@ -51,6 +50,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
   //Prefijo a mostrar
   prefijo: string;
 
+
   //Oculta campos de Contraseña
   ocultar: boolean = true;
 
@@ -78,7 +78,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
     //FormGroup
     this.altauser = this.fb.group({
       nombre: ['', [Validators.required]],
-      nombreusuario: ['', [Validators.required, Validators.minLength(4)]],
+      nombreusuario: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(8)]],
       contrasena: ['', this.valida],
       confirmcontrasena: [''],
       email: ['', [Validators.required, Validators.email]],
@@ -93,7 +93,6 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
 
   //Arreglo roles
   roles: Rol[] = [
-    { value: 'se-0', viewValue: 'Sin Especificar' },
     { value: 'ROLE_USER', viewValue: 'USUARIO' },
     { value: 'ROLE_ADMIN', viewValue: 'ADMINISTRADOR' }
   ];
@@ -114,8 +113,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
     this.load = true;
     this.jwt = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
-    console.log(this.actRoute);
-    
+
     //Valida que sea un usuario válido
     if (this.actRoute != '0') {
 
@@ -126,14 +124,12 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
       }
 
       this.usuarioService.obtenerUsuario(this.jwt, this.prefix, this.actRoute).then(ok => {
-        console.log(ok);
         this.usuario = ok.body;
         this.load = false;
         this.habilitaNU = true;
         this.pasarValores(this.usuario);
         this.ocultar = false;
       }).catch(error => {
-        console.log(error);
         this.load = false;
         this.mensaje = error.error.message;
         this.openDialog(this.mensaje);
@@ -141,9 +137,10 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
     }
     else {
       this.load = false;
-      this.prefijo = this.prefix;
+      this.prefijo = this.prefix.concat('_');
       this.mensajeBienvenida = 'Dar de alta usuario';
     }
+
   }
 
   pasarValores(usuario: any) {
@@ -153,14 +150,19 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
     this.selected = usuario.rol
 
     //Split el usuario para separar prefijo del nombre
-    let user = usuario.nombreusuario;
+    /*let user = usuario.nombreusuario;
     let userSplit;
     userSplit = user.split("_", 2);
 
     this.prefijo = userSplit[0];
-    console.log(this.prefijo);
     usuario.nombreusuario = user.replace(this.prefijo + '_', '');
 
+    this.prefijo = this.prefijo.concat('_');*/
+
+    //Si es un usuario admin, no puede ser eliminado
+    if (usuario.rol == 'ROLE_ADMIN') {
+      this.UserPerm = false;
+    }
 
     this.altauser.patchValue({
       nombre: usuario.nombre,
@@ -173,21 +175,33 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
 
     this.altauser.get('nombreusuario').disable();
     //this.altauser.get('rol').disable();
+    console.log(this.altauser)
 
   }
 
   guardar() {
+
     this.load = true;
     if (this.altauser.valid) {
+
       if (this.actRoute == '0') {
+
         if (this.altauser.value.contrasena != this.altauser.value.confirmcontrasena) {
           this.load = false;
           this.openSnackBar("Las contraseñas no coinciden, favor de revisar", "Aceptar");
         }
         else {
-          this.altauser.patchValue({
-            rol: 'ROLE_USUARIO',
-          });
+
+          //Concatenar prefijo con usuario
+          let usuario;
+          usuario = this.altauser.value.nombreusuario;
+          usuario = this.prefix.concat('_', usuario);
+
+          this.altauser.value.nombreusuario = usuario;
+          console.log('Variable usuario ' + usuario);
+          console.log('valor form ' + this.altauser.value.nombreusuario);
+
+
           this.usuarioService.setAlta(this.jwt, this.prefix, this.altauser)
             .then(ok => {
               // console.log(ok);
@@ -209,8 +223,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
           this.openSnackBar("Las contraseñas no coinciden, favor de revisar", "Aceptar");
         }
         else {
-          //console.log(this.altauser.get('nombreUsuario').touched);
-          console.log(this.altauser);
+          this.prefijo = "";
           this.usuarioService.modifica(this.jwt, this.prefix, this.altauser, this.actRoute)
             .then(ok => {
               this.load = false;
@@ -233,6 +246,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
       this.load = false;
       this.openSnackBar("Favor de llenar los campos obligatiorios", "Aceptar");
     }
+
   }
 
   eliminar() {

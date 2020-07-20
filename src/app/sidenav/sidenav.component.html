@@ -1,5 +1,5 @@
 <mat-toolbar class="toolbar" *ngIf="isLoggedIn$ | async as isLoggedIn">
-    Laboratorios LACE
+    NOLTIK
 </mat-toolbar>
 <mat-sidenav-container class="container">
     <mat-sidenav #drawer mode="side" opened role="navigation" *ngIf="isLoggedIn$ | async as isLoggedIn"
@@ -21,7 +21,7 @@
             </a>
             <mat-divider></mat-divider>
 
-            <a mat-list-item routerLink='/usuarios' *ngIf="UserPerm">
+            <a mat-list-item routerLink='/usuarios' *ngIf="checkRol()">
                 <fa-icon [icon]="faUsers" style="margin-right: 6px;"></fa-icon> Usuarios
             </a>
             <mat-divider></mat-divider>

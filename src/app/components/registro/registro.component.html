@@ -1,0 +1,144 @@
+<div class="container">
+    <div class="div_imagen">
+        <img class="responsiveimagen" mat-card-image src="https://lablace.com/ZLOGOS/noltik.png" alt="Logo">
+    </div>
+    <mat-card class="card">
+        <mat-card-content>
+            <h2 class="title">Crea tu cuenta</h2>
+            <form class="registro" novalidate [formGroup]="registro">
+
+                <h4 class="subtitle">Completa todos los campos</h4>
+
+                <mat-form-field appearance="outline" style="margin-top: 15px;">
+                    <mat-label>Nombre de usuario</mat-label>
+                    <input matInput formControlName="nombre">
+                    <mat-error *ngIf="registro.get('nombre').invalid">
+                        *Campo obligatorio
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="margin-top: 15px;">
+                    <mat-label>Nombre del laboratorio</mat-label>
+                    <input matInput formControlName="nombreLab">
+                    <mat-error *ngIf="registro.get('nombreLab').invalid">
+                        *Campo obligatorio
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" formControlName="emailuser">
+                    <mat-error *ngIf="registro.get('emailuser').invalid">
+                        Ingresa un correo electrónico válido
+                    </mat-error>
+                </mat-form-field>
+
+                <div class="row">
+                    <div class="col-4">
+                        <mat-form-field hintLabel="Max 8 caracteres" appearance="outline">
+                            <mat-label>Prefijo</mat-label>
+                            <input matInput type="email" formControlName="prefijo" minlength="4" maxlength="8"
+                                [(ngModel)]="prefix" #input maxlength="8" placeholder="Prefijo único">
+                            <mat-hint align="end">{{input.value?.length || 0}}/8</mat-hint>
+                            <mat-error *ngIf="registro.get('prefijo').invalid">
+                                *Mínimo 4 caracteres
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-6">
+                        <mat-form-field style="padding: 0px 0px 0px 10px;">
+                            <mat-label>Usuario</mat-label>
+                            <span matPrefix>{{ prefix }}_&nbsp;</span>
+                            <input matInput formControlName="nombreusuario">
+                            <mat-error *ngIf="registro.get('nombreusuario').invalid">
+                                *Campo obligatorio
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-5">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Contraseña</mat-label>
+                            <input matInput [type]="hide ? 'password' : 'text'" formControlName="contrasena">
+                            <button mat-icon-button matSuffix (click)="hide = !hide"
+                                [attr.aria-label]="'Hide contrasena'" [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                            <mat-error *ngIf="registro.get('contrasena').invalid">
+                                *La contraseña debe contener mínimo 6 caracteres
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-5">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Repetir Contraseña</mat-label>
+                            <input matInput [type]="hide2 ? 'password' : 'text'" [(ngModel)]="password2"
+                                [ngModelOptions]="{standalone: true}">
+                            <button mat-icon-button matSuffix (click)="hide2 = !hide2"
+                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide2">
+                                <mat-icon>{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                            <mat-error *ngIf="noMatch">
+                                *Contraseñas no coinciden
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+
+                <!--INICIO - INPUT PARA EL LOGO
+                        <label for="file-upload" class="custom-file-upload">
+                            <i class="fa fa-cloud-upload"></i> Seleccionar logo
+                        </label>
+                        <input id="file-upload" name="logo" type="file" accept="image/*"
+                            (change)="handleInputChange($event)" />
+
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Nombre del archivo</mat-label>
+                            <input matInput disabled value="{{ fileName }}">
+                        </mat-form-field>
+                        FIN - INPUT PARA EL LOGO-->
+
+                <mat-divider></mat-divider>
+
+                <div class="center">
+                    <mat-checkbox (change)="OnChange('checkbox', $event)">
+                    </mat-checkbox>
+                    <mat-label style="padding: 10px;">
+                        Al registrarse usted acepta nuestra
+                        <a href="https://www.google.com" target="_blank"><b>política de privacidad</b></a>
+                        y los <a href="https://www.google.com" target="_blank"><b>términos de uso</b></a>.
+                    </mat-label>
+                </div>
+                <br>
+
+                <!--<re-captcha (resolved)="OnChange('captcha', $event)" class="center" [(ngModel)]="recaptcha"
+                    [ngModelOptions]="{standalone: true}">
+                </re-captcha>-->
+
+                <mat-card-actions class="center">
+                    <form novalidate (ngSubmit)="guardar()" [formGroup]="registro">
+                        <button [disabled]="isAllOk" mat-flat-button class="button" type="submit" color="primary">
+                            Crear Cuenta
+                        </button>
+                    </form>
+                </mat-card-actions>
+            </form>
+            <div class="center">
+                ¿Ya tienes una cuenta?
+                <button mat-button color="accent" routerLink="/ingresar" type="submit">Ingresar</button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
+<div class='loading' *ngIf="load">
+    <mat-spinner></mat-spinner>
+</div>
