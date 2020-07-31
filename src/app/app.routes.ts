@@ -14,10 +14,12 @@ import { UnanalisisComponent } from './components/analisis/unanalisis/unanalisis
 
 import { AuthGuard } from './services/auth/auth.guard';
 import { RegistroComponent } from './components/registro/registro.component';
+import { ConfirmarComponent } from './components/confirmar/confirmar.component';
 
 
 const APP_ROUTES: Routes = [
     { path: 'registro', component: RegistroComponent },
+    { path: 'confirma/:token', component: ConfirmarComponent },
     { path: 'ingresar', component: IngresarComponent },
     { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
     { path: 'usuarios/:id', component: AltausuarioComponent, canActivate: [AuthGuard] },

@@ -56,6 +56,9 @@ import { DialogmembreteComponent } from './common/dialogmembrete/dialogmembrete.
 import { MatCheckboxModule } from '@angular/material/checkbox';
 //Módulo registro
 import { RegistroModule } from './components/registro/registro.module';
+//Módulo confirmar
+import { ConfirmarModule } from './components/confirmar/confirmar.module';
+
 
 
 
@@ -107,7 +110,8 @@ import { RegistroModule } from './components/registro/registro.module';
     MatPaginatorModule,
     MatCheckboxModule,
     MatAutocompleteModule,
-    RegistroModule
+    RegistroModule,
+    ConfirmarModule
   ],
   providers: [
     AuthService, AuthGuard, DatePipe,

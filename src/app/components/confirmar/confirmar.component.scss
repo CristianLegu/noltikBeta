@@ -1,0 +1,38 @@
+.container {
+    background-color: #0e2f56;
+    background-size: cover;
+    margin-top: 50px;
+}
+
+//#0e2f56;
+
+.card {
+    max-width: 400px;
+    max-height: 100%;
+    margin: auto;
+    box-shadow: 9px 9px 9px 1px rgba(0, 0, 0, 0.3);
+}
+
+img {
+    width: 20% !important;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.loading {
+    animation: fade-in 0.5s ease-out;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    top: 0;
+    background: rgba(170, 162, 162, 0.7);
+    overflow: hidden;
+    z-index: 1;
+    mat-spinner {
+      margin: auto;
+    }
+  }

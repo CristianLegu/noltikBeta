@@ -1,0 +1,21 @@
+<div class="container">
+    <mat-card class="card" *ngIf="valido">
+        <img src="https://lablace.com/ZLOGOS/noltik.png" alt="Noltik">
+        <mat-card-header>
+            <mat-card-title>Bienvenido a NOLTIK</mat-card-title>
+            <mat-card-subtitle>¡Gracias por registrarte!</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <p align="justify">
+                En Noltik, nos preocupamos porque mantengas el control de tu laboratorio donde quiera
+                que te encuentres.
+            </p>
+        </mat-card-content>
+        <mat-card-actions class="center">
+            <button mat-raised-button routerLink="/ingresar" color="primary">Iniciar sesión</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
+<div class='loading' *ngIf="load">
+    <mat-spinner></mat-spinner>
+</div>
