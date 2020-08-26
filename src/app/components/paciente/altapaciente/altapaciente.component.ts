@@ -66,7 +66,7 @@ export class AltapacienteComponent implements OnInit {
     estado: [""],
     codigopostal: [""],
     nacimiento: [""], //, disabled: true
-    genero: ["", [Validators.required]],
+    sexo: ["", [Validators.required]],
     telefonos: this.fb.array([this.fb.control("")]),
     tiposangre: [""],
     email: [""],
@@ -92,6 +92,7 @@ export class AltapacienteComponent implements OnInit {
       this.altapaciente
         .getPaciente(this.jwt, this.prefix, this.actRoute)
         .then(ok => {
+          console.log(ok);
           this.paciente = ok.body;
           this.load = false;
           this.pasarValores(this.paciente);
@@ -116,9 +117,13 @@ export class AltapacienteComponent implements OnInit {
         this.buttonRFCQuitar = false;
       }
     }
-   // console.log(paciente.genero)
-    if (paciente.genero == "F" || paciente.genero == "m-2") this.selected = "m-2";
-    else this.selected = "h-1";
+    // console.log(paciente.genero)
+    if (paciente.sexo == "M") {
+      this.selected = "M";
+    }
+    else {
+      this.selected = "H";
+    }
 
     this.buttongen = false;
 
@@ -133,7 +138,7 @@ export class AltapacienteComponent implements OnInit {
       estado: paciente.estado,
       codigopostal: paciente.codigopostal,
       nacimiento: new Date(paciente.nacimiento),
-      genero: paciente.genero,
+      sexo: paciente.sexo,
       tiposangre: paciente.tiposangre,
       email: paciente.email,
       rfcjson: paciente.rfcjson
@@ -178,6 +183,7 @@ export class AltapacienteComponent implements OnInit {
   guardar() {
     this.load = true;
     if (this.actRoute != "0") {
+      console.log(this.altapac);
       this.altapaciente
         .modifica(this.jwt, this.prefix, this.altapac, this.actRoute)
         .then(ok => {

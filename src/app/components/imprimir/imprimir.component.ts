@@ -72,7 +72,21 @@ export class ImprimirComponent implements OnInit {
 
   getFormatoFecha(fecha: string) {
     let splitted = fecha.split("T", 1);
+    let dd: string, mm: string, yyyy: string, mes: Number;
+    const monthNames = ["Ene", "Feb", "Mar", "Abr", "Mayo", "Jun",
+      "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
+    ];
+
     fecha = splitted[0];
+    fecha = fecha.substring(0, 10);
+    yyyy = fecha.substring(0, 4);
+    mm = fecha.substring(5, 7);
+    mes = Number(mm) -1;
+    mm = monthNames[mes.toString()];
+    dd = fecha.substring(8, 10);
+
+    fecha = dd.concat("-", mm, "-", yyyy);
+    console.log(fecha);
     return fecha;
   }
 

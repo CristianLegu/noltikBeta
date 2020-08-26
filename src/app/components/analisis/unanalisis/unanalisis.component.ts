@@ -177,12 +177,12 @@ export class UnanalisisComponent implements OnInit {
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
     this.rol = localStorage.getItem('role');
-    
+
     this.timeZone = moment.tz.guess();
     this.load = true;
 
     //Valida rol
-    if(this.rol == 'ROLE_ADMIN'){
+    if (this.rol == 'ROLE_ADMIN') {
       this.UserPerm = true;
     }
 
@@ -243,9 +243,12 @@ export class UnanalisisComponent implements OnInit {
   pasaValores(an: Analisis) {
     this.analisisIn = an;
 
-    if (this.idAnalisis != "0") this.mensaje = this.analisisIn.analisis;
-    else this.mensaje = "Crear Análisis";
-
+    if (this.idAnalisis != "0") {
+      this.mensaje = this.analisisIn.analisis;
+    }
+    else {
+      this.mensaje = "Crear Análisis";
+    }
     this.altaAnalisis.patchValue({
       analisis: this.analisisIn.analisis,
       area: this.analisisIn.area,
@@ -440,7 +443,7 @@ export class UnanalisisComponent implements OnInit {
         this.load = false;
         //Pasamos la respuesta a la variable
         this.estudioI = response.body;
-
+        this.agregaEstudio();
       })
       .catch(error => {
         this.load = false;
@@ -518,6 +521,7 @@ export class UnanalisisComponent implements OnInit {
     let an = this.analisisMod(this.analisis);
 
     this.pasaValores(an);
+    delete this.estudioI;
   }
 
   backListA() {
@@ -526,7 +530,7 @@ export class UnanalisisComponent implements OnInit {
 
   eliminarEstudio(i: number) {
     let control = <FormArray>this.altaAnalisis.controls.json;
-
+    delete this.estudioI;
     control.removeAt(i);
 
     this.analisisIn.json.splice(i, 1);

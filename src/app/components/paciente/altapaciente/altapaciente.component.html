@@ -58,7 +58,7 @@
         </div>
         <mat-form-field appearance="outline" style="width: 20%;">
             <mat-label>Sexo</mat-label>
-            <mat-select formControlName="genero" [(value)]="selected">
+            <mat-select formControlName="sexo" [(value)]="selected">
                 <mat-option *ngFor="let sex of gen" [value]="sex.value">
                     {{sex.viewValue}}
                 </mat-option>

@@ -59,7 +59,9 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
     this.nombre = '';
     this.service.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
-        this.length = ok;
+        console.log(ok);
+        this.length = ok.body.length;
+        
         this.service.getpacientes(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
           .then(ok => {
             // console.log(ok);

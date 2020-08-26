@@ -7,7 +7,8 @@
         </span>
         <span>{{mensaje}}</span>
         <span class="space"></span>
-        <span *ngIf="idAnalisis != '0' && UserPerm"> <button mat-button (click)="eliminar()"><i class="material-icons">delete</i> Eliminar Análisis</button></span>
+        <span *ngIf="idAnalisis != '0' && UserPerm"> <button mat-button (click)="eliminar()"><i
+                    class="material-icons">delete</i> Eliminar Análisis</button></span>
     </mat-toolbar>
 
     <form class="form-container" [formGroup]="altaAnalisis">
@@ -46,8 +47,9 @@
                             <h4>{{a.value.analisis}}</h4>
                         </mat-grid-tile>
                         <mat-grid-tile colspan="1" rowspan="2">
-                            <button mat-flat-button color="warn" *ngIf="(i>0 || btn) && idAnalisis=='0'" (click)="eliminarEstudio(i)">
-                                <i class="material-icons">delete</i> 
+                            <button mat-flat-button color="warn" *ngIf="(i>0 || btn) && idAnalisis=='0'"
+                                (click)="eliminarEstudio(i)">
+                                <i class="material-icons">delete</i>
                             </button>
                         </mat-grid-tile>
                         <mat-grid-tile colspan="5" rowspan="2" class="title">
@@ -107,19 +109,21 @@
         <div *ngIf="idAnalisis == '0'">
             <mat-form-field appearance="outline" style="width: 50%;">
                 <input type="text" placeholder="Estudio" matInput [formControl]="fControlE" [matAutocomplete]="auto">
-                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFnE" (optionSelected)="(getEstudio($event))">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFnE"
+                    (optionSelected)="(getEstudio($event))">
                     <mat-option *ngFor="let option of filteredEstudio | async" [value]="option">
                         {{option.nombre}}
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
-            <button mat-flat-button color="primary" style="margin-bottom: 1em; margin-left: 2em;" (click)="agregaEstudio()">
+            <!-- <button mat-flat-button color="primary" style="margin-bottom: 1em; margin-left: 2em;" (click)="agregaEstudio()">
                 <fa-icon [icon]="faPlusSquare"></fa-icon>
                 Agregar Estudio
-            </button>
+            </button>-->
         </div>
 
-        <button mat-flat-button (click)="guardar()" color="primary" style="margin: 3em 5em; width: 20%;">Guardar</button>
+        <button mat-flat-button (click)="guardar()" color="primary"
+            style="margin: 3em 5em; width: 20%;">Guardar</button>
 
     </form>
 

@@ -198,8 +198,6 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
           usuario = this.prefix.concat('_', usuario);
 
           this.altauser.value.nombreusuario = usuario;
-          console.log('Variable usuario ' + usuario);
-          console.log('valor form ' + this.altauser.value.nombreusuario);
 
 
           this.usuarioService.setAlta(this.jwt, this.prefix, this.altauser)
@@ -213,7 +211,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
               // console.log(err);
               let mensaje: string;
               mensaje = err.error.mensaje;
-              this.openDialog(mensaje);
+              this.openDialog(mensaje, err.status);
               this.load = false;
             });
         }
@@ -234,7 +232,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
               // console.log(error);
               let mensaje: string;
               mensaje = error.error.mensaje;
-              this.openDialog(mensaje);
+              this.openDialog(mensaje, error.status);
               this.load = false;
             });
 
@@ -274,13 +272,15 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
 
   }
 
-  openDialog(mensaje: string): void {
+  openDialog(mensaje: string, status?: string): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '350px',
       data: { mensaje: mensaje }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.router.navigate(["/usuarios"]);
+      if (status != "409") {
+        this.router.navigate(["/usuarios"]);
+      }
     });
     /*
         if (this.altauser.get('nombreUsuario').touched) {

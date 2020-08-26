@@ -1,4 +1,4 @@
-//let hostApiUrl = 'http://b3eb009cd917.ngrok.io/noltik_api/v1/';
+//let hostApiUrl = 'http://9e849b79e762.ngrok.io/noltik_api/v1/';
 let hostApiUrl = 'https://api-noltik-example.herokuapp.com/noltik_api/v1/';
 export const ApiUrl = hostApiUrl;
 
