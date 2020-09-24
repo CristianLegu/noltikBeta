@@ -93,7 +93,7 @@ export class PacienteService {
 
   obtenerTotal(jwt: string, prefix: string, name: string): Promise<any> {
     return new Promise((ok, error) => {
-      this.http.get(ApiUrl + prefix + '/pacientes',
+      this.http.get(ApiUrl + prefix + '/pacientes/total',
         {
           headers: { 'Authorization': 'Bearer ' + jwt },
           params: { 'name': name }

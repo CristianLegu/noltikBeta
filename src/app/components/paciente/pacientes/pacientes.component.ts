@@ -8,8 +8,7 @@ import { Router } from '@angular/router';
 import { AuthService } from "../../../services/auth/auth.service";
 import { MatPaginatorIntl, MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-
-
+import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
 
 
 @Component({
@@ -40,19 +39,16 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
     private service: PacienteService,
     private authService: AuthService,
     private dialog: MatDialog,
-    private router: Router) {
+    private router: Router,
+    private sidenav: SidenavComponent = new SidenavComponent(router, authService)
+  ) {
     super();
-    /*
-    const mat = new MatPaginatorIntl();
-    mat.itemsPerPageLabel = 'Pacientes por página';
-  */
   }
 
 
 
   ngOnInit() {
-
-
+    this.sidenav.onResize();
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
@@ -60,8 +56,8 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
     this.service.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
         console.log(ok);
-        this.length = ok.body.length;
-        
+        this.length = ok;
+
         this.service.getpacientes(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
           .then(ok => {
             // console.log(ok);
@@ -71,7 +67,7 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
           .catch(err => {
             this.load = false;
             console.log(err);
-            this.mensaje = err.error.mensaje;//err.error.message;
+            this.mensaje = err.message;//err.error.message;
             this.openDialog(this.mensaje);
           });
       })
@@ -84,7 +80,7 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
         else {
           this.mensaje = error.error.mensaje;
         }
-        
+
         if (error.status == 401) {
           let m = "Sesión expiró, debe de iniciar sesión nuevamente.";
           this.openDialog(m, error.status);
@@ -97,6 +93,7 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
   }
 
   handlePage(e: PageEvent) {
+    this.sidenav.onResize();
     this.load = true;
     this.page_size = e.pageSize;
     this.page_number = e.pageIndex;
@@ -113,6 +110,7 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
   }
 
   refresh() {
+    this.sidenav.onResize();
     this.nombre = '';
     this.page_size = 30;
     this.load = true;
@@ -138,6 +136,7 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
   }
 
   buscar(nombre: string) {
+    this.sidenav.onResize();
 
     this.paginator.pageIndex = 0;
 

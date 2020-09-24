@@ -1,27 +1,29 @@
 <mat-toolbar class="toolbar" *ngIf="isLoggedIn$ | async as isLoggedIn">
+    <button mat-icon-button color="white" aria-label="Menú" (click)="sidenav()">
+        <mat-icon>menu</mat-icon>
+    </button>
     NOLTIK
 </mat-toolbar>
 <mat-sidenav-container class="container">
-    <mat-sidenav #drawer mode="side" opened role="navigation" *ngIf="isLoggedIn$ | async as isLoggedIn"
-        style="width: 15%;">
-        <mat-nav-list>
-
-            <a mat-list-item routerLink='/pacientes'>
+    <mat-sidenav #drawer #side mode="side" [(opened)]="opened" role="navigation"
+        *ngIf="isLoggedIn$ | async as isLoggedIn">
+        <mat-nav-list class="content">
+            <a mat-list-item routerLink='/pacientes' (click)="sidenav()">
                 <fa-icon [icon]="faProcedures" style="margin-right: 6px;"></fa-icon>Pacientes
             </a>
             <mat-divider></mat-divider>
 
-            <a mat-list-item routerLink='/medicos'>
+            <a mat-list-item routerLink='/medicos' (click)="sidenav()">
                 <fa-icon [icon]="faStethoscope" style="margin-right: 6px;"></fa-icon>Médicos
             </a>
             <mat-divider></mat-divider>
 
-            <a mat-list-item routerLink='/estudios'>
+            <a mat-list-item routerLink='/estudios' (click)="sidenav()">
                 <fa-icon [icon]="faFileInvoice" style="margin-right: 6px;"></fa-icon>Estudios
             </a>
             <mat-divider></mat-divider>
 
-            <a mat-list-item routerLink='/usuarios' *ngIf="checkRol()">
+            <a mat-list-item routerLink='/usuarios' *ngIf="checkRol()" (click)="sidenav()">
                 <fa-icon [icon]="faUsers" style="margin-right: 6px;"></fa-icon> Usuarios
             </a>
             <mat-divider></mat-divider>

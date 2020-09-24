@@ -14,6 +14,8 @@ import { Patient } from "../../../common/interface";
 import { DialogeliminarComponent } from "../../../common/dialogeliminar/dialogeliminar.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { faPlusSquare, faFileInvoice } from "@fortawesome/free-solid-svg-icons";
+import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: "app-altapaciente",
@@ -34,6 +36,7 @@ export class AltapacienteComponent implements OnInit {
   faFileInvoice = faFileInvoice;
   rol: string;
   UserPerm: boolean;
+  buttonTel = true;
 
   constructor(
     private router: Router,
@@ -42,7 +45,9 @@ export class AltapacienteComponent implements OnInit {
     private fb: FormBuilder,
     private fb2: FormBuilder,
     private activatedRoute: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService: AuthService,
+    private sidenav: SidenavComponent = new SidenavComponent(router, authService)
   ) {
     this.actRoute = this.activatedRoute.snapshot.params["id"];
   }
@@ -78,6 +83,7 @@ export class AltapacienteComponent implements OnInit {
   });
 
   ngOnInit() {
+    this.sidenav.onResize();
     this.load = true;
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
@@ -96,6 +102,7 @@ export class AltapacienteComponent implements OnInit {
           this.paciente = ok.body;
           this.load = false;
           this.pasarValores(this.paciente);
+          this.sidenav.onResize();
         })
         .catch(error => {
           this.load = false;
@@ -163,24 +170,35 @@ export class AltapacienteComponent implements OnInit {
   }
 
   agregarTel() {
+    this.sidenav.onResize();
     if (this.telefonos.length <= 2) {
       this.telefonos.push(this.fb.control(""));
+      if (this.telefonos.length > 2) {
+        this.buttonTel = false;
+      }
     }
   }
 
   quitarTel(index: number) {
+    this.sidenav.onResize();
     if (index != 0) this.telefonos.removeAt(index);
+    if (this.telefonos.length <= 2) {
+      this.buttonTel = true;
+    }
   }
 
   agregarRfc() {
+    this.sidenav.onResize();
     this.buttonRFC = false;
   }
 
   quitarRfc() {
+    this.sidenav.onResize();
     this.buttonRFC = true;
   }
 
   guardar() {
+    this.sidenav.onResize();
     this.load = true;
     if (this.actRoute != "0") {
       console.log(this.altapac);
@@ -222,6 +240,7 @@ export class AltapacienteComponent implements OnInit {
   }
 
   eliminar() {
+    this.sidenav.onResize();
     this.load = true;
     this.openDialogEliminar();
   }

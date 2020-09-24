@@ -1,8 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
 import { Router } from '@angular/router';
-import { faHospital, faUsers, faStethoscope, faProcedures, faSignOutAlt, faFileInvoice } from '@fortawesome/free-solid-svg-icons';
+import { faHospital, 
+         faUsers, 
+         faStethoscope, 
+         faProcedures, 
+         faSignOutAlt, 
+         faFileInvoice, 
+         faBars } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-sidenav',
@@ -13,13 +19,31 @@ export class SidenavComponent implements OnInit {
 
   isLoggedIn$: Observable<boolean>;
   rol: string;
+  opened: boolean;
+
+  //Validar tamaño de pantalla
+  innerWidth: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.innerWidth = window.innerWidth;
+    if (this.innerWidth > 920) {
+      this.opened = true;
+    }
+    else {
+      this.opened = false;
+    }
+  }
+
 
   faHospital = faHospital;
   faUsers = faUsers;
   faStethoscope = faStethoscope;
-  faProcedures = faProcedures;
-  faSignOutAlt = faSignOutAlt;
+  faProcedures  = faProcedures;
+  faSignOutAlt  = faSignOutAlt;
   faFileInvoice = faFileInvoice;
+  faCaretSquare = faBars;
+
 
   constructor(
     private router: Router,
@@ -29,6 +53,7 @@ export class SidenavComponent implements OnInit {
 
   ngOnInit() {
     this.isLoggedIn$ = this.authService.isLoggedIn;
+    this.onResize();
   }
 
   logout() {
@@ -43,6 +68,15 @@ export class SidenavComponent implements OnInit {
     }
     else {
       return false;
+    }
+  }
+
+  sidenav() {
+    if (this.opened != false) {
+      this.opened = false;
+    }
+    else {
+      this.opened = true;
     }
   }
 

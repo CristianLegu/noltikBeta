@@ -1,18 +1,12 @@
-.container {
-    position: absolute;
-    top: 10%;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #eee;
-}
-
-.toolbar {
-    position: fixed;
-    background: #2D4C82;
+mat-sidenav-content {
+    height: 100vh;
+  }
+  
+  .toolbar {
+    background: #2d4c82;
     color: white;
-    top: 0;
-    left: 0;
-    // z-index: 2;
-    width: 100%;
-}
+  }
+  
+  .content {
+    padding: 0 8px;
+  }
