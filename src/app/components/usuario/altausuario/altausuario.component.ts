@@ -9,6 +9,8 @@ import { Usuario, Rol, DialogDataEliminar } from '../../../common/interface';//'
 import { DialogeliminarComponent } from '../../../common/dialogeliminar/dialogeliminar.component';//'src/app/common/dialogeliminar/dialogeliminar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
 
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -67,7 +69,9 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
     private usuarioService: UsuarioService,
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService: AuthService,
+    private sidenav: SidenavComponent = new SidenavComponent(router, authService)
   ) {
 
     this.actRoute = this.activatedRoute.snapshot.params['id'];
@@ -110,6 +114,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.sidenav.onResize();
     this.load = true;
     this.jwt = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
@@ -145,7 +150,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
 
   pasarValores(usuario: any) {
 
-    this.mensajeBienvenida = 'Usuario ' + usuario.nombre;
+    this.mensajeBienvenida = usuario.nombre;
 
     this.selected = usuario.rol
 
@@ -175,12 +180,11 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
 
     this.altauser.get('nombreusuario').disable();
     //this.altauser.get('rol').disable();
-    console.log(this.altauser)
 
   }
 
   guardar() {
-
+    this.sidenav.onResize();
     this.load = true;
     if (this.altauser.valid) {
 
@@ -248,6 +252,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
   }
 
   eliminar() {
+    this.sidenav.onResize();
     this.load = true;
     this.openDialogEliminar();
   }
@@ -309,7 +314,8 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
     });
   }
 
-  ruta_usuario() {
+  ruta() {
+    this.sidenav.onResize();
     this.altauser.patchValue({
       nombre: '',
       nombreusuario: '',

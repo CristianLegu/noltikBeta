@@ -7,6 +7,8 @@ import { DialogComponent } from '../../../common/dialog/dialog.component';
 import { Router } from '@angular/router';
 import { MatPaginatorIntl, MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
+import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 
 
@@ -21,7 +23,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
   page_size: number = 30;
   page_number: number = 0;
   dataSource: Usuario[] = [];
-  displayedColumns: string[] = ['id', 'usuario', 'perfil'];
+  displayedColumns: string[] = ['id', 'usuario'];
   token: string;
   prefix: string;
   load: boolean = false;
@@ -34,7 +36,9 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
   constructor(
     private service: UsuarioService,
     private dialog: MatDialog,
-    private router: Router) {
+    private router: Router,
+    private authService: AuthService,
+    private sidenav: SidenavComponent = new SidenavComponent(router, authService)) {
     super();
     const mat = new MatPaginatorIntl();
     mat.itemsPerPageLabel = 'Pacientes por página';
@@ -42,6 +46,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
 
 
   ngOnInit() {
+    this.sidenav.onResize();
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
@@ -103,6 +108,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   refresh() {
+    this.sidenav.onResize();
     this.nombre = '';
     this.page_size = 30;
     this.load = true;
@@ -131,7 +137,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
 
 
   buscar(nombre: string) {
-
+    this.sidenav.onResize();
     this.paginator.pageIndex = 0;
     this.page_number = 0;
     this.page_size = 50;

@@ -8,6 +8,7 @@ import { DialogComponent } from "../../../common/dialog/dialog.component";
 import { DialogeliminarComponent } from "src/app/common/dialogeliminar/dialogeliminar.component";
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: "app-estudio",
@@ -53,7 +54,8 @@ export class EstudioComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private estudioService: EstudiosService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService: AuthService,
   ) {
     this.actRoute = this.activatedRoute.snapshot.params["id"];
 
@@ -79,16 +81,20 @@ export class EstudioComponent implements OnInit {
 
       this.estudioService.obtenerEstudio(this.jwt, this.prefix, this.actRoute)
         .then(ok => {
-          console.log(ok);
           this.estudio = ok.body;
           this.load = false;
           this.pasarValores(this.estudio);
         })
         .catch(error => {
           let mensaje: string;
+          if (error.error.status === 401) {
+            mensaje = 'Sin autorización';
+          }
+          else {
+            mensaje = error.error.message;
+          }
           this.load = false;
-          mensaje = error.error.mensaje;
-          this.openDialog(mensaje);
+          this.openDialog(mensaje, error.error.status);
         });
     } else {
       this.mensajeBienvenida = "Dar de alta Estudio";
@@ -101,7 +107,6 @@ export class EstudioComponent implements OnInit {
     this.altaEstudio.patchValue({
       nombre: estudio.nombre
     });
-    console.log(estudio.json_estudio);
 
     //VALIDAR JSON
     if (estudio.json_estudio != null) {
@@ -263,15 +268,23 @@ export class EstudioComponent implements OnInit {
     });
   }
 
-  openDialog(mensaje: string): void {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: "350px",
       data: { mensaje: mensaje }
     });
+    if (status == 401) {
+      dialogRef.afterClosed().subscribe(result => {
+        this.authService.logout();
+        this.router.navigate(["/ingresar"]);
+      });
+    }
+    else {
+      dialogRef.afterClosed().subscribe(result => {
+        this.router.navigate(["/estudios"]);
+      });
+    }
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.router.navigate(["/estudios"]);
-    });
   }
 
   ruta_usuario() {

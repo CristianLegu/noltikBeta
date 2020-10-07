@@ -1,14 +1,3 @@
-.example-container {
-    display: flex;
-    flex-direction: column;
-    // background: #fff;
-    min-width: 150px;
-    max-width: 800px;
-    width: 100%;
-    margin: 2% 0 0 2%;
-    font-size: 14px;
-}
-
 .container {
     top: 0;
     bottom: 0;
@@ -17,16 +6,24 @@
     background: #fff;
 }
 
+.form {
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+    max-width: 1200px;
+    //width: 100%;
+    margin: 2% 5% 0 5%;
+    font-size: 14px;
+}
+
+.buttonTR {
+    margin: 1em;
+    width: 20%;
+}
+
 .separa {
     margin: 0 1em 0 0;
 }
-
-
-/*
-.separacion {
-    width: 280px !important;
-}
-*/
 
 .loading {
     animation: fade-in 0.5s ease-out;
@@ -57,4 +54,185 @@
     flex-direction: row;
     align-items: center;
     white-space: nowrap;
+}
+
+//Columns
+.row::after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+[class*="col-"] {
+    float: left;
+    padding: 0 0.5em;
+}
+.col-1 {
+    width: 8.33%;
+}
+.col-2 {
+    width: 16.66%;
+}
+.col-3 {
+    width: 25%;
+}
+.col-4 {
+    width: 33.33%;
+}
+.col-5 {
+    width: 45.66%;
+}
+.col-6 {
+    width: 50%;
+}
+.col-7 {
+    width: 58.33%;
+}
+.col-8 {
+    width: 66.66%;
+}
+.col-9 {
+    width: 75%;
+}
+.col-10 {
+    width: 83.33%;
+}
+.col-11 {
+    width: 91.66%;
+}
+.col-12 {
+    width: 100%;
+}
+
+.buttonGuardar {
+    margin: 3em 5em;
+    width: 20%;
+}
+
+//Pantallas
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .col-3 {
+        width: 40%;
+    }
+
+    .col-4{
+        width: 50%;
+    }
+
+    .col-5 {
+        width: 70%;
+    }
+    .col-7 {
+        width: 80%;
+    }
+
+    .col-8{
+        width: 90%;
+    }
+
+    .buttonTR {
+        width: 50%;
+    }
+
+    .buttonGuardar {
+        width: 50%;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .col-3 {
+        width: 40%;
+    }
+
+    .col-5 {
+        width: 55%;
+    }
+    .col-7 {
+        width: 70%;
+    }
+
+    .buttonTR {
+        width: 30%;
+    }
+
+    .buttonGuardar {
+        width: 40%;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .col-3 {
+        width: 30%;
+    }
+
+    .col-5 {
+        width: 40%;
+    }
+    .col-7 {
+        width: 55%;
+    }
+
+    .buttonTR {
+        width: 25%;
+    }
+
+    .buttonGuardar {
+        width: 30%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .col-3 {
+        width: 20%;
+    }
+
+    .col-5 {
+        width: 30%;
+    }
+    .col-7 {
+        width: 40%;
+    }
+
+    .buttonTR {
+        width: 20%;
+    }
+
+    .buttonGuardar {
+        width: 20%;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .col-3 {
+        width: 20%;
+    }
+
+    .col-4 {
+        width: 25%;
+    }
+    .col-5 {
+        width: 30%;
+    }
+    .col-7 {
+        width: 40%;
+    }
+
+    .col-8 {
+        width: 45%;
+    }
+
+    .buttonTR {
+        width: 20%;
+    }
+
+    .buttonGuardar {
+        width: 20%;
+    }
 }

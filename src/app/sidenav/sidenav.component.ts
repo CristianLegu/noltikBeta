@@ -2,13 +2,15 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
 import { Router } from '@angular/router';
-import { faHospital, 
-         faUsers, 
-         faStethoscope, 
-         faProcedures, 
-         faSignOutAlt, 
-         faFileInvoice, 
-         faBars } from '@fortawesome/free-solid-svg-icons';
+import {
+  faHospital,
+  faUsers,
+  faStethoscope,
+  faProcedures,
+  faSignOutAlt,
+  faFileInvoice,
+  faBars
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-sidenav',
@@ -19,7 +21,7 @@ export class SidenavComponent implements OnInit {
 
   isLoggedIn$: Observable<boolean>;
   rol: string;
-  opened: boolean;
+  opened: boolean = false;
 
   //Validar tamaño de pantalla
   innerWidth: number;
@@ -31,7 +33,9 @@ export class SidenavComponent implements OnInit {
       this.opened = true;
     }
     else {
-      this.opened = false;
+      if (this.opened == true) {
+        this.opened = false;
+      }
     }
   }
 
@@ -39,8 +43,8 @@ export class SidenavComponent implements OnInit {
   faHospital = faHospital;
   faUsers = faUsers;
   faStethoscope = faStethoscope;
-  faProcedures  = faProcedures;
-  faSignOutAlt  = faSignOutAlt;
+  faProcedures = faProcedures;
+  faSignOutAlt = faSignOutAlt;
   faFileInvoice = faFileInvoice;
   faCaretSquare = faBars;
 
