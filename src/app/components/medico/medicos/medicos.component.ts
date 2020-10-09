@@ -8,6 +8,7 @@ import { DialogComponent } from '../../../common/dialog/dialog.component';
 import { Router } from '@angular/router';
 import { MatPaginatorIntl, MatPaginator, PageEvent } from '@angular/material/paginator';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
 
 @Component({
   selector: 'app-medicos',
@@ -21,7 +22,7 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
   page_size: number = 30;
   page_number: number = 0;
   dataSource: Medico[] = [];
-  displayedColumns: string[] = ['id', 'nombre', 'area', 'perfil'];
+  displayedColumns: string[] = ['id', 'nombre', 'area'];
   token: string;
   prefix: string;
   load: boolean = false;
@@ -35,14 +36,13 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
     private serviceM: MedicosService,
     private authService: AuthService,
     private dialog: MatDialog,
-    private router: Router) {
+    private router: Router,
+    private sidenav: SidenavComponent = new SidenavComponent(router, authService)) {
     super();
-    /* const mat = new MatPaginatorIntl();
-     mat.itemsPerPageLabel = 'Médicos por página';
-   */
   }
 
   ngOnInit() {
+    this.sidenav.onResize();
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
@@ -86,6 +86,7 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   handlePage(e: PageEvent) {
+    this.sidenav.onResize();
     this.load = true;
     this.page_size = e.pageSize;
     this.page_number = e.pageIndex;
@@ -107,6 +108,7 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   refresh() {
+    this.sidenav.onResize();
     this.nombre = '';
     this.page_size = 30;
     this.load = true;
@@ -134,7 +136,7 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   buscar(nombre: string) {
-
+    this.sidenav.onResize();
     this.paginator.pageIndex = 0;
     this.page_number = 0;
     this.page_size = 50;

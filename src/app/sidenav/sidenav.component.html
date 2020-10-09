@@ -8,22 +8,22 @@
     <mat-sidenav #drawer #side mode="side" [(opened)]="opened" role="navigation"
         *ngIf="isLoggedIn$ | async as isLoggedIn">
         <mat-nav-list class="content">
-            <a mat-list-item routerLink='/pacientes' (click)="sidenav()">
+            <a mat-list-item routerLink='/pacientes'>
                 <fa-icon [icon]="faProcedures" style="margin-right: 6px;"></fa-icon>Pacientes
             </a>
             <mat-divider></mat-divider>
 
-            <a mat-list-item routerLink='/medicos' (click)="sidenav()">
+            <a mat-list-item routerLink='/medicos'>
                 <fa-icon [icon]="faStethoscope" style="margin-right: 6px;"></fa-icon>Médicos
             </a>
             <mat-divider></mat-divider>
 
-            <a mat-list-item routerLink='/estudios' (click)="sidenav()">
+            <a mat-list-item routerLink='/estudios'>
                 <fa-icon [icon]="faFileInvoice" style="margin-right: 6px;"></fa-icon>Estudios
             </a>
             <mat-divider></mat-divider>
 
-            <a mat-list-item routerLink='/usuarios' *ngIf="checkRol()" (click)="sidenav()">
+            <a mat-list-item routerLink='/usuarios' *ngIf="checkRol()">
                 <fa-icon [icon]="faUsers" style="margin-right: 6px;"></fa-icon> Usuarios
             </a>
             <mat-divider></mat-divider>

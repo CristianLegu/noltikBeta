@@ -23,7 +23,7 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
   page_size: number = 30;
   page_number: number = 0;
   dataSource: Patient[] = [];
-  displayedColumns: string[] = ['id', 'nombre', 'perfil', 'analisis'];
+  displayedColumns: string[] = ['id', 'nombre', 'analisis'];
   token: string;
   prefix: string;
   load: boolean = false;
@@ -44,8 +44,6 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
   ) {
     super();
   }
-
-
 
   ngOnInit() {
     this.sidenav.onResize();
@@ -88,12 +86,9 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
           this.openDialog(this.mensaje);
       });
 
-
-
   }
 
   handlePage(e: PageEvent) {
-    this.sidenav.onResize();
     this.load = true;
     this.page_size = e.pageSize;
     this.page_number = e.pageIndex;
@@ -110,29 +105,8 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
   }
 
   refresh() {
-    this.sidenav.onResize();
-    this.nombre = '';
-    this.page_size = 30;
-    this.load = true;
-    this.service.obtenerTotal(this.token, this.prefix, this.nombre)
-      .then(ok => {
-        this.length = ok;
-        this.service.getpacientes(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
-          .then(ok => {
-            this.dataSource = ok.body;
-            this.load = false;
-          })
-          .catch(err => {
-            this.load = false;
-            this.mensaje = err.error.mensaje;//err.error.message;
-            this.openDialog(this.mensaje);
-          });
-      })
-      .catch(error => {
-        this.load = false;
-        this.mensaje = error.error.mensaje;//error.error.message;
-        this.openDialog(this.mensaje);
-      });
+    this.ngOnInit();
+
   }
 
   buscar(nombre: string) {

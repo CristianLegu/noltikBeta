@@ -8,6 +8,8 @@ import { DialogComponent } from 'src/app/common/dialog/dialog.component';
 import { Router } from '@angular/router';
 import { MatPaginatorIntl, MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
+import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-estudios',
@@ -21,7 +23,7 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
   page_size: number = 30;
   page_number: number = 0;
   dataSource: Estudio;
-  displayedColumns: string[] = ['id', 'estudio', 'detalles'];
+  displayedColumns: string[] = ['id', 'estudio'];
   faPlusCircle = faPlusCircle;
   faSync = faSync;
   faSearch = faSearch;
@@ -36,11 +38,14 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
   constructor(
     private estudiosServices: EstudiosService,
     private dialog: MatDialog,
-    private router: Router) {
+    private router: Router,
+    private authService: AuthService,
+    private sidenav: SidenavComponent = new SidenavComponent(router, authService)) {
     super();
   }
 
   ngOnInit() {
+    this.sidenav.onResize();
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
@@ -55,18 +60,28 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
             this.load = false;
           })
           .catch((err => {
+            console.log(err);
             let mensaje: string;
+            if (err.error.status === 401) {
+              mensaje = 'Sin autorización';
+            }
+            else {
+              mensaje = err.error.message;
+            }
             this.load = false;
-            mensaje = err.error.mensaje;
-            this.openDialog(mensaje);
+            this.openDialog(mensaje, err.error.status);
           }))
       })
       .catch(err => {
         let mensaje: string;
-        console.log(err);
+        if (err.error.status === 401) {
+          mensaje = 'Sin autorización';
+        }
+        else {
+          mensaje = err.error.message;
+        }
         this.load = false;
-        mensaje = err.error.mensaje;
-        this.openDialog(mensaje);
+        this.openDialog(mensaje, err.error.status);
       });
   }
 
@@ -91,7 +106,7 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   buscar(nombre: string) {
-
+    this.sidenav.onResize();
     this.paginator.pageIndex = 0;
     this.page_number = 0;
     this.page_size = 50;
@@ -122,6 +137,7 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   refresh() {
+    this.sidenav.onResize();
     this.nombre = '';
     this.page_size = 30;
     this.load = true;
@@ -148,15 +164,24 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
       });
   }
 
-  openDialog(mensaje: string): void {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '350px',
       data: { mensaje: mensaje }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.router.navigate(["/estudios"]);
-    });
+    if (status == 401) {
+      dialogRef.afterClosed().subscribe(result => {
+        this.authService.logout();
+        this.router.navigate(["/ingresar"]);
+      });
+    }
+    else {
+      dialogRef.afterClosed().subscribe(result => {
+        this.router.navigate(["/estudios"]);
+      });
+    }
+
   }
 
   pageSizeOptions = [10, 30, 50, 100];

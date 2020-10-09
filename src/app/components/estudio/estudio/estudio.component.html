@@ -1,87 +1,125 @@
 <div class="container">
-    <mat-toolbar class="mat-mod">
-        <span>
-            <a mat-flat-button (click)="ruta_usuario()" style="background: whitesmoke;">
-                <i class="material-icons">keyboard_backspace</i>
-            </a>
-        </span>
-        <span>{{mensajeBienvenida}}</span>
-        <span class="space"></span>
-        <span *ngIf="actRoute != '0' && UserPerm"> <button mat-button (click)="eliminar()"><i class="material-icons">delete</i>
-                Eliminar Estudio</button></span>
+    <mat-toolbar>
+        <mat-toolbar-row>
+            <span>{{mensajeBienvenida}}</span>
+        </mat-toolbar-row>
+
+        <mat-toolbar-row>
+            <span>
+                <a mat-flat-button (click)="ruta_usuario()" style="background: whitesmoke;">
+                    <i class="material-icons">keyboard_backspace</i>
+                </a>
+            </span>
+            <span class="space"></span>
+            <span *ngIf="actRoute != '0'">
+                <button mat-button (click)="eliminar()" *ngIf="rol == 'ROLE_ADMIN'">
+                    <i class="material-icons">delete</i>
+                    Eliminar
+                </button>
+            </span>
+        </mat-toolbar-row>
+
     </mat-toolbar>
 
-    <form class="example-container" novalidate [formGroup]="altaEstudio">
-
-        <mat-form-field appearance="outline" style="width: 60%;">
-            <mat-label>Nombre Estudio</mat-label>
-            <input matInput formControlName="nombre" class="separacion">
-        </mat-form-field>
+    <form class="form" novalidate [formGroup]="altaEstudio">
+        <div class="row">
+            <mat-form-field class="col-8">
+                <mat-label>Nombre Estudio</mat-label>
+                <input matInput formControlName="nombre">
+            </mat-form-field>
+        </div>
 
         <!--División para subtitulos-->
         <div formArrayName="json_estudio">
             <div *ngFor="let sub of altaEstudio.get('json_estudio')['controls']; let i=index">
                 <div [formGroupName]="i">
-                    <mat-form-field appearance="outline" class="separa">
-                        <mat-label>Subtítulo</mat-label>
-                        <input matInput formControlName="subtitulo">
-                        <mat-icon matSuffix></mat-icon>
-                    </mat-form-field>
+                    <div class="row">
+                        <mat-form-field class="col-4">
+                            <mat-label>Subtítulo</mat-label>
+                            <input matInput formControlName="subtitulo">
+                            <mat-icon matSuffix></mat-icon>
+                        </mat-form-field>
 
-                    <!--Botón agregar subtítulo-->
-                    <button mat-flat-button color="primary" *ngIf="i==0" (click)="addSubtitulo()">
-                        <i class="material-icons">add</i> Subtítulo
-                    </button>
+                        <!--Botón agregar subtítulo-->
+                        <div class="col-2">
+                            <button mat-stroked-button color="primary" *ngIf="i==0" (click)="addSubtitulo()"
+                                matTooltip="Agregar un subtítulo"
+                                aria-label="Button that displays a tooltip when focused or hovered over">
+                                <i class="material-icons">library_add</i> Subtítulo
+                            </button>
+                        </div>
 
-                    <!--Botón eliminar subtítulo-->
-                    <button mat-flat-button color="warn" *ngIf="i>0" (click)="deleteSubtitulo(i)">
-                        <i class="material-icons">delete</i>
-                    </button>
+                        <!--Botón eliminar subtítulo-->
+                        <div class="col-2">
+                            <button mat-icon-button color="warn" *ngIf="i>0" (click)="deleteSubtitulo(i)"
+                                matTooltip="Eliminar subtítulo"
+                                aria-label="Button that displays a tooltip when focused or hovered over">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </div>
+                    </div>
 
                     <!--División para items-->
                     <div formArrayName="items">
                         <div *ngFor="let items of sub.get('items').controls; let j=index">
                             <div [formGroupName]="j">
-                                <mat-form-field appearance="outline" class="separa">
-                                    <mat-label>Prueba</mat-label>
-                                    <input matInput formControlName="prueba">
-                                    <mat-icon matSuffix></mat-icon>
-                                </mat-form-field>
-                                <mat-form-field appearance="outline" class="separa">
-                                    <mat-label>Unidades</mat-label>
-                                    <input matInput formControlName="unidades">
-                                    <mat-icon matSuffix></mat-icon>
-                                </mat-form-field>
-                                <mat-form-field appearance="outline" class="separa">
-                                    <mat-label>Referencia</mat-label>
-                                    <input matInput formControlName="referencia">
-                                    <mat-icon matSuffix></mat-icon>
-                                </mat-form-field>
 
-                                <!--Botón agregar items-->
-                                <button mat-flat-button color="primary" *ngIf="j==0"
-                                    (click)="addItems(sub.controls.items)">
-                                    <i class="material-icons">add</i> Items
-                                </button>
+                                <div class="row">
+                                    <div id="separa">
+                                        <mat-form-field class="col-4">
+                                            <mat-label>Prueba</mat-label>
+                                            <input matInput formControlName="prueba">
+                                            <mat-icon matSuffix></mat-icon>
+                                        </mat-form-field>
+                                    </div>
 
-                                <!--Eliminar Items-->
-                                <button mat-flat-button color="warn" *ngIf="j>0"
-                                    (click)="deleteItem(sub.controls.items, j)">
-                                    <i class="material-icons">delete</i>
-                                </button>
+                                    <div id="separa">
+                                        <mat-form-field class="col-3">
+                                            <mat-label>Unidades</mat-label>
+                                            <input matInput formControlName="unidades">
+                                            <mat-icon matSuffix></mat-icon>
+                                        </mat-form-field>
+                                    </div>
 
+                                    <div id="separa">
+                                        <mat-form-field class="col-4">
+                                            <mat-label>Referencia</mat-label>
+                                            <input matInput formControlName="referencia">
+                                            <mat-icon matSuffix></mat-icon>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <!--Botón agregar items-->
+                                    <div class="col-1" id="separa">
+                                        <button mat-flat-button color="primary" *ngIf="j==0"
+                                            (click)="addItems(sub.controls.items)">
+                                            <i class="material-icons">library_add</i> Prueba
+                                        </button>
+                                    </div>
+
+                                    <!--Eliminar Items-->
+                                    <div class="col-1" id="separa">
+                                        <button mat-icon-button color="warn" *ngIf="j>0"
+                                            (click)="deleteItem(sub.controls.items, j)">
+                                            <i class="material-icons">delete_forever</i>
+                                        </button>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <mat-divider style="margin-bottom: 1em;"></mat-divider>
+                <div class="col-12">
+                    <mat-divider style="margin-bottom: 1em;"></mat-divider>
+                </div>
             </div>
 
         </div>
 
-        <button mat-flat-button (click)="guardar()" color="primary" style="margin: 3em 5em; width: 20%;">
-            Guardar
+        <button mat-raised-button color="primary" (click)="guardar()" class="buttonGuardar">
+            <i class="material-icons">save</i> Guardar
         </button>
 
     </form>

@@ -1,13 +1,14 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { FormBuilder, Validators, FormArray } from "@angular/forms";
-import { faPhone, faPlusSquare } from "@fortawesome/free-solid-svg-icons";
-import { MedicosService } from "src/app/services/medicos/medicos.service";
+import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import { Medico, DialogDataEliminar } from "src/app/common/interface";
 import { DialogComponent } from "src/app/common/dialog/dialog.component";
 import { DialogeliminarComponent } from "src/app/common/dialogeliminar/dialogeliminar.component";
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MedicosService } from 'src/app/services/medicos/medicos.service';
+import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: "app-altamedico",
@@ -16,41 +17,49 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class AltamedicoComponent implements OnInit {
   //Variables
-  actRoute: string;
-  jwt: string;
-  prefix: string;
-  mensajeBienvenida: string;
   load: boolean = false;
-  faPhone = faPhone;
-  medico: Medico;
-  faPlusSquare = faPlusSquare;
+  mensajeBienvenida: string;
+  actRoute: string;
+  buttonTel = true;
   mensaje: string;
-  dataEliminar: DialogDataEliminar = { id: "", jwt: "", prefix: '', mensaje: "", tipo: "" };
+
+  //Estructura para dialog eliminar
+  dataEliminar: DialogDataEliminar = { id: "", jwt: "", mensaje: "", tipo: "", prefix: "" };
+
+  //íconos
+  faPlusSquare = faPlusSquare;
+
+  //Estructura Médico
+  medico: Medico;
+
+  //Storage
+  jwt: string;
+  pref: string;
+  rol: string;
 
   constructor(
+    private activateRoute: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private fbTel: FormBuilder,
-    private activatedRoute: ActivatedRoute,
+    private fbHosp: FormBuilder,
     private medicoService: MedicosService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private authService: AuthService,
+    private sidenav: SidenavComponent = new SidenavComponent(router, authService)
   ) {
-    this.actRoute = this.activatedRoute.snapshot.params["id"];
+    this.actRoute = this.activateRoute.snapshot.params["id"];
   }
-
-  color = "accent";
 
   //FormGroup Médico
   altaMedico = this.fb.group({
-    area: ["", [Validators.required]],
     nombre: ["", [Validators.required]],
+    area: ["",],
     domicilio: ["", []],
     ciudad: ["", []],
     estado: ["", []],
     email: ["", []],
     telefonos: this.fb.array([this.fb.control("")]),
-    infoHosp: this.fbTel.group({
+    infoHosp: this.fbHosp.group({
       nombre: ["", []],
       direccion: ["", []],
       telefono: ["", []],
@@ -59,93 +68,107 @@ export class AltamedicoComponent implements OnInit {
     })
   });
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.load = true;
     this.jwt = localStorage.getItem("token");
-    this.prefix = localStorage.getItem('prefix');
-    if (this.actRoute != "0") {
-      this.medicoService
-        .obtenerMedico(this.jwt, this.prefix, this.actRoute)
+    this.pref = localStorage.getItem("prefix");
+    this.rol = localStorage.getItem("role");
+
+    if (this.actRoute != '0') {
+      this.medicoService.obtenerMedico(this.jwt, this.pref, this.actRoute)
         .then(ok => {
           this.medico = ok.body;
+
+          this.fillForm(this.medico);
+
           this.load = false;
-          this.pasarValores(this.medico);
         })
         .catch(error => {
-          let mensaje: string;
+          console.log(error);
+          this.openDialog(error);
           this.load = false;
-          mensaje = error.error.mensaje;//error.error.message;
-          this.openDialog(mensaje);
-        });
-    } else {
-      this.mensajeBienvenida = "Dar de alta Médico";
+          this.router.navigate(["/medicos"]);
+        })
+    }
+    else {
+      this.mensajeBienvenida = 'Crear Médico';
       this.load = false;
     }
   }
 
-  ruta_usuario() {
+  guardar() {
+    this.load = true;
+    this.medicoService.crearMedico(this.jwt, this.pref, this.altaMedico)
+      .then(ok => {
+        this.load = false;
+        this.mensaje = ok.mensaje;
+        this.openDialog(this.mensaje);
+        this.ruta();
+      })
+      .catch(err => {
+        this.load = false;
+        this.mensaje = err.error.mensaje;
+        this.openDialog(this.mensaje);
+      });
+
+  }
+
+  //Botón flecha atrás
+  ruta() {
     this.router.navigate(["/medicos"]);
   }
 
-  guardar() {
-    this.load = true;
-    if (this.altaMedico.valid) {
-      if (this.actRoute == "0") {
-        this.medicoService
-          .crearMedico(this.jwt, this.prefix, this.altaMedico)
-          .then(ok => {
-            this.load = false;
-            this.mensaje = ok.mensaje;//"El médico se guardó correctamente";
-            this.openDialog(this.mensaje);
-          })
-          .catch(error => {
-            let mensaje: string;
-            this.load = false;
-            mensaje = error.error.mensaje;//error.error.message;
-            this.openDialog(mensaje);
-          });
-      } else {
-        this.medicoService
-          .modifica(this.jwt, this.prefix, this.altaMedico, this.actRoute)
-          .then(ok => {
-            this.load = false;
-            this.mensaje = ok.mensaje;//"El médico se actualizó correctamente";
-            this.openDialog(this.mensaje);
-          })
-          .catch(error => {
-            let mensaje: string;
-            this.load = false;
-            mensaje = error.error.mensaje;//error.error.message;
-            this.openDialog(mensaje);
-          });
-      }
-    } else {
-      this.openSnackBar("Complete los campos obligatorios", "Aceptar");
-    }
-  }
-
+  //Botón eliminar Médico
   eliminar() {
     this.load = true;
     this.openDialogEliminar();
   }
 
-  openDialogEliminar(): void {
-    this.load = false;
-    this.dataEliminar.mensaje =
-      "¿Desea eliminar al médico " + this.medico.nombre + "?";
-    this.dataEliminar.id = this.actRoute;
-    this.dataEliminar.jwt = this.jwt;
-    this.dataEliminar.tipo = "medicos";
+  //Forma arreglo de teléfonos
+  get telefonos() {
+    return this.altaMedico.get("telefonos") as FormArray;
+  }
 
-    const dialogRef = this.dialog.open(DialogeliminarComponent, {
+  agregarTel() {
+    if (this.telefonos.length <= 2) {
+      this.telefonos.push(this.fb.control(""));
+      if (this.telefonos.length > 2) {
+        this.buttonTel = false;
+      }
+    }
+  }
+
+  quitarTel(index: number) {
+    if (index != 0) this.telefonos.removeAt(index);
+    if (this.telefonos.length <= 2) {
+      this.buttonTel = true;
+    }
+  }
+
+  openDialog(mensaje: string): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
       width: "350px",
-      data: { mensaje: this.dataEliminar }
+      data: { mensaje: mensaje }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      //this.router.navigate(["/noltik/medicos"]);
     });
   }
 
-  pasarValores(medico: any) {
-    this.mensajeBienvenida = "Médico " + medico.nombre;
-    if (medico.telefonos == null) medico.telefonos = [];
+  //Pasa los valores al form de médico
+  fillForm(medico: any) {
+    if (this.sidenav.innerWidth > 920) {
+      this.mensajeBienvenida = medico.nombre
+    }
+    else {
+      this.mensajeBienvenida = medico.nombre.substr(0, 36);
+    }
+
+    //Si los teléfonos se obtienen vacíos, se manda un arreglo vacío
+    if (medico.telefonos == null) {
+      medico.telefonos = [];
+    }
 
     this.altaMedico.patchValue({
       area: medico.area,
@@ -158,44 +181,33 @@ export class AltamedicoComponent implements OnInit {
       infoHosp: medico.infoHosp
     });
 
+    //Pasa los valores de los teléfonos
     medico.telefonos.forEach((x, index) => {
-      if (index == 0) this.telefonos.at(index).setValue(x.telefono);
+      if (index == 0) {
+        this.telefonos.at(index).setValue(x.telefono);
+      }
       else {
         this.agregarTel();
         this.telefonos.at(index).setValue(x.telefono);
       }
     });
+
   }
 
-  get telefonos() {
-    return this.altaMedico.get("telefonos") as FormArray;
-  }
-
-  agregarTel() {
-    if (this.telefonos.length <= 2) {
-      this.telefonos.push(this.fb.control(""));
-    }
-  }
-
-  quitarTel(index: number) {
-    if (index != 0) this.telefonos.removeAt(index);
-  }
-
-  openDialog(m: string): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: "350px",
-      data: { mensaje: m }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.router.navigate(["/medicos"]);
-    });
-  }
-
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 2000
-    });
+  //Dialog para eliminar
+  openDialogEliminar(): void {
     this.load = false;
+    this.dataEliminar.mensaje =
+      "¿Desea eliminar al médico ";
+    this.dataEliminar.id = this.actRoute;
+    this.dataEliminar.jwt = this.jwt;
+    this.dataEliminar.prefix = this.pref;
+    this.dataEliminar.tipo = "medicos";
+
+    const dialogRef = this.dialog.open(DialogeliminarComponent, {
+      width: "350px",
+      data: { mensaje: this.dataEliminar.mensaje, datos: this.dataEliminar }
+    });
   }
+
 }

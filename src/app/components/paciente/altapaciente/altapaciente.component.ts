@@ -98,7 +98,6 @@ export class AltapacienteComponent implements OnInit {
       this.altapaciente
         .getPaciente(this.jwt, this.prefix, this.actRoute)
         .then(ok => {
-          console.log(ok);
           this.paciente = ok.body;
           this.load = false;
           this.pasarValores(this.paciente);
@@ -112,13 +111,18 @@ export class AltapacienteComponent implements OnInit {
     } else {
       this.load = false;
 
-      this.mensajeBienvenida = "Dar de alta paciente";
+      this.mensajeBienvenida = "Crear paciente";
     }
   }
 
   pasarValores(paciente: any) {
     if (this.actRoute != "0") {
-      this.mensajeBienvenida = "Paciente " + paciente.nombre;
+      if (this.sidenav.innerWidth > 920) {
+        this.mensajeBienvenida = paciente.nombre
+      }
+      else {
+        this.mensajeBienvenida = paciente.nombre.substr(0, 36);
+      }
       if (paciente.rfcjson != null) {
         this.agregarRfc();
         this.buttonRFCQuitar = false;
@@ -271,7 +275,7 @@ export class AltapacienteComponent implements OnInit {
     });
   }
 
-  ruta_usuario() {
+  ruta() {
     this.router.navigate(["/pacientes"]);
   }
 
