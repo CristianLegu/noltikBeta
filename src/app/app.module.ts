@@ -59,6 +59,7 @@ import { RegistroModule } from './components/registro/registro.module';
 //Módulo confirmar
 import { ConfirmarModule } from './components/confirmar/confirmar.module';
 import { InicioComponent } from './components/inicio/inicio.component';
+import { HomeComponent } from './components/home/home.component';
 
 
 
@@ -83,7 +84,8 @@ import { InicioComponent } from './components/inicio/inicio.component';
     EstudiosComponent,
     UnanalisisComponent,
     DialogmembreteComponent,
-    InicioComponent
+    InicioComponent,
+    HomeComponent
   ],
   imports: [
     FontAwesomeModule,

@@ -16,6 +16,7 @@ import { AuthGuard } from './services/auth/auth.guard';
 import { RegistroComponent } from './components/registro/registro.component';
 import { ConfirmarComponent } from './components/confirmar/confirmar.component';
 import { InicioComponent } from './components/inicio/inicio.component';
+import { HomeComponent } from './components/home/home.component';
 
 
 const APP_ROUTES: Routes = [
@@ -36,8 +37,9 @@ const APP_ROUTES: Routes = [
     { path: 'estudios/:id', component: EstudioComponent, canActivate: [AuthGuard] },
     { path: 'pacientes/:id/analisis/imprimir/:an', component: ImprimirComponent, canActivate: [AuthGuard] },
 
+    { path: 'home', component: HomeComponent },
     //Ruta por defecto
-    { path: '**', pathMatch: 'full', redirectTo: 'inicio' }
+    { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ];
 
 
