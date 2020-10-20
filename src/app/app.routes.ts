@@ -15,14 +15,12 @@ import { UnanalisisComponent } from './components/analisis/unanalisis/unanalisis
 import { AuthGuard } from './services/auth/auth.guard';
 import { RegistroComponent } from './components/registro/registro.component';
 import { ConfirmarComponent } from './components/confirmar/confirmar.component';
-import { InicioComponent } from './components/inicio/inicio.component';
 
 
 const APP_ROUTES: Routes = [
     { path: 'registro', component: RegistroComponent },
     { path: 'confirma/:token', component: ConfirmarComponent },
     { path: 'ingresar', component: IngresarComponent },
-    { path: 'inicio', component: InicioComponent },
     { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
     { path: 'usuarios/:id', component: AltausuarioComponent, canActivate: [AuthGuard] },
     { path: 'pacientes', component: PacientesComponent, canActivate: [AuthGuard] },
@@ -37,7 +35,7 @@ const APP_ROUTES: Routes = [
     { path: 'pacientes/:id/analisis/imprimir/:an', component: ImprimirComponent, canActivate: [AuthGuard] },
 
     //Ruta por defecto
-    { path: '**', pathMatch: 'full', redirectTo: 'inicio' }
+    { path: '**', pathMatch: 'full', redirectTo: '/' }
 ];
 
 

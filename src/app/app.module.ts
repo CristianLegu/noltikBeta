@@ -58,11 +58,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { RegistroModule } from './components/registro/registro.module';
 //Módulo confirmar
 import { ConfirmarModule } from './components/confirmar/confirmar.module';
-import { InicioComponent } from './components/inicio/inicio.component';
-
-
-
-
 
 @NgModule({
   declarations: [
@@ -82,8 +77,7 @@ import { InicioComponent } from './components/inicio/inicio.component';
     EstudioComponent,
     EstudiosComponent,
     UnanalisisComponent,
-    DialogmembreteComponent,
-    InicioComponent
+    DialogmembreteComponent
   ],
   imports: [
     FontAwesomeModule,
