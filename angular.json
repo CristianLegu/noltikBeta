@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "noltikbeta"
+  "defaultProject": "noltikbeta",
+  "cli": {
+    "analytics": false
+  }
 }
