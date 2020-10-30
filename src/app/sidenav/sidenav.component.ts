@@ -25,10 +25,12 @@ export class SidenavComponent implements OnInit {
 
   //Validar tamaño de pantalla
   innerWidth: number;
+  innerHeight: number;
 
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.innerWidth = window.innerWidth;
+/*    innerHeight = window.innerHeight;
     if (this.innerWidth > 920) {
       this.opened = true;
     }
@@ -36,7 +38,7 @@ export class SidenavComponent implements OnInit {
       if (this.opened == true) {
         this.opened = false;
       }
-    }
+    }*/
   }
 
 

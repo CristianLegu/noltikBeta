@@ -71,7 +71,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private snackBar: MatSnackBar,
     private authService: AuthService,
-    private sidenav: SidenavComponent = new SidenavComponent(router, authService)
+     
   ) {
 
     this.actRoute = this.activatedRoute.snapshot.params['id'];
@@ -114,7 +114,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sidenav.onResize();
+     
     this.load = true;
     this.jwt = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
@@ -184,7 +184,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
   }
 
   guardar() {
-    this.sidenav.onResize();
+     
     this.load = true;
     if (this.altauser.valid) {
 
@@ -252,7 +252,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
   }
 
   eliminar() {
-    this.sidenav.onResize();
+     
     this.load = true;
     this.openDialogEliminar();
   }
@@ -315,7 +315,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
   }
 
   ruta() {
-    this.sidenav.onResize();
+     
     this.altauser.patchValue({
       nombre: '',
       nombreusuario: '',

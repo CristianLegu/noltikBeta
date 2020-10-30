@@ -37,12 +37,12 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
     private authService: AuthService,
     private dialog: MatDialog,
     private router: Router,
-    private sidenav: SidenavComponent = new SidenavComponent(router, authService)) {
+     ) {
     super();
   }
 
   ngOnInit() {
-    this.sidenav.onResize();
+     
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
@@ -86,7 +86,7 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   handlePage(e: PageEvent) {
-    this.sidenav.onResize();
+     
     this.load = true;
     this.page_size = e.pageSize;
     this.page_number = e.pageIndex;
@@ -108,7 +108,7 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   refresh() {
-    this.sidenav.onResize();
+     
     this.nombre = '';
     this.page_size = 30;
     this.load = true;
@@ -136,7 +136,7 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   buscar(nombre: string) {
-    this.sidenav.onResize();
+     
     this.paginator.pageIndex = 0;
     this.page_number = 0;
     this.page_size = 50;

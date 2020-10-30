@@ -40,13 +40,13 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
     private authService: AuthService,
     private dialog: MatDialog,
     private router: Router,
-    private sidenav: SidenavComponent = new SidenavComponent(router, authService)
+    private sidenav: SidenavComponent
   ) {
     super();
   }
 
   ngOnInit() {
-    this.sidenav.onResize();
+    this.sidenav.opened = false;
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
@@ -110,7 +110,7 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
   }
 
   buscar(nombre: string) {
-    this.sidenav.onResize();
+
 
     this.paginator.pageIndex = 0;
 

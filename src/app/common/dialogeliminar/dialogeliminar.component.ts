@@ -64,11 +64,13 @@ export class DialogeliminarComponent {
     if (dataI.datos.tipo == 'medicos') {
       this.serviceMedicos.eliminar(dataI.datos.jwt, dataI.datos.prefix, dataI.datos.id)
         .then(ok => {
-          this.dialogRef.close();
-          this.router.navigateByUrl('/medicos')
+          this.mensajeSnack(ok.mensaje);
         })
         .catch(error => {
+          this.mensajeSnack(error.message);
         });
+      this.dialogRef.close();
+      this.router.navigateByUrl('/medicos')
     }
 
     if (dataI.datos.tipo == 'usuarios') {

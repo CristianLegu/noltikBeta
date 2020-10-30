@@ -76,9 +76,9 @@ export class UnanalisisComponent implements OnInit {
   subtitulofinal: string;
   noBtn: boolean = false;
   btn: boolean = false;
-
+  
   altaAnalisis: FormGroup;
-  fecha1: string;
+  fecha1: string = '';
   myDate = new Date();
   analisisNuevo: Analisis = {
     analisis: "",
@@ -90,7 +90,7 @@ export class UnanalisisComponent implements OnInit {
     medico: "",
     paciente: ""
   };
-
+  
   dataEliminar: DialogDataEliminar = {
     id: "",
     jwt: "",

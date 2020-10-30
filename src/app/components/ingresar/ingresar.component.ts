@@ -76,7 +76,6 @@ export class IngresarComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.router.navigate(["/"]);
       this.loading = false;
     });
   }

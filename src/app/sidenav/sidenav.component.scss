@@ -1,12 +1,12 @@
 mat-sidenav-content {
-    height: 100vh;
-  }
-  
-  .toolbar {
-    background: #2d4c82;
-    color: white;
-  }
-  
-  .content {
-    padding: 0 8px;
-  }
+  height: fit-content;
+}
+
+.toolbar {
+  background: #2d4c82;
+  color: white;
+}
+
+.content {
+  padding: 0 8px;
+}

@@ -71,7 +71,7 @@ export class AltapacienteComponent implements OnInit {
     estado: [""],
     codigopostal: [""],
     nacimiento: [""], //, disabled: true
-    sexo: ["", [Validators.required]],
+    sexo: ["",],
     telefonos: this.fb.array([this.fb.control("")]),
     tiposangre: [""],
     email: [""],
@@ -83,7 +83,7 @@ export class AltapacienteComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.sidenav.onResize();
+
     this.load = true;
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
@@ -99,9 +99,10 @@ export class AltapacienteComponent implements OnInit {
         .getPaciente(this.jwt, this.prefix, this.actRoute)
         .then(ok => {
           this.paciente = ok.body;
+          console.log(this.paciente);
           this.load = false;
           this.pasarValores(this.paciente);
-          this.sidenav.onResize();
+
         })
         .catch(error => {
           this.load = false;
@@ -116,18 +117,21 @@ export class AltapacienteComponent implements OnInit {
   }
 
   pasarValores(paciente: any) {
-    if (this.actRoute != "0") {
-      if (this.sidenav.innerWidth > 920) {
-        this.mensajeBienvenida = paciente.nombre
-      }
-      else {
-        this.mensajeBienvenida = paciente.nombre.substr(0, 36);
-      }
-      if (paciente.rfcjson != null) {
-        this.agregarRfc();
-        this.buttonRFCQuitar = false;
-      }
+
+    if (this.sidenav.innerWidth > 920) {
+      this.mensajeBienvenida = paciente.nombre
     }
+    else {
+      this.mensajeBienvenida = paciente.nombre.substr(0, 36);
+    }
+
+    console.log(paciente.rfcjson.rfc);
+    if (paciente.rfcjson.rfc != null) {
+      this.agregarRfc();
+      //this.buttonRFCQuitar = false;
+    }
+
+
     // console.log(paciente.genero)
     if (paciente.sexo == "M") {
       this.selected = "M";
@@ -174,7 +178,7 @@ export class AltapacienteComponent implements OnInit {
   }
 
   agregarTel() {
-    this.sidenav.onResize();
+
     if (this.telefonos.length <= 2) {
       this.telefonos.push(this.fb.control(""));
       if (this.telefonos.length > 2) {
@@ -184,7 +188,7 @@ export class AltapacienteComponent implements OnInit {
   }
 
   quitarTel(index: number) {
-    this.sidenav.onResize();
+
     if (index != 0) this.telefonos.removeAt(index);
     if (this.telefonos.length <= 2) {
       this.buttonTel = true;
@@ -192,20 +196,23 @@ export class AltapacienteComponent implements OnInit {
   }
 
   agregarRfc() {
-    this.sidenav.onResize();
+
     this.buttonRFC = false;
   }
 
   quitarRfc() {
-    this.sidenav.onResize();
+
+    this.altapac.patchValue({
+      rfcjson: []
+    });
+    console.log(this.altapac);
     this.buttonRFC = true;
   }
 
   guardar() {
-    this.sidenav.onResize();
+
     this.load = true;
     if (this.actRoute != "0") {
-      console.log(this.altapac);
       this.altapaciente
         .modifica(this.jwt, this.prefix, this.altapac, this.actRoute)
         .then(ok => {
@@ -244,7 +251,7 @@ export class AltapacienteComponent implements OnInit {
   }
 
   eliminar() {
-    this.sidenav.onResize();
+
     this.load = true;
     this.openDialogEliminar();
   }

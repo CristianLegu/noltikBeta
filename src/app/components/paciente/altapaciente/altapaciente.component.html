@@ -106,29 +106,21 @@
 
         <div formGroupName="rfcjson" class="row">
 
-            <button mat-raised-button (click)="agregarRfc()" color="accent" *ngIf="buttonRFC" class="buttonTR">
-                <fa-icon [icon]="faFileInvoice" style="margin-right: 6px;"></fa-icon>RFC
-            </button>
-
-            <div [hidden]="buttonRFC == true">
-                <mat-form-field class="col-5">
-                    <mat-label>RFC</mat-label>
-                    <input matInput formControlName="rfc">
-                    <mat-icon matSuffix></mat-icon>
-                </mat-form-field>
-                <mat-form-field class="col-5">
-                    <mat-label>Razón Social</mat-label>
-                    <input matInput formControlName="razon">
-                    <mat-icon matSuffix></mat-icon>
-                </mat-form-field>
-                <mat-form-field class="col-5">
-                    <mat-label>Domicilio Fiscal</mat-label>
-                    <input matInput formControlName="fiscal">
-                    <mat-icon matSuffix></mat-icon>
-                </mat-form-field>
-                <button mat-raised-button (click)="quitarRfc()" color="warn"
-                    [disabled]="buttonRFCQuitar == false">Quitar RFC</button>
-            </div>
+            <mat-form-field class="col-5">
+                <mat-label>RFC</mat-label>
+                <input matInput formControlName="rfc">
+                <mat-icon matSuffix></mat-icon>
+            </mat-form-field>
+            <mat-form-field class="col-5">
+                <mat-label>Razón Social</mat-label>
+                <input matInput formControlName="razon">
+                <mat-icon matSuffix></mat-icon>
+            </mat-form-field>
+            <mat-form-field class="col-5">
+                <mat-label>Domicilio Fiscal</mat-label>
+                <input matInput formControlName="fiscal">
+                <mat-icon matSuffix></mat-icon>
+            </mat-form-field>
         </div>
 
         <button mat-raised-button color="primary" (click)="guardar()" class="buttonGuardar">

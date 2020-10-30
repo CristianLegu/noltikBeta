@@ -85,7 +85,9 @@ export class AltamedicoComponent implements OnInit {
         })
         .catch(error => {
           console.log(error);
-          this.openDialog(error);
+          if (error.status != 401) {
+            this.openDialog(error.message);
+          }
           this.load = false;
           this.router.navigate(["/medicos"]);
         })
@@ -97,19 +99,35 @@ export class AltamedicoComponent implements OnInit {
   }
 
   guardar() {
+
     this.load = true;
-    this.medicoService.crearMedico(this.jwt, this.pref, this.altaMedico)
-      .then(ok => {
-        this.load = false;
-        this.mensaje = ok.mensaje;
-        this.openDialog(this.mensaje);
-        this.ruta();
-      })
-      .catch(err => {
-        this.load = false;
-        this.mensaje = err.error.mensaje;
-        this.openDialog(this.mensaje);
-      });
+    if (this.actRoute != "0") {
+      this.medicoService.modifica(this.jwt, this.pref, this.altaMedico, this.actRoute)
+        .then(ok => {
+          this.load = false;
+          this.mensaje = ok.mensaje;
+          this.openDialog(this.mensaje);
+          this.ruta();
+        }).catch(error => {
+          this.mensaje = error.error.mensaje;//error.error.message;
+          this.openDialog(this.mensaje);
+          this.load = false;
+        });
+    }
+    else {
+      this.medicoService.crearMedico(this.jwt, this.pref, this.altaMedico)
+        .then(ok => {
+          this.load = false;
+          this.mensaje = ok.mensaje;
+          this.openDialog(this.mensaje);
+          this.ruta();
+        })
+        .catch(err => {
+          this.load = false;
+          this.mensaje = err.error.mensaje;
+          this.openDialog(this.mensaje);
+        });
+    }
 
   }
 
@@ -198,7 +216,7 @@ export class AltamedicoComponent implements OnInit {
   openDialogEliminar(): void {
     this.load = false;
     this.dataEliminar.mensaje =
-      "¿Desea eliminar al médico ";
+      "¿Desea eliminar al médico " + this.medico.nombre + "? ";
     this.dataEliminar.id = this.actRoute;
     this.dataEliminar.jwt = this.jwt;
     this.dataEliminar.prefix = this.pref;

@@ -1,28 +1,43 @@
-<mat-toolbar class="mat-mod">
-    <span>
-        <a mat-flat-button (click)="backlist()" style="background: whitesmoke;">
-            <i class="material-icons">keyboard_backspace</i>
-        </a>
-    </span>
+<mat-toolbar>
 
-    <span>Análisis {{paciente}}</span>
-    <span class="space"></span>
+    <mat-toolbar-row>
+        <span>Análisis</span>
+    </mat-toolbar-row>
 
-    <span> <button mat-button routerLink="{{ruta}}" [disabled]="buttonImp == false">
-            <i class="material-icons">print</i> Imprimir </button></span>
+    <mat-toolbar-row>
+        <span>
+            {{paciente}}
+        </span>
+    </mat-toolbar-row>
 
-    <span> <button mat-button routerLink="/pacientes/{{actRoute}}/analisis/0"><i class="material-icons">assignment</i>
-            Agregar Análisis</button></span>
+    <mat-toolbar-row>
+        <span>
+            <a mat-flat-button (click)="backlist()" style="background: whitesmoke;">
+                <i class="material-icons">keyboard_backspace</i>
+            </a>
+        </span>
+        <span class="space"></span>
+        <span>
+            <button mat-button routerLink="{{ruta}}" [disabled]="buttonImp == false">
+                <i class="material-icons">print</i> Imprimir
+            </button>
+        </span>
+
+        <span>
+            <button mat-button routerLink="/pacientes/{{actRoute}}/analisis/0">
+                <i class="material-icons">assignment</i>
+                Agregar Análisis
+            </button>
+        </span>
+    </mat-toolbar-row>
+
+
 </mat-toolbar>
+
 <div class='loading' *ngIf="load">
     <mat-spinner></mat-spinner>
 </div>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-    <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let analisis"> {{ analisis.id}} </td>
-    </ng-container>
 
     <ng-container matColumnDef="analisis">
         <th mat-header-cell *matHeaderCellDef> Nombre </th>
@@ -37,7 +52,7 @@
 
     </ng-container>
 
-    <ng-container matColumnDef="medico">
+    <ng-container matColumnDef="medico" *ngIf="showMedico">
         <th mat-header-cell *matHeaderCellDef> Médico </th>
         <td mat-cell *matCellDef="let analisis"> {{ analisis.medico}} </td>
     </ng-container>

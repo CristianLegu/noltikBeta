@@ -40,12 +40,12 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private authService: AuthService,
-    private sidenav: SidenavComponent = new SidenavComponent(router, authService)) {
+  ) {
     super();
   }
 
   ngOnInit() {
-    this.sidenav.onResize();
+
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
@@ -106,7 +106,7 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   buscar(nombre: string) {
-    this.sidenav.onResize();
+
     this.paginator.pageIndex = 0;
     this.page_number = 0;
     this.page_size = 50;
@@ -137,7 +137,7 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   refresh() {
-    this.sidenav.onResize();
+
     this.nombre = '';
     this.page_size = 30;
     this.load = true;

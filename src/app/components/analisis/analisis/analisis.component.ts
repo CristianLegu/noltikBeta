@@ -8,6 +8,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { DialogComponent } from "../../../common/dialog/dialog.component";
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 
 @Component({
@@ -22,7 +24,7 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
   length: number;
   page_size: number = 50;
   page_number: number = 0;
-  displayedColumns: string[] = ['id', 'analisis', 'fecha', 'medico', 'imprimir'];
+  displayedColumns: string[] = ['analisis', 'fecha', 'medico', 'imprimir'];
   token: string;
   prefix: string;
   load: boolean = false;
@@ -33,6 +35,7 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
   selected: boolean;
   mensaje: string;
   paciente: string;
+  showMedico: boolean = true;
 
   ruta: string;
 
@@ -42,6 +45,8 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
+    private authService: AuthService,
+    private sidenav: SidenavComponent = new SidenavComponent(router, authService)
   ) {
     super();
 
@@ -58,6 +63,14 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
       .getPaciente(this.token, this.prefix, this.actRoute)
       .then(ok => {
         this.paciente = ok.body.nombre;
+
+        if (this.sidenav.innerWidth < 920) {
+          this.displayedColumns = ['analisis', 'fecha', 'imprimir'];
+          this.showMedico = false;
+          this.paciente = this.paciente.substr(0, 30);
+          this.paciente = this.paciente.concat('...');
+        }
+
       })
       .catch(error => {
         this.load = false;

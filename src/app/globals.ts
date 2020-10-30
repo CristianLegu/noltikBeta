@@ -1,7 +1,7 @@
-//let hostApiUrl = 'https://c19ed278cff4.ngrok.io/noltik_api/v1/';
+let hostApiUrl = 'https://d0710b7a8df6.ngrok.io/noltik_api/v1/';
 //let hostApiUrl = 'https://api-noltik-example.herokuapp.com/noltik_api/v1/';
 
-let hostApiUrl = 'https://api.noltik.com/noltik_api/v1/';
+//let hostApiUrl = 'https://api.noltik.com/noltik_api/v1/';
 export const ApiUrl = hostApiUrl;
 
 let imgDataPDF =
