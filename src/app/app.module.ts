@@ -59,6 +59,12 @@ import { RegistroModule } from './components/registro/registro.module';
 //Módulo confirmar
 import { ConfirmarModule } from './components/confirmar/confirmar.module';
 import { HomeComponent } from './components/home/home.component';
+//import { InicioComponent } from './components/inicio/inicio.component';
+
+
+
+
+
 
 @NgModule({
   declarations: [
