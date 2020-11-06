@@ -21,7 +21,7 @@ export class SidenavComponent implements OnInit {
 
   isLoggedIn$: Observable<boolean>;
   rol: string;
-  opened: boolean = false;
+  abrir: boolean = false;
 
   //Validar tamaño de pantalla
   innerWidth: number;
@@ -30,15 +30,15 @@ export class SidenavComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.innerWidth = window.innerWidth;
-/*    innerHeight = window.innerHeight;
-    if (this.innerWidth > 920) {
-      this.opened = true;
-    }
-    else {
-      if (this.opened == true) {
-        this.opened = false;
-      }
-    }*/
+    /*    innerHeight = window.innerHeight;
+        if (this.innerWidth > 920) {
+          this.opened = true;
+        }
+        else {
+          if (this.opened == true) {
+            this.opened = false;
+          }
+        }*/
   }
 
 
@@ -59,10 +59,10 @@ export class SidenavComponent implements OnInit {
 
   ngOnInit() {
     this.isLoggedIn$ = this.authService.isLoggedIn;
-    this.onResize();
   }
 
   logout() {
+    this.abrir = false;
     this.authService.logout();
     this.router.navigateByUrl('/ingresar');
   }
@@ -78,13 +78,7 @@ export class SidenavComponent implements OnInit {
   }
 
   sidenav() {
-    if (this.opened != false) {
-      this.opened = false;
-    }
-    else {
-      this.opened = true;
-    }
+    this.abrir = !this.abrir;
   }
-
 
 }

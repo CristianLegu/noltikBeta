@@ -61,7 +61,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
 
   habilitaNU: boolean = false;
   rol: string;
-  UserPerm: boolean;
+  UserPerm: boolean = false;
 
   constructor(
     private router: Router,
@@ -124,6 +124,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
 
       //Valida Rol
       this.rol = localStorage.getItem('role');
+      console.log(this.rol);
       if (this.rol == 'ROLE_ADMIN') {
         this.UserPerm = true;
       }
@@ -167,6 +168,10 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
     //Si es un usuario admin, no puede ser eliminado
     if (usuario.rol == 'ROLE_ADMIN') {
       this.UserPerm = false;
+    }
+    else{
+      console.log("aquí no entró xD porque no es admin");
+      console.log(this.UserPerm);
     }
 
     this.altauser.patchValue({
