@@ -19,7 +19,8 @@ import { HomeComponent } from './components/home/home.component';
 
 
 const APP_ROUTES: Routes = [
-    { path: 'registro', component: RegistroComponent },
+    //{ path: 'registro', component: IngresarComponent },
+    { path: 'registrar', component: RegistroComponent },
     { path: 'confirma/:token', component: ConfirmarComponent },
     { path: 'ingresar', component: IngresarComponent },
     { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },

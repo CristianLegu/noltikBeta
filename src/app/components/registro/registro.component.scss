@@ -7,16 +7,20 @@
 }
 
 .container {
-  position: absolute; //fixed !important;
+  position: relative; //absolute !important;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
 
   width: 100%;
-  height: 220vh;
-  background: url(../../../assets/Fondo.png) top center;
-  background-size: cover;
+  height: auto;
+  background-color: #935d8c;
+	background-image: url("/src/assets/images/overlay.png"), -moz-linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
+	background-image: url("/src/assets/images/overlay.png"), -webkit-linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
+	background-image: url("/src/assets/images/overlay.png"), -ms-linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
+	background-image: url("/src/assets/images/overlay.png"), linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
+  //background: url(../../../assets/Fondo.png) top center;
 }
 
 .center {
