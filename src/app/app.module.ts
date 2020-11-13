@@ -115,7 +115,7 @@ import { HomeComponent } from './components/home/home.component';
   ],
   providers: [
     AuthService, AuthGuard, DatePipe,
-    { provide: MatPaginatorIntl, useClass: PacientesComponent },
+    { provide: MatPaginatorIntl, useClass: PacientesComponent  },
     { provide: MAT_DATE_LOCALE, useValue: 'es-MX' },
   ],
   bootstrap: [AppComponent],

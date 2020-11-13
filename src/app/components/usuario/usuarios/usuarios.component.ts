@@ -7,7 +7,6 @@ import { DialogComponent } from '../../../common/dialog/dialog.component';
 import { Router } from '@angular/router';
 import { MatPaginatorIntl, MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 
@@ -38,15 +37,16 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private authService: AuthService,
-     ) {
+  ) {
     super();
     const mat = new MatPaginatorIntl();
     mat.itemsPerPageLabel = 'Pacientes por página';
+    mat.getRangeLabel(69,2,69);
   }
 
 
   ngOnInit() {
-     
+
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
@@ -55,7 +55,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
     this.service.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
         this.length = ok;
-
+        
         this.service.obtenerLista(this.token, this.prefix, this.page_number, this.page_size,
           this.nombre)
           .then(ok => {
@@ -108,7 +108,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   refresh() {
-     
+
     this.nombre = '';
     this.page_size = 30;
     this.load = true;
@@ -137,10 +137,10 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
 
 
   buscar(nombre: string) {
-     
+
     this.paginator.pageIndex = 0;
     this.page_number = 0;
-    this.page_size = 50;
+    this.page_size = 30;
     this.load = true;
     this.service.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
@@ -167,7 +167,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
       });
   }
 
-  pageSizeOptions = [10, 30, 50, 100];
+  pageSizeOptions = [5, 30, 50, 100];
 
   openDialog(mensaje: string): void {
     const dialogRef = this.dialog.open(DialogComponent, {
