@@ -9,9 +9,6 @@ export function CustomPaginator(name: string) {
   customPaginatorIntl.firstPageLabel = 'Primera Página';
   customPaginatorIntl.lastPageLabel = 'Última página';
   customPaginatorIntl.getRangeLabel = function (page, pageSize, length) {
-    console.log('page' + page);
-    console.log('pageSize' + pageSize);
-    console.log('length' + length);
 
     length = Math.max(length, 0);
     const startIndex = page * pageSize;
