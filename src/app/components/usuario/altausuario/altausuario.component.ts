@@ -124,7 +124,6 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
 
       //Valida Rol
       this.rol = localStorage.getItem('role');
-      console.log(this.rol);
       if (this.rol == 'ROLE_ADMIN') {
         this.UserPerm = true;
       }
@@ -169,10 +168,6 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
     if (usuario.rol == 'ROLE_ADMIN') {
       this.UserPerm = false;
     }
-    else{
-      console.log("aquí no entró xD porque no es admin");
-      console.log(this.UserPerm);
-    }
 
     this.altauser.patchValue({
       nombre: usuario.nombre,
@@ -211,13 +206,11 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
 
           this.usuarioService.setAlta(this.jwt, this.prefix, this.altauser)
             .then(ok => {
-              // console.log(ok);
               this.load = false;
               this.mensaje = ok.mensaje;//"El usuario se creó correctamente";
               this.openDialog(this.mensaje);
             })
             .catch(err => {
-              // console.log(err);
               let mensaje: string;
               mensaje = err.error.mensaje;
               this.openDialog(mensaje, err.status);
@@ -238,7 +231,6 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
               this.openDialog(this.mensaje);
             })
             .catch(error => {
-              // console.log(error);
               let mensaje: string;
               mensaje = error.error.mensaje;
               this.openDialog(mensaje, error.status);

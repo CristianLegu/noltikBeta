@@ -47,14 +47,11 @@ export class DialogeliminarComponent {
     }
 
     if (dataI.datos.tipo == 'pacientes') {
-      console.log(dataI);
       this.servicePacientes.eliminar(dataI.datos.jwt, dataI.datos.prefix, dataI.datos.id)
         .then(ok => {
-          console.log(ok);
           this.mensajeSnack(ok.mensaje);
         })
         .catch(error => {
-          console.log(error)
           this.mensajeSnack(error.message);
         });
       this.dialogRef.close();
@@ -77,7 +74,6 @@ export class DialogeliminarComponent {
 
       this.serviceUsuarios.eliminar(dataI.datos.jwt, dataI.datos.prefix, dataI.datos.id)
         .then(ok => {
-          console.log(ok);
           this.mensajeSnack(ok.mensaje);
         })
         .catch(error => {

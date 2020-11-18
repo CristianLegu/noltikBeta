@@ -1,5 +1,33 @@
+.container {
+    overflow: auto;
+}
+
 table {
-    width: 100%;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.w-75 {
+    width: 75px;
+    text-align: center !important;
+}
+
+th {
+    padding-left: 15px !important;
+}
+.mat-table-sticky:first-child {
+    border-right: 1px solid #e0e0e0;
+}
+
+.mat-table-sticky:last-child {
+    border-left: 1px solid #e0e0e0;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .loading {

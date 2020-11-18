@@ -72,7 +72,6 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
       })
       .catch(err => {
         let mensaje: string;
-        console.log(err);
         if (err.status == 401) {
           mensaje = 'Sesión ha expirado, intenta acceder de nuevo';
           this.openDialog(mensaje);
@@ -152,7 +151,6 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
           })
           .catch(err => {
             let mensaje: string;
-            console.log(err);
             mensaje = err.error.mensaje;
             this.openDialog(mensaje);
             this.load = false;
@@ -160,7 +158,6 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
       })
       .catch(error => {
         let mensaje: string;
-        console.log(error);
         mensaje = error.error.mensaje;
         this.openDialog(mensaje);
         this.load = false;

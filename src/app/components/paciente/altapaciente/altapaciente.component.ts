@@ -99,7 +99,6 @@ export class AltapacienteComponent implements OnInit {
         .getPaciente(this.jwt, this.prefix, this.actRoute)
         .then(ok => {
           this.paciente = ok.body;
-          console.log(this.paciente);
           this.load = false;
           this.pasarValores(this.paciente);
 
@@ -125,14 +124,11 @@ export class AltapacienteComponent implements OnInit {
       this.mensajeBienvenida = paciente.nombre.substr(0, 36);
     }
 
-    console.log(paciente.rfcjson.rfc);
     if (paciente.rfcjson.rfc != null) {
       this.agregarRfc();
       //this.buttonRFCQuitar = false;
     }
 
-
-    // console.log(paciente.genero)
     if (paciente.sexo == "M") {
       this.selected = "M";
     }
@@ -205,7 +201,6 @@ export class AltapacienteComponent implements OnInit {
     this.altapac.patchValue({
       rfcjson: []
     });
-    console.log(this.altapac);
     this.buttonRFC = true;
   }
 
@@ -227,7 +222,6 @@ export class AltapacienteComponent implements OnInit {
         });
     } else {
       if (this.altapac.valid) {
-        //console.log(this.altapac)
         this.altapaciente
           .setAlta(this.jwt, this.prefix, this.altapac)
           .then(ok => {

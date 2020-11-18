@@ -10,7 +10,7 @@
         </span>
     </mat-toolbar-row>
 
-    <mat-toolbar-row>
+    <mat-toolbar-row class="center">
         <mat-form-field class="search">
             <input matInput placeholder="Buscar Usuarios" type="search" [(ngModel)]="nombre"
                 (keydown.enter)="buscar(nombre)">
@@ -31,8 +31,8 @@
 
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-    <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
+    <ng-container matColumnDef="id" sticky>
+        <th mat-header-cell *matHeaderCellDef class="w-75"> ID </th>
         <td mat-cell *matCellDef="let usuario; let i = index;">
             <button mat-flat-button [routerLink]="['/usuarios', usuario.id]">
                 {{ i+1 }}
@@ -47,7 +47,7 @@
         </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
 </table>

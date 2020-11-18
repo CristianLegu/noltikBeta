@@ -52,7 +52,6 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
     this.nombre = '';
     this.estudiosServices.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
-        console.log(ok);
         this.length = ok;
         this.estudiosServices.obtenerEstudios(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
           .then(ok => {
@@ -60,7 +59,6 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
             this.load = false;
           })
           .catch((err => {
-            console.log(err);
             let mensaje: string;
             if (err.error.status === 401) {
               mensaje = 'Sin autorización';
