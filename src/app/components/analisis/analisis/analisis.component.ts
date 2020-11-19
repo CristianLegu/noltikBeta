@@ -24,14 +24,16 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
   length: number;
   page_size: number = 50;
   page_number: number = 0;
-  displayedColumns: string[] = ['analisis', 'fecha', 'medico', 'imprimir'];
+  displayedColumns: string[] = ['analisis', 'fecha', 'medico', 'imprimir','enviar'];
   token: string;
   prefix: string;
   load: boolean = false;
   actRoute: number;
   dataSource: Analisis[] = [];
   analisisImp: Array<string> = [];
+  analisisEnv: Array<string> = [];
   buttonImp: boolean = false;
+  buttonEnv: boolean = false;
   selected: boolean;
   mensaje: string;
   paciente: string;
@@ -65,7 +67,7 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
         this.paciente = ok.body.nombre;
 
         if (this.sidenav.innerWidth < 920) {
-          this.displayedColumns = ['analisis', 'fecha', 'imprimir'];
+          this.displayedColumns = ['analisis', 'fecha', 'imprimir','enviar'];
           this.showMedico = false;
           this.paciente = this.paciente.substr(0, 30);
           this.paciente = this.paciente.concat('...');
@@ -152,6 +154,29 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
     this.ruta = "/pacientes/" + this.actRoute + "/analisis/imprimir/" + this.analisisImp;
     console.log(this.ruta);
   }
+
+  somethingClick2(checkbox: MatCheckbox, item: { id: string }) {
+    var cont = this.analisisEnv.length;
+    console.log(cont);
+    if (checkbox.checked == false) {
+      this.analisisEnv[cont] = item.id;
+    } else {
+      var pos = this.analisisEnv.indexOf(item.id);
+      this.analisisEnv.splice(pos, 1);
+    }
+
+    if (this.analisisEnv.length > 0) {
+      this.buttonEnv = true;
+    } else {
+      this.buttonEnv = false;
+    }
+    this.ruta = "/pacientes/" + this.actRoute + "/analisis/enviar/" + this.analisisEnv;
+    console.log(this.ruta);
+  }
+
+
+
+
 
   onActivate(event) {
     window.scroll(0, 0);

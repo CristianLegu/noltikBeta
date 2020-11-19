@@ -24,6 +24,12 @@
         </span>
 
         <span>
+            <button mat-button routerLink="{{ruta}}" [disabled]="buttonEnv == false">
+                <i class="material-icons">mail</i> Enviar por correo
+            </button>
+        </span>
+
+        <span>
             <button mat-button routerLink="/pacientes/{{actRoute}}/analisis/0">
                 <i class="material-icons">assignment</i>
                 Agregar Análisis
@@ -62,6 +68,14 @@
         <td mat-cell *matCellDef="let analisis">
             <mat-checkbox #checkbox="matCheckbox" [checked]="selected == true"
                 (click)="somethingClick(checkbox, analisis)"></mat-checkbox>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="enviar">
+        <th mat-header-cell *matHeaderCellDef> Enviar por correo </th>
+        <td mat-cell *matCellDef="let analisis">
+            <mat-checkbox #checkbox="matCheckbox" [checked]="selected == true"
+                (click)="somethingClick2(checkbox, analisis)"></mat-checkbox>
         </td>
     </ng-container>
 
