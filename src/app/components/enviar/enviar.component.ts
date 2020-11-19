@@ -1,29 +1,26 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 import * as jsPDF from "jspdf";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AnalisisService } from "../../services/analisis/analisis.service";
 import { imgData } from "../../globals";
 
 import { Analisis } from "src/app/common/interface";
-import { DialogmembreteComponent } from "src/app/common/dialogmembrete/dialogmembrete.component";
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: "app-imprimir",
-  templateUrl: "./imprimir.component.html",
-  styleUrls: ["./imprimir.component.scss"]
+  selector: 'app-enviar',
+  templateUrl: './enviar.component.html'
 })
-export class ImprimirComponent implements OnInit {
+export class EnviarComponent implements OnInit {
+
   jwt: string;
   prefix: string;
   actID: number;
   actString: string;
   actRoute: Array<string> = [];
-  analisisImp: Array<Analisis> = [];
+  analisisEnv: Array<Analisis> = [];
   paciente: string;
   fecha: string;
   doc = new jsPDF();
-  mensaje: string = "¿Desea que el reporte tenga membrete?";
   decision: string;
   sangria: number;
   altura: number;
@@ -32,13 +29,12 @@ export class ImprimirComponent implements OnInit {
   constructor(
     private serviceA: AnalisisService,
     private activatedRoute: ActivatedRoute,
-    private dialog: MatDialog,
     private router: Router
   ) {
     console.log(this.activatedRoute);
     this.actString = this.activatedRoute.snapshot.params["an"];
     this.actID = this.activatedRoute.snapshot.params["id"];
-  }
+   }
 
   ngOnInit() {
     this.jwt = localStorage.getItem("token");
@@ -48,28 +44,17 @@ export class ImprimirComponent implements OnInit {
       this.serviceA
         .getUnAnalisis(this.jwt, this.prefix, this.actID, this.actRoute[i])
         .then(ok => {
-          this.analisisImp.push(ok.body);
+          this.analisisEnv.push(ok.body);
         })
         .catch(error => {
           // this.load = false;
         });
     }
-    console.log(this.analisisImp);
-    this.openDialog();
+    this.decision = 'si';
+    this.downloadPDF(this.decision);
+    this.router.navigate(["/pacientes/" + this.actID + "/analisis"]);
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(DialogmembreteComponent, {
-      width: "350px",
-      data: { mensaje: this.mensaje, decision: this.decision }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.decision = result;
-      this.downloadPDF(this.decision);
-      this.router.navigate(["/pacientes/" + this.actID + "/analisis"]);
-    });
-  }
 
   getFormatoFecha(fecha: string) {
     let splitted = fecha.split("T", 1);
@@ -141,15 +126,16 @@ export class ImprimirComponent implements OnInit {
     this.doc.setFontType("normal");
     this.sangria = 156;
     this.doc.text("Fecha de aplicación: ", this.sangria, this.altura);
+    console.log(this.analisisEnv);
     this.sangria = 40;
     this.doc.setFontType("bold");
     this.doc.text(
-      this.analisisImp[0].paciente.toString(),
+      this.analisisEnv[0].paciente.toString(),
       this.sangria,
       this.altura
     );
     this.sangria = 185;
-    this.fecha = this.analisisImp[0].fecha.toString();
+    this.fecha = this.analisisEnv[0].fecha.toString();
     this.fecha = this.getFormatoFecha(this.fecha);
     this.doc.text(this.fecha, this.sangria, this.altura);
     this.altura = 50;
@@ -159,14 +145,14 @@ export class ImprimirComponent implements OnInit {
     this.sangria = 45;
     this.doc.setFontType("bold");
     this.doc.text(
-      this.analisisImp[0].medico.toString(),
+      this.analisisEnv[0].medico.toString(),
       this.sangria,
       this.altura + 4
     );
 
     this.doc.line(5, this.altura + 8, 205, this.altura + 8);
 
-    for (var i = 0; i < this.analisisImp.length; i++) {
+    for (var i = 0; i < this.analisisEnv.length; i++) {
       if (this.alturaItems >= 240) {
         this.doc.addPage();
         if (membrete != null) {
@@ -174,7 +160,7 @@ export class ImprimirComponent implements OnInit {
         }
         this.alturaItems = 60;
       }
-      let product = this.analisisImp[i];
+      let product = this.analisisEnv[i];
       this.paciente = product.paciente;
 
       this.alturaItems = this.alturaItems + 5;
@@ -1149,5 +1135,9 @@ export class ImprimirComponent implements OnInit {
       title: this.paciente + ".pdf"
     });
     this.doc.output("dataurlnewwindow");
+    
   }
+
+
+
 }

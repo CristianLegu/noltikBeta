@@ -9,7 +9,8 @@ import { AltamedicoComponent } from './components/medico/altamedico/altamedico.c
 import { AnalisisComponent } from './components/analisis/analisis/analisis.component';
 import { EstudiosComponent } from './components/estudio/estudios/estudios.component';
 import { EstudioComponent } from './components/estudio/estudio/estudio.component';
-import { ImprimirComponent } from './components/imprimir/imprimir.component'
+import { ImprimirComponent } from './components/imprimir/imprimir.component';
+import { EnviarComponent } from './components/enviar/enviar.component';
 import { UnanalisisComponent } from './components/analisis/unanalisis/unanalisis.component';
 
 import { AuthGuard } from './services/auth/auth.guard';
@@ -35,6 +36,7 @@ const APP_ROUTES: Routes = [
     { path: 'estudios', component: EstudiosComponent, canActivate: [AuthGuard] },
     { path: 'estudios/:id', component: EstudioComponent, canActivate: [AuthGuard] },
     { path: 'pacientes/:id/analisis/imprimir/:an', component: ImprimirComponent, canActivate: [AuthGuard] },
+    { path: 'pacientes/:id/analisis/enviar/:an', component: EnviarComponent, canActivate: [AuthGuard] },
 
     { path: 'home', component: HomeComponent },
     //Ruta por defecto
