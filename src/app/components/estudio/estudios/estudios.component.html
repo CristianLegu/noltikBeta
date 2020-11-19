@@ -50,10 +50,11 @@
 
     </table>
 
+    <mat-paginator [length]="length" [pageSize]="page_size" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+        (page)="handlePage($event)">
+    </mat-paginator>
 </div>
-<mat-paginator [length]="length" [pageSize]="page_size" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
-    (page)="handlePage($event)">
-</mat-paginator>
+
 <div class='loading' *ngIf="load">
     <mat-spinner></mat-spinner>
 </div>

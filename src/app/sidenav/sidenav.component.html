@@ -4,6 +4,7 @@
     </button>
     NOLTIK
 </mat-toolbar>
+
 <mat-sidenav-container>
     <mat-sidenav #drawer [(opened)]="abrir" *ngIf="isLoggedIn$ | async as isLoggedIn">
         <mat-nav-list class="content">
@@ -33,7 +34,10 @@
 
         </mat-nav-list>
     </mat-sidenav>
-    <mat-sidenav-content>
+
+
+    <mat-sidenav-content >
         <router-outlet></router-outlet>
     </mat-sidenav-content>
+
 </mat-sidenav-container>
