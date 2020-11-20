@@ -1,14 +1,15 @@
 .card {
-  height: 175vh;
+  height: auto;
   margin-top: 1ex;
   margin-left: 10%;
   margin-right: 10%;
+  margin-bottom: 20px;
   box-shadow: 9px 9px 9px 1px rgba(0, 0, 0, 0.3);
 }
 
 .container {
   position: relative; //absolute !important;
-  top: 0;
+  top: -40px;
   bottom: 0;
   left: 0;
   right: 0;
@@ -16,10 +17,10 @@
   width: 100%;
   height: auto;
   background-color: #935d8c;
-	background-image: url("/src/assets/images/overlay.png"), -moz-linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
-	background-image: url("/src/assets/images/overlay.png"), -webkit-linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
-	background-image: url("/src/assets/images/overlay.png"), -ms-linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
-	background-image: url("/src/assets/images/overlay.png"), linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
+  background-image: url("/src/assets/images/overlay.png"), -moz-linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
+  background-image: url("/src/assets/images/overlay.png"), -webkit-linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
+  background-image: url("/src/assets/images/overlay.png"), -ms-linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
+  background-image: url("/src/assets/images/overlay.png"), linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
   //background: url(../../../assets/Fondo.png) top center;
 }
 
@@ -85,6 +86,7 @@ input[type="file"] {
   height: auto;
   display: block;
   margin: auto;
+  padding: 48px 0 0 0;
 }
 
 .div_imagen {
@@ -151,11 +153,11 @@ input[type="file"] {
     width: 80%;
   }
   .container {
-    height: 240vh;
+    height: auto;
   }
 
   .card {
-    height: 190vh;
+    height: auto;
     margin-left: 5%;
     margin-right: 5%;
   }
@@ -167,7 +169,7 @@ input[type="file"] {
   .div_imagen {
     margin-bottom: 0em;
   }
-  .loading{
+  .loading {
     height: 350vh;
   }
 }
@@ -178,11 +180,11 @@ input[type="file"] {
     width: 40%;
   }
   .container {
-    height: 280vh;
+    height: auto;
   }
 
   .card {
-    height: 220vh;
+    height: auto;
     margin-left: 5%;
     margin-right: 5%;
   }
@@ -194,7 +196,7 @@ input[type="file"] {
   .div_imagen {
     margin-bottom: 0em;
   }
-  .loading{
+  .loading {
     height: 250vh;
   }
 }
@@ -202,15 +204,15 @@ input[type="file"] {
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
   .container {
-    height: 200vh;
+    height: auto;
   }
 
   .card {
-    height: 150vh;
+    height: auto;
     margin-left: 20%;
     margin-right: 20%;
   }
-  .loading{
+  .loading {
     height: 250vh;
   }
 }
@@ -218,11 +220,11 @@ input[type="file"] {
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
   .container {
-    height: 250vh;
+    height: auto;
   }
   .card {
     margin-top: 3ex;
-    height: 200vh;
+    height: auto;
     margin-left: 20%;
     margin-right: 20%;
     display: grid;
@@ -237,7 +239,7 @@ input[type="file"] {
     margin-bottom: 0em;
   }
 
-  .loading{
+  .loading {
     height: 250vh;
   }
 }
@@ -245,11 +247,11 @@ input[type="file"] {
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
   .container {
-    height: 180vh;
+    height: auto;
   }
   .card {
     margin-top: 3ex;
-    height: 120vh;
+    height: auto;
     margin-left: 30%;
     margin-right: 30%;
     display: grid;
@@ -257,14 +259,29 @@ input[type="file"] {
   }
 
   .responsiveimagen {
-    width: 15%;
+    width: 10%;
   }
 
   .div_imagen {
     margin-bottom: 0em;
   }
 
-  .loading{
+  .loading {
     height: 180vh;
   }
+}
+
+.footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.42);
+  border: 1px;
+  position: initial;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
+  -webkit-box-shadow: inset -5px 10px 39px -15px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: inset -5px 10px 39px -15px rgba(0, 0, 0, 0.2);
+  box-shadow: inset -5px 10px 39px -15px rgba(0, 0, 0, 0.2);
+  color: black;
+  text-align: right;
 }
