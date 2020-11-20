@@ -6,6 +6,7 @@ import { imgData } from "../../globals";
 import { Analisis } from "src/app/common/interface";
 import { delay } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-enviar',
@@ -30,7 +31,8 @@ export class EnviarComponent implements OnInit {
   constructor(
     private serviceA: AnalisisService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {
     console.log(this.activatedRoute);
     this.actString = this.activatedRoute.snapshot.params["an"];
@@ -1147,13 +1149,34 @@ export class EnviarComponent implements OnInit {
     });
 
     console.log('se genero el pdf');
-
+    
     var formData = new FormData();
     formData.append('pdf', data, nombre);
-    console.log(formData);
-    var request = new XMLHttpRequest();
-    request.open("POST","");
-    request.send(formData);
+    // this.http.post(ApiUrl + prefix + '/pacientes/' + idp + '/analisis/', analisis,
+    // {
+    //   headers: {
+    //     'Authorization': 'Bearer ' + jwt,
+    //     'time-zone': timeZone
+    //   }
+    // })
+    this.http.put('https://989ff4d2f353.ngrok.io/noltik_api/v1/lab/pacientes/11/enviar/', formData,
+      {
+        observe: 'response',
+        headers: {
+          'Authorization': 'Bearer ' + this.jwt
+        }
+      })
+      .subscribe((response) => {
+        if (response.status === 200) {
+          alert('se envio el pdf al paciente');
+        }
+        else {
+          console.log('error');
+        }
+      });
+    // var request = new XMLHttpRequest();
+    // request.open("POST","http://7559f35c52e1.ngrok.io");
+    // request.send(formData);
 
     //this.doc.output("dataurlnewwindow");
   }
