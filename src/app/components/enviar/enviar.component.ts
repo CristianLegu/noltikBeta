@@ -3,8 +3,9 @@ import * as jsPDF from "jspdf";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AnalisisService } from "../../services/analisis/analisis.service";
 import { imgData } from "../../globals";
-
 import { Analisis } from "src/app/common/interface";
+import { delay } from 'rxjs/operators';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-enviar',
@@ -37,6 +38,7 @@ export class EnviarComponent implements OnInit {
    }
 
   ngOnInit() {
+    var reqdata;
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
     this.actRoute = JSON.parse("[" + this.actString + "]");
@@ -51,7 +53,9 @@ export class EnviarComponent implements OnInit {
         });
     }
     this.decision = 'si';
+    setTimeout(() => {
     this.downloadPDF(this.decision);
+    }, 8000);
     this.router.navigate(["/pacientes/" + this.actID + "/analisis"]);
   }
 
@@ -112,6 +116,7 @@ export class EnviarComponent implements OnInit {
     this.doc.line(5, 40, 205, 40);
   }
 
+
   downloadPDF(membrete: string) {
     if (membrete != null) {
       this.cabecera();
@@ -126,7 +131,7 @@ export class EnviarComponent implements OnInit {
     this.doc.setFontType("normal");
     this.sangria = 156;
     this.doc.text("Fecha de aplicación: ", this.sangria, this.altura);
-    console.log(this.analisisEnv);
+    //console.log(this.analisisEnv);
     this.sangria = 40;
     this.doc.setFontType("bold");
     this.doc.text(
@@ -1130,14 +1135,36 @@ export class EnviarComponent implements OnInit {
         this.doc.line(5, this.alturaItems, 205, this.alturaItems);
       }
     }
+    let nombre: string;
+    nombre = this.paciente + ".pdf";
 
     this.doc.setProperties({
       title: this.paciente + ".pdf"
+    }); 
+
+    var data = new Blob([this.doc.output()], {
+      type: 'application/pdf'
     });
-    this.doc.output("dataurlnewwindow");
-    
+
+    console.log('se genero el pdf');
+
+    var formData = new FormData();
+    formData.append('pdf', data, nombre);
+    console.log(formData);
+    var request = new XMLHttpRequest();
+    request.open("POST","");
+    request.send(formData);
+
+    //this.doc.output("dataurlnewwindow");
   }
 
-
-
 }
+
+
+
+    
+
+
+
+
+
