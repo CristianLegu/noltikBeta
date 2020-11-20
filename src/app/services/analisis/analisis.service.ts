@@ -123,6 +123,29 @@ export class AnalisisService {
     });
   }
 
+  // sendMail(jwt: string, prefix: string, idp: any, analisis: any, timeZone: string, docu: any): Promise<any> {
+  //   return new Promise((ok, error) => {
+  //     this.http.post(ApiUrl + prefix + '/pacientes/' + idp + '/analisis/', analisis,
+  //       {
+  //         headers: {
+  //           'Authorization': 'Bearer ' + jwt,
+  //           'time-zone': timeZone
+  //         },
+  //         data: JSON.stringify(docu)
+  //       })
+  //       .toPromise()
+  //       .then(response => {
+  //         ok(response);
+  //       })
+  //       .catch(err => {
+  //         error(err);
+  //       })
+  //   });
+  // }
+
+
+
+
   /*
   obtenerTotalEstudio(jwt: string): Promise<any> {
     return new Promise((ok, error) => {
