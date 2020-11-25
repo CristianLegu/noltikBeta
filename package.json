@@ -26,6 +26,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.13.1",
     "@fortawesome/react-fontawesome": "^0.1.11",
     "@types/jquery": "^3.5.4",
+    "cors": "^2.8.5",
     "jspdf": "^1.5.3",
     "moment-timezone": "^0.5.31",
     "nodemailer": "^6.4.16",
