@@ -20,7 +20,7 @@ import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
 export class PacientesComponent extends MatPaginatorIntl implements OnInit {
 
   length: number;
-  page_size: number = 30;
+  page_size: number = 10;
   page_number: number = 0;
   dataSource: Patient[] = [];
   displayedColumns: string[] = ['id', 'nombre', 'analisis'];

@@ -19,7 +19,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 })
 export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
   length: number;
-  page_size: number = 30;
+  page_size: number = 10;
   page_number: number = 0;
   dataSource: Usuario[] = [];
   displayedColumns: string[] = ['id', 'usuario'];
@@ -41,7 +41,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
     super();
     const mat = new MatPaginatorIntl();
     mat.itemsPerPageLabel = 'Pacientes por página';
-    mat.getRangeLabel(69,2,69);
+    mat.getRangeLabel(69, 2, 69);
   }
 
 
@@ -55,7 +55,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
     this.service.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
         this.length = ok;
-        
+
         this.service.obtenerLista(this.token, this.prefix, this.page_number, this.page_size,
           this.nombre)
           .then(ok => {
@@ -164,7 +164,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
       });
   }
 
-  pageSizeOptions = [5, 30, 50, 100];
+  pageSizeOptions = [10, 30, 50, 100, 500, 1000];
 
   openDialog(mensaje: string): void {
     const dialogRef = this.dialog.open(DialogComponent, {

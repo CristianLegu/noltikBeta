@@ -20,7 +20,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
 
   length: number = 10;
-  page_size: number = 30;
+  page_size: number = 10;
   page_number: number = 0;
   dataSource: Estudio;
   displayedColumns: string[] = ['id', 'estudio'];
@@ -182,5 +182,5 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
 
   }
 
-  pageSizeOptions = [10, 30, 50, 100];
+  pageSizeOptions = [10, 30, 50, 100, 500, 1000];
 }

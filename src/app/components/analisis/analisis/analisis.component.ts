@@ -10,6 +10,8 @@ import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatTableDataSource } from '@angular/material/table';
 
 
 @Component({
@@ -22,22 +24,21 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
 
   length: number;
-  page_size: number = 50;
+  page_size: number = 10;
   page_number: number = 0;
-  displayedColumns: string[] = ['analisis', 'fecha', 'medico', 'imprimir','enviar'];
+  displayedColumns: string[] = ['analisis', 'medico', 'fecha', 'imprimir'];
   token: string;
   prefix: string;
   load: boolean = false;
   actRoute: number;
   dataSource: Analisis[] = [];
+  selection = new SelectionModel<Analisis>(true, []);
   analisisImp: Array<string> = [];
-  analisisEnv: Array<string> = [];
   buttonImp: boolean = false;
   buttonEnv: boolean = false;
   selected: boolean;
   mensaje: string;
   paciente: string;
-  showMedico: boolean = true;
 
   ruta: string;
 
@@ -65,11 +66,8 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
       .getPaciente(this.token, this.prefix, this.actRoute)
       .then(ok => {
         this.paciente = ok.body.nombre;
-
-        if (this.sidenav.innerWidth < 920) {
-          this.displayedColumns = ['analisis', 'fecha', 'imprimir','enviar'];
-          this.showMedico = false;
-          this.paciente = this.paciente.substr(0, 30);
+        if (this.paciente.length >= 33) {
+          this.paciente = this.paciente.substr(0, 33);
           this.paciente = this.paciente.concat('...');
         }
 
@@ -130,7 +128,7 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
   }
 
 
-  pageSizeOptions = [10, 50, 100, 300];
+  pageSizeOptions = [10, 30, 50, 100, 500, 1000];
 
   backlist() {
     this.router.navigateByUrl('/pacientes');
@@ -148,39 +146,57 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
 
     if (this.analisisImp.length > 0) {
       this.buttonImp = true;
-    } else {
-      this.buttonImp = false;
-    }
-    this.ruta = "/pacientes/" + this.actRoute + "/analisis/imprimir/" + this.analisisImp;
-    console.log(this.ruta);
-  }
-
-  somethingClick2(checkbox: MatCheckbox, item: { id: string }) {
-    var cont = this.analisisEnv.length;
-    console.log(cont);
-    if (checkbox.checked == false) {
-      this.analisisEnv[cont] = item.id;
-    } else {
-      var pos = this.analisisEnv.indexOf(item.id);
-      this.analisisEnv.splice(pos, 1);
-    }
-
-    if (this.analisisEnv.length > 0) {
       this.buttonEnv = true;
-    } else {
+    }
+    else {
+      this.buttonImp = false;
       this.buttonEnv = false;
     }
-    this.ruta = "/pacientes/" + this.actRoute + "/analisis/enviar/" + this.analisisEnv;
-    console.log(this.ruta);
   }
 
-
-
-
+  sendTo(tipo: string) {
+    this.ruta = "/pacientes/" + this.actRoute + "/analisis/" + tipo + "/" + this.analisisImp;
+    this.router.navigate([this.ruta]);
+  }
 
   onActivate(event) {
     window.scroll(0, 0);
     //or document.body.scrollTop = 0;
     //or document.querySelector('body').scrollTo(0,0)
+  }
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+
+    this.analisisImp = [];
+
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      this.buttonImp = false;
+      this.buttonEnv = false;
+    }
+    else {
+
+      this.dataSource.forEach(row => this.selection.select(row));
+      this.dataSource.forEach(row => this.analisisImp.push(row.id.toString()));
+      this.buttonImp = true;
+      this.buttonEnv = true;
+    }
+
+  }
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: Analisis): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
 }

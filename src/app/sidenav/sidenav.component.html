@@ -5,7 +5,7 @@
     NOLTIK
 </mat-toolbar>
 
-<mat-sidenav-container>
+<mat-sidenav-container class="container">
     <mat-sidenav #drawer [(opened)]="abrir" *ngIf="isLoggedIn$ | async as isLoggedIn">
         <mat-nav-list class="content">
             <a mat-list-item routerLink='/pacientes' (click)="sidenav()">

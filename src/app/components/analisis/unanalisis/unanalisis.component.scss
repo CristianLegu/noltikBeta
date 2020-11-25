@@ -1,5 +1,5 @@
 .container {
-    top: 10px;
+    top: 0px;
     bottom: 0;
     left: 0;
     right: 0;
@@ -16,11 +16,25 @@
     font-size: 14px;
 }
 
+mat-divider {
+    padding: 10px;
+}
+
+mat-icon:hover {
+    cursor: pointer;
+}
+
+p {
+    font-size: 25px;
+    font-style: bold;
+    text-align: center;
+}
+
 #contenido {
-    width:80%;
-    height:2000px;
-    overflow:hidden;
-    white-space:nowrap;
+    width: 80%;
+    height: 2000px;
+    overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
 }
 
@@ -54,7 +68,7 @@
     flex: 1 1 auto;
 }
 
-.bienvenida{
+.bienvenida {
     font-size: 1em;
 }
 
@@ -114,6 +128,10 @@
 //Pantallas
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
+    .col-1 {
+        width: 15%;
+    }
+
     .col-3 {
         width: 50%;
     }
@@ -136,6 +154,10 @@
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
+    .col-1 {
+        width: 15%;
+    }
+
     .col-3 {
         width: 40%;
     }
@@ -158,6 +180,10 @@
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
+    .col-1 {
+        width: 15%;
+    }
+
     .col-3 {
         width: 30%;
     }

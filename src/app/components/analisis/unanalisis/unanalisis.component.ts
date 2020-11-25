@@ -76,7 +76,7 @@ export class UnanalisisComponent implements OnInit {
   subtitulofinal: string;
   noBtn: boolean = false;
   btn: boolean = false;
-  
+
   altaAnalisis: FormGroup;
   fecha1: string = '';
   myDate = new Date();
@@ -90,7 +90,7 @@ export class UnanalisisComponent implements OnInit {
     medico: "",
     paciente: ""
   };
-  
+
   dataEliminar: DialogDataEliminar = {
     id: "",
     jwt: "",
@@ -174,6 +174,7 @@ export class UnanalisisComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.altaAnalisis.get('area').disable();
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
     this.rol = localStorage.getItem('role');
