@@ -7,6 +7,7 @@ import { Analisis } from "src/app/common/interface";
 import { delay } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import { HttpClient } from '@angular/common/http';
+import { ApiUrl } from "../../globals";
 
 @Component({
   selector: 'app-enviar',
@@ -27,6 +28,7 @@ export class EnviarComponent implements OnInit {
   sangria: number;
   altura: number;
   alturaItems: number;
+  load: boolean = false;
 
   constructor(
     private serviceA: AnalisisService,
@@ -123,6 +125,7 @@ export class EnviarComponent implements OnInit {
     if (membrete != null) {
       this.cabecera();
     }
+    this.load = true;
     this.altura = 50;
     this.alturaItems = 60;
 
@@ -1159,19 +1162,21 @@ export class EnviarComponent implements OnInit {
     //     'time-zone': timeZone
     //   }
     // })
-    this.http.put('https://989ff4d2f353.ngrok.io/noltik_api/v1/lab/pacientes/11/enviar/', formData,
+
+    this.http.put(ApiUrl + this.prefix + '/pacientes/' + this.actID + '/enviar/', formData,
       {
         observe: 'response',
         headers: {
-          'Authorization': 'Bearer ' + this.jwt
+          Authorization: 'Bearer ' + this.jwt
         }
       })
       .subscribe((response) => {
         if (response.status === 200) {
           alert('se envio el pdf al paciente');
-        }
-        else {
+          this.load = false;
+        } else {
           console.log('error');
+          this.load = false;
         }
       });
     // var request = new XMLHttpRequest();
