@@ -59,10 +59,15 @@ import { RegistroModule } from './components/registro/registro.module';
 //Módulo confirmar
 import { ConfirmarModule } from './components/confirmar/confirmar.module';
 import { HomeComponent } from './components/home/home.component';
+<<<<<<< HEAD
 import { ContrasenaComponent } from './components/contrasena/contrasena.component';
 import { ConfirmarUserComponent } from './components/confirmar-user/confirmar-user.component';
 import { MensajeComponent } from './components/mensaje/mensaje.component';
 import { LaboratoriosComponent } from './components/laboratorio/laboratorios/laboratorios.component';
+=======
+import { EnviarComponent } from './components/enviar/enviar.component';
+//import { InicioComponent } from './components/inicio/inicio.component';
+>>>>>>> d25f672e96e9b00a75f256bb77d307f6f8171a17
 
 @NgModule({
   declarations: [
@@ -84,10 +89,14 @@ import { LaboratoriosComponent } from './components/laboratorio/laboratorios/lab
     UnanalisisComponent,
     DialogmembreteComponent,
     HomeComponent,
+<<<<<<< HEAD
     ContrasenaComponent,
     ConfirmarUserComponent,
     MensajeComponent,
     LaboratoriosComponent
+=======
+    EnviarComponent
+>>>>>>> d25f672e96e9b00a75f256bb77d307f6f8171a17
   ],
   imports: [
     FontAwesomeModule,
