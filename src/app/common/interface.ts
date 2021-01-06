@@ -98,3 +98,8 @@ export interface itemsEstudio {
   items: string[]
 }
 
+export interface jsonPDF {
+  nombre_archivo: string,
+  base64: string
+}
+

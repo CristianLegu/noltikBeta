@@ -65,6 +65,23 @@ export class AnalisisService {
     });
   }
 
+  getAnalisisSeleccionados(jwt: string, prefix: string, idp: any, ida: any): Promise<any> {
+    return new Promise((ok, error) => {
+      this.http.get(ApiUrl + prefix + '/pacientes/' + idp + '/analisis/mail',
+        {
+          headers: { 'Authorization': 'Bearer ' + jwt },
+          params: { analisis: ida }
+        })
+        .toPromise()
+        .then(response => {
+          ok(response);
+        })
+        .catch(err => {
+          error(err);
+        })
+    });
+  }
+
   crear(jwt: string, prefix: string, idp: any, analisis: any, timeZone: string): Promise<any> {
     return new Promise((ok, error) => {
       this.http.post(ApiUrl + prefix + '/pacientes/' + idp + '/analisis/', analisis,

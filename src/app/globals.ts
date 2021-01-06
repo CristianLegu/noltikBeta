@@ -1,7 +1,7 @@
-//let hostApiUrl = 'https://d0710b7a8df6.ngrok.io/noltik_api/v1/';
+//let hostApiUrl = 'https://0304d1dc908c.ngrok.io/noltik_api/v1/';
 //let hostApiUrl = 'https://api-noltik-example.herokuapp.com/noltik_api/v1/';
-let hostApiUrl = 'http://localhost:8080/noltik_api/v1/';
-//let hostApiUrl = 'https://api.noltik.com/noltik_api/v1/';
+//let hostApiUrl = 'https://noltik-api-main-ey47zdfuufjxiw.herokuapp.com/noltik_api/v1/';
+let hostApiUrl = 'https://a61d8130c8a2.ngrok.io/noltik_api/v1/';
 export const ApiUrl = hostApiUrl;
 
 let imgDataPDF =
