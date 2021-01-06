@@ -1,0 +1,92 @@
+<div class="container">
+    <mat-toolbar>
+
+        <mat-toolbar-row>
+            <span>{{mensajeBienvenida}}</span>
+        </mat-toolbar-row>
+
+        <mat-toolbar-row>
+            <span>
+                <a mat-flat-button (click)="ruta()" style="background: whitesmoke;">
+                    <i class="material-icons">keyboard_backspace</i>
+                </a>
+            </span>
+            <span>Datos Laboratorio</span>
+            <span class="space"></span>
+            <span *ngIf="actRoute != '0'">
+                <!--<button mat-button (click)="eliminar()" *ngIf="rol == 'ROLE_ADMIN'">
+                    <i class="material-icons">delete</i>
+                    Eliminar
+                </button>-->
+            </span>
+        </mat-toolbar-row>
+
+
+    </mat-toolbar>
+
+    <form class="form" novalidate [formGroup]="actLab">
+        <div class="header">
+            <div class="doc">
+                <div *ngIf=retrievedImage>
+                    <img [src]="retrievedImage" class="image">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <mat-form-field class="col-5">
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="nombre">
+            </mat-form-field>
+            <mat-form-field class="col-5">
+                <mat-label>Dirección</mat-label>
+                <input matInput formControlName="domicilio">
+            </mat-form-field>
+
+            <mat-form-field class="col-5">
+                <mat-label>Ciudad</mat-label>
+                <input matInput formControlName="ciudad">
+            </mat-form-field>
+
+            <mat-form-field class="col-4">
+                <mat-label>Estado</mat-label>
+                <input matInput #postalCode formControlName="estado">
+            </mat-form-field>
+
+            <mat-form-field class="col-4">
+                <mat-label>Correo electrónico</mat-label>
+                <input matInput formControlName="email">
+            </mat-form-field>
+
+            <mat-form-field class="col-4">
+                <mat-label>Teléfono</mat-label>
+                <input matInput formControlName="telefonos">
+            </mat-form-field>
+
+            <mat-form-field class="col-4">
+                <mat-label>Cuerpo Email</mat-label>
+                <textarea matInput formControlName="bodyMail" cdkTextareaAutosize #autosize="cdkTextareaAutosize"></textarea>
+            </mat-form-field>
+            <div formGroupName="infoMembrete">
+                <mat-form-field class="col-4">
+                    <mat-label>Cédula Profesional</mat-label>
+                    <textarea matInput formControlName="cedulaProfesional" cdkTextareaAutosize #autosize="cdkTextareaAutosize"></textarea>
+                </mat-form-field>
+
+                <mat-form-field class="col-4">
+                    <mat-label>Cédula Especialidad</mat-label>
+                    <textarea matInput formControlName="cedulaEspecialidad" cdkTextareaAutosize #autosize="cdkTextareaAutosize"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="btnimg">
+            <input type="file" (change)="onFileChanged($event)" multiple [formGroup]="imageFG">
+        </div>
+        <button mat-raised-button color="primary" (click)="guardar()" class="buttonGuardar">
+            <i class="material-icons">save</i> Guardar
+        </button>
+    </form>
+</div>
+
+<div class='loading' *ngIf="load">
+    <mat-spinner></mat-spinner>
+</div>

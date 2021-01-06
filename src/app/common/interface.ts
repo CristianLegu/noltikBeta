@@ -26,6 +26,8 @@ export interface DialogDataEliminar {
   idpaciente?: string
 }
 
+export interface CambiarPasswordParams { token: string; }
+
 export interface Usuario {
   id: number;
   nombre: string;
@@ -72,6 +74,23 @@ export interface Analisis {
   paciente: string,
   medico: string,
   json: JSONEstudio[]
+}
+
+export interface Laboratorio{
+  id: number,
+  nombre: string,
+  domicilio: string,
+  ciudad: string,
+  estado: string,
+  telefonos: string,
+  email: string,
+  bodyMail: string,
+  infoMembrete: InfoMembrete
+}
+
+export interface InfoMembrete{
+  cedulaProfesional: string,
+  cedulaEspecialidad: string
 }
 
 export interface JSONEstudio {

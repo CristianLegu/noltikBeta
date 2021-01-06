@@ -17,6 +17,10 @@ import { AuthGuard } from './services/auth/auth.guard';
 import { RegistroComponent } from './components/registro/registro.component';
 import { ConfirmarComponent } from './components/confirmar/confirmar.component';
 import { HomeComponent } from './components/home/home.component';
+import { ContrasenaComponent } from './components/contrasena/contrasena.component';
+import { ConfirmarUserComponent } from './components/confirmar-user/confirmar-user.component';
+import { MensajeComponent } from './components/mensaje/mensaje.component';
+import { LaboratoriosComponent } from './components/laboratorio/laboratorios/laboratorios.component';
 
 
 const APP_ROUTES: Routes = [
@@ -24,13 +28,16 @@ const APP_ROUTES: Routes = [
     { path: 'registrar', component: RegistroComponent },
     { path: 'confirma/:token', component: ConfirmarComponent },
     { path: 'ingresar', component: IngresarComponent },
+    { path: 'user', component: ConfirmarUserComponent },
+    { path: 'successMessage', component: MensajeComponent },
+    { path: 'laboratorio', component: LaboratoriosComponent },
     { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
     { path: 'usuarios/:id', component: AltausuarioComponent, canActivate: [AuthGuard] },
     { path: 'pacientes', component: PacientesComponent, canActivate: [AuthGuard] },
     { path: 'pacientes/:id', component: AltapacienteComponent, canActivate: [AuthGuard] },
     { path: 'pacientes/:id/analisis', component: AnalisisComponent, canActivate: [AuthGuard] },
     { path: 'pacientes/:id/analisis/:ia', component: UnanalisisComponent, canActivate: [AuthGuard] },
-
+    { path: 'reset-pass/:token', component: ContrasenaComponent },
     { path: 'medicos', component: MedicosComponent, canActivate: [AuthGuard] },
     { path: 'medicos/:id', component: AltamedicoComponent, canActivate: [AuthGuard] },
     { path: 'estudios', component: EstudiosComponent, canActivate: [AuthGuard] },

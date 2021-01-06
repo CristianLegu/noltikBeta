@@ -84,6 +84,10 @@ export class IngresarComponent implements OnInit, OnDestroy {
     this.authService.logout();
   }
 
+  goContra() {
+    this.router.navigateByUrl('/contrasena');
+  }
+
   ngAfterViewInit() {
     /*setTimeout(() => {
       this.logout()

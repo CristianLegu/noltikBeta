@@ -59,8 +59,10 @@ import { RegistroModule } from './components/registro/registro.module';
 //Módulo confirmar
 import { ConfirmarModule } from './components/confirmar/confirmar.module';
 import { HomeComponent } from './components/home/home.component';
-import { EnviarComponent } from './components/enviar/enviar.component';
-//import { InicioComponent } from './components/inicio/inicio.component';
+import { ContrasenaComponent } from './components/contrasena/contrasena.component';
+import { ConfirmarUserComponent } from './components/confirmar-user/confirmar-user.component';
+import { MensajeComponent } from './components/mensaje/mensaje.component';
+import { LaboratoriosComponent } from './components/laboratorio/laboratorios/laboratorios.component';
 
 @NgModule({
   declarations: [
@@ -82,13 +84,17 @@ import { EnviarComponent } from './components/enviar/enviar.component';
     UnanalisisComponent,
     DialogmembreteComponent,
     HomeComponent,
-    EnviarComponent
+    ContrasenaComponent,
+    ConfirmarUserComponent,
+    MensajeComponent,
+    LaboratoriosComponent
   ],
   imports: [
     FontAwesomeModule,
     BrowserModule,
     APP_ROUTING,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
     MatCardModule,
     MatInputModule,

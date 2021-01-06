@@ -1,0 +1,27 @@
+<div class="container">
+    <mat-card class="card">
+        <mat-card-content>
+            <form class="example-form">
+                <div class="div_imagen">
+                    <img class="responsiveimagen" mat-card-image src="https://lablace.com/ZLOGOS/noltik.png" alt="Logo">
+                </div>
+                <div class="center">
+                    <h2>Recuperación de la cuenta</h2>
+                </div>
+                <mat-form-field class="center " appearance="outline" [formGroup]="confUser">
+                    <mat-label>Usuario</mat-label>
+                    <input matInput formControlName="user">
+                </mat-form-field>
+
+                <mat-card-actions class="center">
+                    <form novalidate (ngSubmit)="checkUser()">
+                        <button mat-flat-button type="submit" color="primary">Enviar</button>
+                    </form>
+                </mat-card-actions>
+            </form>
+        </mat-card-content>
+    </mat-card>
+    <!--<div class='loading' *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>-->
+</div>
