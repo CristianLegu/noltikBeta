@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 //let hostApiUrl = 'http://ceacf932415f.ngrok.io/noltik_api/v1/';
 let hostApiUrl = 'https://api-noltik-example.herokuapp.com/noltik_api/v1/';
 //let hostApiUrl = 'https://localhost:8080/noltik_api/v1';
-=======
-//let hostApiUrl = 'https://d0710b7a8df6.ngrok.io/noltik_api/v1/';
-//let hostApiUrl = 'https://api-noltik-example.herokuapp.com/noltik_api/v1/';
-let hostApiUrl = 'http://localhost:8080/noltik_api/v1/';
->>>>>>> d25f672e96e9b00a75f256bb77d307f6f8171a17
 //let hostApiUrl = 'https://api.noltik.com/noltik_api/v1/';
 export const ApiUrl = hostApiUrl;
 
