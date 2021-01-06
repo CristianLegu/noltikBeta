@@ -7,7 +7,6 @@ import { DialogComponent } from '../../../common/dialog/dialog.component';
 import { Router } from '@angular/router';
 import { MatPaginatorIntl, MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 
@@ -20,7 +19,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 })
 export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
   length: number;
-  page_size: number = 30;
+  page_size: number = 10;
   page_number: number = 0;
   dataSource: Usuario[] = [];
   displayedColumns: string[] = ['id', 'usuario'];
@@ -38,15 +37,16 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private authService: AuthService,
-     ) {
+  ) {
     super();
     const mat = new MatPaginatorIntl();
     mat.itemsPerPageLabel = 'Pacientes por página';
+    mat.getRangeLabel(69, 2, 69);
   }
 
 
   ngOnInit() {
-     
+
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
@@ -72,7 +72,6 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
       })
       .catch(err => {
         let mensaje: string;
-        console.log(err);
         if (err.status == 401) {
           mensaje = 'Sesión ha expirado, intenta acceder de nuevo';
           this.openDialog(mensaje);
@@ -108,7 +107,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   refresh() {
-     
+
     this.nombre = '';
     this.page_size = 30;
     this.load = true;
@@ -137,10 +136,10 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
 
 
   buscar(nombre: string) {
-     
+
     this.paginator.pageIndex = 0;
     this.page_number = 0;
-    this.page_size = 50;
+    this.page_size = 30;
     this.load = true;
     this.service.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
@@ -152,7 +151,6 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
           })
           .catch(err => {
             let mensaje: string;
-            console.log(err);
             mensaje = err.error.mensaje;
             this.openDialog(mensaje);
             this.load = false;
@@ -160,14 +158,13 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
       })
       .catch(error => {
         let mensaje: string;
-        console.log(error);
         mensaje = error.error.mensaje;
         this.openDialog(mensaje);
         this.load = false;
       });
   }
 
-  pageSizeOptions = [10, 30, 50, 100];
+  pageSizeOptions = [10, 30, 50, 100, 500, 1000];
 
   openDialog(mensaje: string): void {
     const dialogRef = this.dialog.open(DialogComponent, {

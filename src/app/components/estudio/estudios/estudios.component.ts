@@ -20,7 +20,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
 
   length: number = 10;
-  page_size: number = 30;
+  page_size: number = 10;
   page_number: number = 0;
   dataSource: Estudio;
   displayedColumns: string[] = ['id', 'estudio'];
@@ -52,7 +52,6 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
     this.nombre = '';
     this.estudiosServices.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
-        console.log(ok);
         this.length = ok;
         this.estudiosServices.obtenerEstudios(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
           .then(ok => {
@@ -60,7 +59,6 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
             this.load = false;
           })
           .catch((err => {
-            console.log(err);
             let mensaje: string;
             if (err.error.status === 401) {
               mensaje = 'Sin autorización';
@@ -184,5 +182,5 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
 
   }
 
-  pageSizeOptions = [10, 30, 50, 100];
+  pageSizeOptions = [10, 30, 50, 100, 500, 1000];
 }

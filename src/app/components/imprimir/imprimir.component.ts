@@ -54,6 +54,7 @@ export class ImprimirComponent implements OnInit {
           // this.load = false;
         });
     }
+    console.log(this.analisisImp);
     this.openDialog();
   }
 
@@ -140,7 +141,6 @@ export class ImprimirComponent implements OnInit {
     this.doc.setFontType("normal");
     this.sangria = 156;
     this.doc.text("Fecha de aplicación: ", this.sangria, this.altura);
-
     this.sangria = 40;
     this.doc.setFontType("bold");
     this.doc.text(
@@ -1068,7 +1068,6 @@ export class ImprimirComponent implements OnInit {
                 this.alturaItems
               );
             }
-
             if (y.unidades != null) {
               this.sangria = 105;
               this.doc.text(

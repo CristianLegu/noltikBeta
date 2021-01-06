@@ -1,0 +1,28 @@
+<div class="container">
+    <mat-card class="card">
+        <mat-card-content>
+            <form class="example-form">
+                <div class="div_imagen">
+                    <img class="responsiveimagen" mat-card-image src="https://lablace.com/ZLOGOS/noltik.png" alt="Logo">
+                </div>
+                <div class="center">
+                    <h2>
+                        <b>Contraseña restablecida con éxito</b>
+                    </h2>
+                </div>
+                <div class="center">
+                    <p> Tu contraseña se actualizo satisfactoriamente.</p>
+                </div>
+                <mat-card-actions class="center">
+                    <!--<form novalidate (ngSubmit)="guardarContra()" [formGroup]="newContra">
+                        <button mat-flat-button type="submit" color="primary">Guardar Contraseña</button>
+            </form>-->
+                    <button mat-flat-button routerLink="/ingresar" type="submit" color="primary">Aceptar</button>
+                </mat-card-actions>
+            </form>
+        </mat-card-content>
+    </mat-card>
+    <!--<div class='loading' *ngIf="load">
+        <mat-spinner></mat-spinner>
+    </div>-->
+</div>

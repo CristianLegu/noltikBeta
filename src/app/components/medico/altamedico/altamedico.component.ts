@@ -84,7 +84,6 @@ export class AltamedicoComponent implements OnInit {
           this.load = false;
         })
         .catch(error => {
-          console.log(error);
           if (error.status != 401) {
             this.openDialog(error.message);
           }

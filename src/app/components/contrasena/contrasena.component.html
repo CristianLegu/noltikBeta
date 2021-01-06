@@ -1,0 +1,38 @@
+<div class="container">
+    <mat-card class="card">
+        <mat-card-content>
+            <form class="example-form" [formGroup]="newPass">
+                <div class="div_imagen">
+                    <img class="responsiveimagen" mat-card-image src="https://lablace.com/ZLOGOS/noltik.png" alt="Logo">
+                </div>
+                <div class="center">
+                    <h2>Restablecer Contraseña</h2>
+                </div>
+                <mat-form-field class="center " appearance="outline">
+                    <mat-label>Nueva Contraseña</mat-label>
+                    <!-- <h4>Nueva Contraseña</h4>-->
+                    <input matInput type="password" formControlName="passNuevo">
+                </mat-form-field>
+
+                <mat-form-field class="center" appearance="outline">
+                    <mat-label>Confirmar Contraseña</mat-label>
+                    <!--<h4>Confirmar Contraseña</h4>-->
+                    <input matInput type="password" formControlName="passNuevoCoincide">
+                </mat-form-field>
+
+                <mat-card-actions class="center">
+                    <form novalidate (ngSubmit)="guardarContra()">
+                        <button mat-flat-button type="submit" color="primary">Guardar Contraseña</button>
+                    </form>
+                </mat-card-actions>
+            </form>
+            <!--<ng-content select="selector"></ng-content>
+            <mat-card-actions class=" center ">
+                <button mat-button color="accent " routerLink="/ingresar " type="submit ">¿Te acordaste de tu contraseña?</button>
+            </mat-card-actions>-->
+        </mat-card-content>
+    </mat-card>
+    <div class='loading' *ngIf="load">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>

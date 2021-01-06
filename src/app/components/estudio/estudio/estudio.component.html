@@ -1,15 +1,12 @@
 <div class="container">
     <mat-toolbar>
         <mat-toolbar-row>
-            <span>{{mensajeBienvenida}}</span>
-        </mat-toolbar-row>
-
-        <mat-toolbar-row>
             <span>
                 <a mat-flat-button (click)="ruta_usuario()" style="background: whitesmoke;">
                     <i class="material-icons">keyboard_backspace</i>
                 </a>
             </span>
+            <span>Estudio</span>
             <span class="space"></span>
             <span *ngIf="actRoute != '0'">
                 <button mat-button (click)="eliminar()" *ngIf="rol == 'ROLE_ADMIN'">
@@ -18,7 +15,6 @@
                 </button>
             </span>
         </mat-toolbar-row>
-
     </mat-toolbar>
 
     <form class="form" novalidate [formGroup]="altaEstudio">

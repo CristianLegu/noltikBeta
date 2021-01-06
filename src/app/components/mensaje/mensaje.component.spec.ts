@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DialogeliminarComponent } from './dialogeliminar.component';
+import { MensajeComponent } from './mensaje.component';
 
-describe('DialogeliminarComponent', () => {
-  let component: DialogeliminarComponent;
-  let fixture: ComponentFixture<DialogeliminarComponent>;
+describe('MensajeComponent', () => {
+  let component: MensajeComponent;
+  let fixture: ComponentFixture<MensajeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DialogeliminarComponent ]
+      declarations: [ MensajeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DialogeliminarComponent);
+    fixture = TestBed.createComponent(MensajeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -212,7 +212,6 @@ export class EstudioComponent implements OnInit {
 
   guardar() {
     this.load = true;
-    console.log(this.altaEstudio);
     if (this.altaEstudio.valid) {
       if (this.actRoute == "0") {
         this.estudioService

@@ -20,7 +20,7 @@ import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
 export class PacientesComponent extends MatPaginatorIntl implements OnInit {
 
   length: number;
-  page_size: number = 30;
+  page_size: number = 10;
   page_number: number = 0;
   dataSource: Patient[] = [];
   displayedColumns: string[] = ['id', 'nombre', 'analisis'];
@@ -46,19 +46,16 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
   }
 
   ngOnInit() {
-    this.sidenav.opened = false;
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
     this.nombre = '';
     this.service.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
-        console.log(ok);
         this.length = ok;
 
         this.service.getpacientes(this.token, this.prefix, this.page_number, this.page_size, this.nombre)
           .then(ok => {
-            // console.log(ok);
             this.dataSource = ok.body;
             this.load = false;
           })

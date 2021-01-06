@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { RegistroComponent } from './registro.component'
 
 
-const routes: Routes = [{ path: 'registro', component: RegistroComponent, pathMatch: 'full' }];
+const routes: Routes = [{ path: 'registra', component: RegistroComponent, pathMatch: 'full' }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

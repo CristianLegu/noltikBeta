@@ -61,7 +61,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
 
   habilitaNU: boolean = false;
   rol: string;
-  UserPerm: boolean;
+  UserPerm: boolean = false;
 
   constructor(
     private router: Router,
@@ -206,13 +206,11 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
 
           this.usuarioService.setAlta(this.jwt, this.prefix, this.altauser)
             .then(ok => {
-              // console.log(ok);
               this.load = false;
               this.mensaje = ok.mensaje;//"El usuario se creó correctamente";
               this.openDialog(this.mensaje);
             })
             .catch(err => {
-              // console.log(err);
               let mensaje: string;
               mensaje = err.error.mensaje;
               this.openDialog(mensaje, err.status);
@@ -233,7 +231,6 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
               this.openDialog(this.mensaje);
             })
             .catch(error => {
-              // console.log(error);
               let mensaje: string;
               mensaje = error.error.mensaje;
               this.openDialog(mensaje, error.status);

@@ -1,10 +1,5 @@
 <div class="container">
     <mat-toolbar>
-
-        <mat-toolbar-row>
-            <span>{{mensajeBienvenida}}</span>
-        </mat-toolbar-row>
-
         <mat-toolbar-row>
             <span>
                 <a mat-flat-button (click)="ruta()" style="background: whitesmoke;">
@@ -20,7 +15,6 @@
                 </button>
             </span>
         </mat-toolbar-row>
-
 
     </mat-toolbar>
 
@@ -80,8 +74,7 @@
         </div>
 
 
-        <button mat-raised-button [disabled]="buttonTel !== true" class="buttonTR" (click)="agregarTel()"
-            color="accent">
+        <button mat-raised-button [disabled]="buttonTel !== true" class="buttonTR" (click)="agregarTel()" color="accent">
             <fa-icon [icon]="faPlusSquare"></fa-icon>
             Agregar Teléfono
         </button>
@@ -92,8 +85,7 @@
                 <mat-form-field class="col-12">
                     <mat-label>Teléfono {{i + 1}}</mat-label>
                     <input type="tel" matInput [formControlName]="i">
-                    <button mat-button *ngIf="i>0" matSuffix mat-icon-button aria-label="Eliminar"
-                        (click)="quitarTel(i)">
+                    <button mat-button *ngIf="i>0" matSuffix mat-icon-button aria-label="Eliminar" (click)="quitarTel(i)">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </mat-form-field>

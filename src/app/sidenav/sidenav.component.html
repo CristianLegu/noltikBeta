@@ -1,11 +1,11 @@
 <mat-toolbar class="toolbar" *ngIf="isLoggedIn$ | async as isLoggedIn">
     <button mat-icon-button color="white" aria-label="Menú" (click)="sidenav()">
         <mat-icon>menu</mat-icon>
-    </button>
-    NOLTIK
+    </button> NOLTIK
 </mat-toolbar>
-<mat-sidenav-container>
-    <mat-sidenav #drawer [(opened)]="opened" role="navigation" *ngIf="isLoggedIn$ | async as isLoggedIn">
+
+<mat-sidenav-container class="container">
+    <mat-sidenav #drawer [(opened)]="abrir" *ngIf="isLoggedIn$ | async as isLoggedIn">
         <mat-nav-list class="content">
             <a mat-list-item routerLink='/pacientes' (click)="sidenav()">
                 <fa-icon [icon]="faProcedures" style="margin-right: 6px;"></fa-icon>Pacientes
@@ -27,13 +27,21 @@
             </a>
             <mat-divider></mat-divider>
 
+            <a mat-list-item routerLink='/laboratorio' *ngIf="checkRol()" (click)="sidenav()">
+                <fa-icon [icon]="faHospital" style="margin-right: 6px;"></fa-icon> Laboratorio
+            </a>
+            <mat-divider></mat-divider>
+
             <a mat-list-item (click)="logout()">
                 <fa-icon [icon]="faSignOutAlt" style="margin-right: 6px;"></fa-icon>Salir
             </a>
 
         </mat-nav-list>
     </mat-sidenav>
+
+
     <mat-sidenav-content>
         <router-outlet></router-outlet>
     </mat-sidenav-content>
+
 </mat-sidenav-container>

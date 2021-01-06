@@ -1,12 +1,23 @@
 mat-sidenav-content {
-  height: fit-content;
+  height: auto; //fit-content;
 }
 
 .toolbar {
   background: #2d4c82;
   color: white;
+  position: sticky;
+  top: 0; /* Sets the sticky toolbar to be on top */
+  z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
 }
 
 .content {
   padding: 0 8px;
+}
+
+.container {
+  position: relative;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }

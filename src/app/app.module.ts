@@ -59,12 +59,10 @@ import { RegistroModule } from './components/registro/registro.module';
 //Módulo confirmar
 import { ConfirmarModule } from './components/confirmar/confirmar.module';
 import { HomeComponent } from './components/home/home.component';
-//import { InicioComponent } from './components/inicio/inicio.component';
-
-
-
-
-
+import { ContrasenaComponent } from './components/contrasena/contrasena.component';
+import { ConfirmarUserComponent } from './components/confirmar-user/confirmar-user.component';
+import { MensajeComponent } from './components/mensaje/mensaje.component';
+import { LaboratoriosComponent } from './components/laboratorio/laboratorios/laboratorios.component';
 
 @NgModule({
   declarations: [
@@ -85,13 +83,18 @@ import { HomeComponent } from './components/home/home.component';
     EstudiosComponent,
     UnanalisisComponent,
     DialogmembreteComponent,
-    HomeComponent
+    HomeComponent,
+    ContrasenaComponent,
+    ConfirmarUserComponent,
+    MensajeComponent,
+    LaboratoriosComponent
   ],
   imports: [
     FontAwesomeModule,
     BrowserModule,
     APP_ROUTING,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
     MatCardModule,
     MatInputModule,
@@ -120,7 +123,7 @@ import { HomeComponent } from './components/home/home.component';
   ],
   providers: [
     AuthService, AuthGuard, DatePipe,
-    { provide: MatPaginatorIntl, useClass: PacientesComponent },
+    { provide: MatPaginatorIntl, useClass: PacientesComponent  },
     { provide: MAT_DATE_LOCALE, useValue: 'es-MX' },
   ],
   bootstrap: [AppComponent],

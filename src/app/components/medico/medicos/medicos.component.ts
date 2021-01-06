@@ -19,7 +19,7 @@ import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
 export class MedicosComponent extends MatPaginatorIntl implements OnInit {
 
   length: number = 10;
-  page_size: number = 30;
+  page_size: number = 10;
   page_number: number = 0;
   dataSource: Medico[] = [];
   displayedColumns: string[] = ['id', 'nombre', 'area'];
@@ -37,12 +37,12 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
     private authService: AuthService,
     private dialog: MatDialog,
     private router: Router,
-     ) {
+  ) {
     super();
   }
 
   ngOnInit() {
-     
+
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
@@ -86,7 +86,7 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   handlePage(e: PageEvent) {
-     
+
     this.load = true;
     this.page_size = e.pageSize;
     this.page_number = e.pageIndex;
@@ -108,7 +108,7 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   refresh() {
-     
+
     this.nombre = '';
     this.page_size = 30;
     this.load = true;
@@ -136,7 +136,7 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
   }
 
   buscar(nombre: string) {
-     
+
     this.paginator.pageIndex = 0;
     this.page_number = 0;
     this.page_size = 50;
@@ -166,7 +166,7 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
       ;
   }
 
-  pageSizeOptions = [10, 30, 50, 100];
+  pageSizeOptions = [10, 30, 50, 100, 500, 1000];
 
   openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {

@@ -21,19 +21,19 @@
                         <button mat-flat-button type="submit" color="primary">Acceder</button>
                     </form>
                 </mat-card-actions>
+                <mat-card-actions class="center">
+                    <!--<form novalidate (ngSubmit)="login()" [formGroup]="logon">-->
+                    <button mat-button color="accent" routerLink="/user" type="submit">¿Olvidaste tu contraseña?</button>
+                    <!--</form>-->
+                </mat-card-actions>
 
-                <!-- <mat-chip-list class="center">
-                                <form novalidate (ngSubmit)="login()" [formGroup]="logon">
-                                    <mat-chip mat-flat-button type="submit" color="primary">Contactar a soporte</mat-chip>
-                                </form>
-                            </mat-chip-list> -->
             </form>
-           <!-- <mat-card-actions class="center">
-                <button mat-button color="accent" routerLink="/registro" type="submit">¿No tienes cuenta? ¡Crea una!</button>
+            <!-- <mat-card-actions class=" center ">
+                <button mat-button color="accent " routerLink="/registro " type="submit ">¿No tienes cuenta? ¡Crea una!</button>
             </mat-card-actions>-->
         </mat-card-content>
     </mat-card>
-    <div class='loading' *ngIf="loading">
+    <div class='loading' *ngIf="loading ">
         <mat-spinner></mat-spinner>
     </div>
 </div>
