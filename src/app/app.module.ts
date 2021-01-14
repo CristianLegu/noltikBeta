@@ -63,6 +63,7 @@ import { ContrasenaComponent } from './components/contrasena/contrasena.componen
 import { ConfirmarUserComponent } from './components/confirmar-user/confirmar-user.component';
 import { MensajeComponent } from './components/mensaje/mensaje.component';
 import { LaboratoriosComponent } from './components/laboratorio/laboratorios/laboratorios.component';
+import { EnviarComponent } from './components/enviar/enviar.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import { LaboratoriosComponent } from './components/laboratorio/laboratorios/lab
     ContrasenaComponent,
     ConfirmarUserComponent,
     MensajeComponent,
-    LaboratoriosComponent
+    LaboratoriosComponent,
+    EnviarComponent
   ],
   imports: [
     FontAwesomeModule,

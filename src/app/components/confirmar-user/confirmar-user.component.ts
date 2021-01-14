@@ -45,6 +45,7 @@ export class ConfirmarUserComponent implements OnInit {
     this.userService
       .setConfirma(this.confUser.get("user").value)
       .then(ok => {
+        console.log(ok);
         this.loading = false;
         this.router.navigateByUrl("/reset-pass");
       })

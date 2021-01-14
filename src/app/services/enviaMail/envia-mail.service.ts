@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { jsonPDF } from 'src/app/common/interface';
 import { ApiUrl } from 'src/app/globals';
 
 @Injectable({

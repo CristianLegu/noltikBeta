@@ -10,7 +10,8 @@ import { DialogComponent } from 'src/app/common/dialog/dialog.component';
 
 @Component({
   selector: 'app-enviar',
-  templateUrl: './enviar.component.html'
+  templateUrl: './enviar.component.html',
+  styleUrls: ["./enviar.component.scss"]
 })
 export class EnviarComponent implements OnInit {
 

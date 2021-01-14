@@ -12,14 +12,14 @@ export class UserTokenService {
     private http: HttpClient
   ) { }
 
-  setConfirma(username: string ) {
+  setConfirma(username: string) {
     return new Promise((ok, error) => {
-     // this.http.post(ApiUrl + 'req-pass/' + username.value, {})
-      this.http.post(ApiUrl + 'usuarios/' + 'req-pass/' + username,
-        {    
+      this.http.post(ApiUrl + 'usuarios/req-pass/' + username,
+        {
         })
         .toPromise()
         .then(response => {
+          console.log(response);
           ok(response);
         })
         .catch(err => {
