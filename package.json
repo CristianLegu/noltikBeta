@@ -2,16 +2,17 @@
   "name": "noltikbeta",
   "version": "1.0.0",
   "engines": {
-    "node": "12.15.0"
+    "node": "12.15.0",
+    "npm": "6.13.7"
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node server.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "heroku-postbuild": "ng build --prod"
+    "postinstall": "ng build --prod"
   },
   "private": true,
   "dependencies": {
@@ -29,10 +30,12 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.12",
+    "express": "^4.17.1",
     "jshint": "^2.12.0",
     "jspdf": "^1.5.3",
     "moment-timezone": "^0.5.31",
     "nodemailer": "^6.4.16",
+    "path": "^0.12.7",
     "rxjs": "~6.5.4",
     "tslib": "^1.14.1",
     "zone.js": "~0.10.2"
