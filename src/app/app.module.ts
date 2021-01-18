@@ -64,6 +64,7 @@ import { ConfirmarUserComponent } from './components/confirmar-user/confirmar-us
 import { MensajeComponent } from './components/mensaje/mensaje.component';
 import { LaboratoriosComponent } from './components/laboratorio/laboratorios/laboratorios.component';
 import { EnviarComponent } from './components/enviar/enviar.component';
+import { EnviaMailComponent } from './components/envia-mail/envia-mail.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,8 @@ import { EnviarComponent } from './components/enviar/enviar.component';
     ConfirmarUserComponent,
     MensajeComponent,
     LaboratoriosComponent,
-    EnviarComponent
+    EnviarComponent,
+    EnviaMailComponent
   ],
   imports: [
     FontAwesomeModule,

@@ -21,7 +21,7 @@ import { ContrasenaComponent } from './components/contrasena/contrasena.componen
 import { ConfirmarUserComponent } from './components/confirmar-user/confirmar-user.component';
 import { MensajeComponent } from './components/mensaje/mensaje.component';
 import { LaboratoriosComponent } from './components/laboratorio/laboratorios/laboratorios.component';
-
+import { EnviaMailComponent } from './components/envia-mail/envia-mail.component';
 
 const APP_ROUTES: Routes = [
     //{ path: 'registro', component: IngresarComponent },
@@ -29,7 +29,8 @@ const APP_ROUTES: Routes = [
     { path: 'confirma/:token', component: ConfirmarComponent },
     { path: 'ingresar', component: IngresarComponent },
     { path: 'user', component: ConfirmarUserComponent },
-    { path: 'successMessage', component: MensajeComponent },
+    { path: 'pass-restablecida', component: MensajeComponent },
+    { path: 'enviar-mail', component: EnviaMailComponent},
     { path: 'laboratorio', component: LaboratoriosComponent },
     { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
     { path: 'usuarios/:id', component: AltausuarioComponent, canActivate: [AuthGuard] },

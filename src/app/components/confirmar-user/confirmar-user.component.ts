@@ -47,7 +47,7 @@ export class ConfirmarUserComponent implements OnInit {
       .then(ok => {
         console.log(ok);
         this.loading = false;
-        this.router.navigateByUrl("/reset-pass");
+        this.router.navigateByUrl("/enviar-mail");
       })
       .catch(error => {
         this.loading = false;
