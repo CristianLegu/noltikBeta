@@ -30,7 +30,7 @@ const APP_ROUTES: Routes = [
     { path: 'ingresar', component: IngresarComponent },
     { path: 'user', component: ConfirmarUserComponent },
     { path: 'successMessage', component: MensajeComponent },
-    { path: 'laboratorio', component: LaboratoriosComponent },
+    { path: 'laboratorio', component: LaboratoriosComponent, canActivate: [AuthGuard] },
     { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
     { path: 'usuarios/:id', component: AltausuarioComponent, canActivate: [AuthGuard] },
     { path: 'pacientes', component: PacientesComponent, canActivate: [AuthGuard] },

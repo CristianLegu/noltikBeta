@@ -85,6 +85,7 @@ export interface Laboratorio{
   telefonos: string,
   email: string,
   bodyMail: string,
+  imgByte: string,
   infoMembrete: InfoMembrete
 }
 

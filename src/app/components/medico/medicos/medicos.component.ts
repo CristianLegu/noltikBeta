@@ -8,7 +8,6 @@ import { DialogComponent } from '../../../common/dialog/dialog.component';
 import { Router } from '@angular/router';
 import { MatPaginatorIntl, MatPaginator, PageEvent } from '@angular/material/paginator';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
 
 @Component({
   selector: 'app-medicos',
