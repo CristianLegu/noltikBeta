@@ -8,15 +8,18 @@
                 <div class="center">
                     <h2>Recuperación de la cuenta</h2>
                 </div>
-                <mat-form-field class="center " appearance="outline" [formGroup]="confUser">
-                    <mat-label>Usuario</mat-label>
-                    <input matInput formControlName="user">
-                </mat-form-field>
+                <form novalidate (ngSubmit)="checkUser()">
+                    <mat-form-field class="center " appearance="outline" [formGroup]="confUser">
+                        <mat-label>Usuario</mat-label>
+                        <input matInput formControlName="user" required>
+                    </mat-form-field>
 
-                <mat-card-actions class="center">
-                    <form novalidate (ngSubmit)="checkUser()">
+                    <mat-card-actions class="center">
                         <button mat-flat-button type="submit" color="primary">Enviar</button>
-                    </form>
+                    </mat-card-actions>
+                </form>
+                <mat-card-actions class="center">
+                    <button mat-button color="accent" routerLink="/ingresar" type="submit">Regresar a inicio de sesión</button>
                 </mat-card-actions>
             </form>
         </mat-card-content>

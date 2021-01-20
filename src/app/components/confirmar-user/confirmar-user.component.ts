@@ -23,7 +23,7 @@ export class ConfirmarUserComponent implements OnInit {
   constructor(
     private userService: UserTokenService,
     private activatedRoute: ActivatedRoute,
-    private userC:FormBuilder,
+    private userC: FormBuilder,
     private dialog: MatDialog,
     private router: Router,
     private _snackBar: MatSnackBar,
@@ -32,43 +32,50 @@ export class ConfirmarUserComponent implements OnInit {
     this.confUser = this.userC.group({
       user: ["", [Validators.required]],
     });
-   }
+  }
 
   ngOnInit(): void {
-    /*this.confUser = new FormGroup({
+    this.confUser = new FormGroup({
       user: new FormControl("", [Validators.required])
-      });*/
+    });
   }
   checkUser() {
     console.log(this.confUser);
-    this.loading = true;
-    this.userService
-      .setConfirma(this.confUser.get("user").value)
-      .then(ok => {
-        console.log(ok);
-        this.loading = false;
-        this.router.navigateByUrl("/enviar-mail");
-      })
-      .catch(error => {
-        this.loading = false;
-        //Error no conexión
-        if (error.status == "0") {
-          this.openDialog(error.message);
-        }
-        else {
-          this.openDialog(error.error.mensaje);
-        }
-        console.log(error);
-      });
-  }
-    openDialog(mensaje: string): void {
-      const dialogRef = this.dialog.open(DialogComponent, {
-        width: '350px',
-        data: { mensaje: mensaje }
-      });
-      dialogRef.afterClosed().subscribe(() => {
-        this.router.navigate(["/ingresar"]);
-      });
+    
+    if (this.confUser.valid) {
+      this.loading = true;
+      this.userService
+        .setConfirma(this.confUser.get("user").value)
+        .then(ok => {
+          console.log(ok);
+          this.loading = false;
+          this.openDialog("Se ha enviado un correo de cambio de contraseña, favor de revisar la bandeja de entrada");
+          //this.router.navigateByUrl("/enviar-mail");
+        })
+        .catch(error => {
+          this.loading = false;
+          //Error no conexión
+          if (error.status == "0") {
+            this.openDialog(error.message);
+          }
+          else {
+            this.openDialog(error.error.mensaje);
+          }
+          console.log(error);
+        });
     }
+  }
+
+
+  openDialog(mensaje: string): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '500px',
+
+      data: { mensaje: mensaje }
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.router.navigate(["/ingresar"]);
+    });
+  }
 
 }

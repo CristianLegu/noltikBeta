@@ -51,19 +51,22 @@ export class ContrasenaComponent implements OnInit {
   }
 
   guardarContra() {
+
+    if (this.newPass.valid) {
       this.load = true;
       this.contrasenaService.updateContrasena(this.actRoute, this.newPass)//this.newPass.get("newpass").value, this.newPass.get("confpass").value)
         .then(ok => {
           this.load = false;
           //this.mensaje = ok.mensaje;
-          this.router.navigateByUrl("/pass-restablecida"); 
+          this.router.navigateByUrl("/pass-restablecida");
         })
         .catch(err => {
           console.log(err);
-          //this.mensaje = err.error.mensaje;
-          //this.openDialog(this.mensaje);
+          this.mensaje = err.error.mensaje;
+          this.openDialog(this.mensaje);
           this.load = false;
         });
+    }
   }
 
   //Mensaje Snackbar
@@ -76,7 +79,7 @@ export class ContrasenaComponent implements OnInit {
 
   openDialog(mensaje: string): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: '350px',
+      width: '450px',
       data: { mensaje: mensaje }
     });
     dialogRef.afterClosed().subscribe(() => {
