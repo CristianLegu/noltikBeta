@@ -1,31 +1,100 @@
 <div class="container">
     <mat-toolbar>
-
         <mat-toolbar-row>
-            <span>{{mensajeBienvenida}}</span>
-        </mat-toolbar-row>
-
-        <mat-toolbar-row>
-            <span>
-                <a mat-flat-button (click)="ruta()" style="background: whitesmoke;">
-                    <i class="material-icons">keyboard_backspace</i>
-                </a>
-            </span>
-            <span>Datos Laboratorio</span>
+            <span>Información Laboratorio</span>
             <span class="space"></span>
-            <span *ngIf="actRoute != '0'">
-                <!--<button mat-button (click)="eliminar()" *ngIf="rol == 'ROLE_ADMIN'">
-                    <i class="material-icons">delete</i>
-                    Eliminar
-                </button>-->
-            </span>
         </mat-toolbar-row>
-
-
     </mat-toolbar>
 
     <form class="form" novalidate [formGroup]="actLab">
-        <div class="header">
+
+        <div class="row">
+            <div class="col-5">
+                <mat-card class="card">
+                    <img mat-card-image [src]="retrievedImage" class="image" alt="Logo Laboratorio" id="logo">
+                    <!--<mat-card-actions>
+                        <input type="file" accept="image/*" (change)="onFileChanged($event)" multiple
+                            [formGroup]="imageFG" style="margin: auto;" id="archivo">
+                    </mat-card-actions>-->
+                    <mat-card-actions>
+                        <label for="file-upload" class="custom-file-upload">
+                            <i class="fa fa-cloud-upload"></i> Seleccionar logo
+                        </label>
+                        <input id="file-upload" name="logo" type="file" accept="image/*"
+                            (change)="onFileChanged ($event)" style="margin: auto;">
+                        <mat-form-field style="margin: 7px;">
+                            <mat-label>Nombre del archivo</mat-label>
+                            <input matInput disabled value="{{ fileName }}">
+                        </mat-form-field>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+            <div class="col-6">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Nombre del Laboratorio</mat-label>
+                    <input matInput formControlName="nombre">
+                </mat-form-field>
+            </div>
+            <div class="col-4">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Dirección</mat-label>
+                    <input matInput formControlName="domicilio">
+                </mat-form-field>
+            </div>
+
+            <div class="col-4">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Ciudad</mat-label>
+                    <input matInput formControlName="ciudad">
+                </mat-form-field>
+            </div>
+
+            <div class="col-4">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Estado</mat-label>
+                    <input matInput #postalCode formControlName="estado">
+                </mat-form-field>
+            </div>
+
+            <div class="col-2">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Correo electrónico</mat-label>
+                    <input matInput formControlName="email">
+                </mat-form-field>
+            </div>
+
+            <div class="col-2">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Teléfono</mat-label>
+                    <input matInput formControlName="telefonos">
+                </mat-form-field>
+            </div>
+
+            <div formGroupName="infoMembrete">
+                <div class="col-2">
+                    <mat-form-field style="width: 100%;">
+                        <mat-label>Cédula Profesional</mat-label>
+                        <input matInput formControlName="cedulaProfesional">
+                    </mat-form-field>
+                </div>
+
+                <div class="col-2">
+                    <mat-form-field style="width: 100%;">
+                        <mat-label>Cédula Especialidad</mat-label>
+                        <input matInput formControlName="cedulaEspecialidad">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <mat-form-field class="col-6">
+                <mat-label>Cuerpo Email</mat-label>
+                <textarea matInput formControlName="bodyMail" cdkTextareaAutosize
+                    placeholder="Contenido del email que será enviado al paciente">
+                </textarea>
+            </mat-form-field>
+
+        </div>
+        <!--<div class="header">
             <div class="doc">
                 <div *ngIf=retrievedImage>
                     <img [src]="retrievedImage" class="image">
@@ -64,23 +133,26 @@
 
             <mat-form-field class="col-4">
                 <mat-label>Cuerpo Email</mat-label>
-                <textarea matInput formControlName="bodyMail" cdkTextareaAutosize #autosize="cdkTextareaAutosize"></textarea>
+                <textarea matInput formControlName="bodyMail" cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"></textarea>
             </mat-form-field>
             <div formGroupName="infoMembrete">
                 <mat-form-field class="col-4">
                     <mat-label>Cédula Profesional</mat-label>
-                    <textarea matInput formControlName="cedulaProfesional" cdkTextareaAutosize #autosize="cdkTextareaAutosize"></textarea>
+                    <textarea matInput formControlName="cedulaProfesional" cdkTextareaAutosize
+                        #autosize="cdkTextareaAutosize"></textarea>
                 </mat-form-field>
 
                 <mat-form-field class="col-4">
                     <mat-label>Cédula Especialidad</mat-label>
-                    <textarea matInput formControlName="cedulaEspecialidad" cdkTextareaAutosize #autosize="cdkTextareaAutosize"></textarea>
+                    <textarea matInput formControlName="cedulaEspecialidad" cdkTextareaAutosize
+                        #autosize="cdkTextareaAutosize"></textarea>
                 </mat-form-field>
             </div>
         </div>
         <div class="btnimg">
             <input type="file" (change)="onFileChanged($event)" multiple [formGroup]="imageFG">
-        </div>
+        </div>-->
         <button mat-raised-button color="primary" (click)="guardar()" class="buttonGuardar">
             <i class="material-icons">save</i> Guardar
         </button>

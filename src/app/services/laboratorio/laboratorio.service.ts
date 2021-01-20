@@ -8,9 +8,9 @@ import { FormGroup } from '@angular/forms';
   providedIn: 'root'
 })
 export class LaboratorioService {
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
   }
-  selectedFile:File;
+  selectedFile: File;
   retrievedImage: any;
   base64Data: any;
   retrieveResonse: any;
@@ -35,11 +35,14 @@ export class LaboratorioService {
     });
   }
   //Modifica
-  modificaLab(jwt: string, prefix: string, mod: FormGroup, id: any, file:File): Promise<any> {
+  modificaLab(jwt: string, prefix: string, mod: FormGroup, file: File): Promise<any> {
+
     const uploadImageData = new FormData();
-    uploadImageData.append('imageFile', new Blob([file]), file.name);
-    uploadImageData.append('laboratorio',JSON.stringify(mod.value));
-    console.log(mod.value);
+    if (file != null) {
+      uploadImageData.append('imageFile', new Blob([file]), file.name);
+    }
+    uploadImageData.append('laboratorio', JSON.stringify(mod.value));
+    
     //console.log(uploadImageData);
     return new Promise((ok, error) => {
       this.http.put(ApiUrl + 'lab/' + prefix, uploadImageData,
@@ -73,9 +76,9 @@ export class LaboratorioService {
     });
   }*/
 
-  getImage(prefix:string) {
+  getImage(prefix: string) {
     //Make a call to Sprinf Boot to get the Image Bytes.
-    this.http.get(ApiUrl + 'lab/' + prefix )
+    this.http.get(ApiUrl + 'lab/' + prefix)
       .subscribe(
         res => {
           console.log(res)
@@ -86,7 +89,7 @@ export class LaboratorioService {
           console.log(this.base64Data);
 
           this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-          
+
         }
       );
   }
