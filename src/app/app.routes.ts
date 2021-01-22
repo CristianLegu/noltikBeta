@@ -28,7 +28,7 @@ const APP_ROUTES: Routes = [
     { path: 'registrar', component: RegistroComponent },
     { path: 'confirma/:token', component: ConfirmarComponent },
     { path: 'ingresar', component: IngresarComponent },
-    { path: 'user', component: ConfirmarUserComponent },
+    { path: 'recuperar-cuenta', component: ConfirmarUserComponent },
     { path: 'pass-restablecida', component: MensajeComponent },
     { path: 'enviar-mail', component: EnviaMailComponent},
     { path: 'laboratorio', component: LaboratoriosComponent },

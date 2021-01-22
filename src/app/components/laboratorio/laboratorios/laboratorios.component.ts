@@ -1,15 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
-import { FormBuilder, Validators, FormArray } from "@angular/forms";
+import { FormBuilder } from "@angular/forms";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import { DialogDataEliminar, Laboratorio } from "src/app/common/interface";
 import { DialogComponent } from "src/app/common/dialog/dialog.component";
-import { DialogeliminarComponent } from "src/app/common/dialogeliminar/dialogeliminar.component";
 import { MatDialog } from '@angular/material/dialog';
-import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
-import { AuthService } from 'src/app/services/auth/auth.service';
 import { LaboratorioService } from '../../../services/laboratorio/laboratorio.service';
-import { ApiUrl } from '../../../globals';
+import { ApiUrl, logoGen } from '../../../globals';
 import { HttpClient } from '@angular/common/http';
 import { InfoMembrete } from '../../../common/interface';
 
@@ -22,14 +19,12 @@ export class LaboratoriosComponent implements OnInit {
   load: boolean = false;
   mensajeBienvenida: string;
   actRoute: string;
-  buttonTel = true;
   mensaje: string;
-  selectedFile:File;
+  selectedFile: File;
   retrievedImage: any;
   base64Data: any;
   retrieveResonse: any;
-  public respuestaImagenEnviada;
-  public resultadoCarga;
+  fileName: string;
 
   //Estructura para dialog eliminar
   dataEliminar: DialogDataEliminar = { id: "", jwt: "", mensaje: "", tipo: "", prefix: "" };
@@ -52,13 +47,11 @@ export class LaboratoriosComponent implements OnInit {
     private fb: FormBuilder,
     //private fbHosp: FormBuilder,
     private dialog: MatDialog,
-    private authService: AuthService,
     private labService: LaboratorioService,
     private http: HttpClient,
-    private sidenav: SidenavComponent = new SidenavComponent(router, authService)
   ) {
     this.actRoute = this.activateRoute.snapshot.params["id"];
-   }
+  }
 
   //FormGroup Médico
   actLab = this.fb.group({
@@ -77,7 +70,7 @@ export class LaboratoriosComponent implements OnInit {
 
   imageFG = this.fb.group({
     nombre_imagen: ["", []],
-    tipo_imagen: ["",[]],
+    tipo_imagen: ["", []],
     img_byte: ["", []]
   });
 
@@ -87,50 +80,39 @@ export class LaboratoriosComponent implements OnInit {
     this.pref = localStorage.getItem("prefix");
     this.rol = localStorage.getItem("role");
 
-    if (this.actRoute != '0') {
-      //console.log(this.actRoute);
-      this.labService.obtenerLab(this.jwt, this.pref, this.actRoute)
-        .then(ok => {
-          this.lab = ok.body;
-          console.log(this.lab);
-          this.fillForm(this.lab);
-          this.getImage(this.pref);
-          this.load = false;
-        })
-        .catch(error => {
-          console.log(error);
-          if (error.status != 401) {
-            this.openDialog(error.message);
-          }
-          this.load = false;
-          //this.router.navigate(["/medicos"]);
-        })
-    }
-
+    this.labService.obtenerLab(this.jwt, this.pref, this.actRoute)
+      .then(ok => {
+        this.lab = ok.body;
+        this.base64Data = this.lab.imgByte;
+        if (this.base64Data != null) {
+          this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
+        } else {
+          this.retrievedImage = logoGen;
+        }
+        this.fillForm(this.lab);
+        this.load = false;
+      })
+      .catch(error => {
+        if (error.status != 401) {
+          this.openDialog(error.message);
+        }
+        this.load = false;
+      })
   }
 
   guardar() {
     this.load = true;
-    console.log(this.actRoute);
-    //this.cargarimagen();
-    if (this.actRoute != "0") {
-      this.labService.modificaLab(this.jwt, this.pref, this.actLab, this.actRoute, this.selectedFile)
-        .then(ok => {
-          this.load = false;
-          this.mensaje = ok.mensaje;
-          this.openDialog(this.mensaje);
-          //this.ruta();
-        }).catch(error => {
-          this.mensaje = error.error.mensaje;
-          this.openDialog(this.mensaje);
-          this.load = false;
-        });
-    }
-  }
-
-  //Botón flecha atrás
-  ruta() {
-    this.router.navigate(["/pacientes"]);
+    this.labService.modificaLab(this.jwt, this.pref, this.actLab, this.selectedFile)
+      .then(ok => {
+        this.load = false;
+        this.mensaje = ok.mensaje;
+        this.openDialog(this.mensaje);
+        this.selectedFile = null;
+      }).catch(error => {
+        this.mensaje = error.error.mensaje;
+        this.openDialog(this.mensaje);
+        this.load = false;
+      });
   }
 
   fillForm(lab: Laboratorio) {
@@ -140,8 +122,9 @@ export class LaboratoriosComponent implements OnInit {
       ciudad: lab.ciudad,
       estado: lab.estado,
       telefonos: lab.telefonos,
-      email:lab.email,
+      email: lab.email,
       bodyMail: lab.bodyMail,
+      imgByte: lab.imgByte,
       infoMembrete: {
         cedulaProfesional: lab.infoMembrete.cedulaProfesional,
         cedulaEspecialidad: lab.infoMembrete.cedulaEspecialidad
@@ -157,32 +140,72 @@ export class LaboratoriosComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      //this.router.navigate(["/noltik/medicos"]);
     });
   }
 
   public onFileChanged(event) {
-    //Select File
-    this.selectedFile = event.target.files[0];
-    console.log(this.selectedFile);
+    let pattern = /image-*/;
+    if (event.target.files[0].type.match(pattern)) {
+      //Select File
+      this.selectedFile = event.target.files[0];
+      this.resizeImage(this.selectedFile, 300, 161).then(blob => {
+        let img: any = document.getElementById('logo');
+        img.src = URL.createObjectURL(blob);
+        let file = new File([blob], event.target.files[0].name);
+        this.selectedFile = file;
+        this.fileName = file.name;
+
+      }, err => {
+        this.openDialog("Error: " + err)
+      });
+    }
+    else {
+      let imagen: any = document.getElementById("file-upload");
+      imagen.value = "";
+      let logo: any = document.getElementById("logo");
+      logo.src = this.retrievedImage;
+      this.selectedFile = null;
+      this.fileName = "";
+      this.openDialog("Sólamente archivos de imagen válidos");
+    }
+
   }
 
-  getImage(prefix:string) {
-    //Make a call to Sprinf Boot to get the Image Bytes.
-    this.http.get(ApiUrl + 'lab/' + prefix )
-      .subscribe(
-        res => {
-          console.log(res)
+  resizeImage(file: File, maxWidth: number, maxHeight: number): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      let image = new Image();
+      image.src = URL.createObjectURL(file);
+      image.onload = () => {
+        let width = image.width;
+        let height = image.height;
 
-          this.retrieveResonse = res;
-          //console.log(this.retrieveResonse);
-          this.base64Data = this.retrieveResonse.body.imgByte;
-
-          //console.log(this.base64Data);
-
-          this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-          
+        if (width <= maxWidth && height <= maxHeight) {
+          resolve(file);
         }
-      );
+
+        let newWidth;
+        let newHeight;
+
+        if (width > height) {
+          newHeight = height * (maxWidth / width);
+          newWidth = maxWidth;
+        } else {
+          newWidth = width * (maxHeight / height);
+          newHeight = maxHeight;
+        }
+
+        let canvas = document.createElement('canvas');
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+
+        let context = canvas.getContext('2d');
+
+        context.drawImage(image, 0, 0, newWidth, newHeight);
+
+        canvas.toBlob(resolve, file.type);
+      };
+      image.onerror = reject;
+    });
   }
+
 }

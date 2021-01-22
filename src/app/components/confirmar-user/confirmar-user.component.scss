@@ -8,14 +8,18 @@
     align-items: center;
     box-shadow: 9px 9px 9px 1px rgba(0, 0, 0, 0.3);
 }
-
 .container {
     position: fixed !important;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    background: #2d4c82;
+    //background: #2d4c82;
+    background-color: #935d8c;
+    background-image: url("/src/assets/images/overlay.png"), -moz-linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
+    background-image: url("/src/assets/images/overlay.png"), -webkit-linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
+    background-image: url("/src/assets/images/overlay.png"), -ms-linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
+    background-image: url("/src/assets/images/overlay.png"), linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
 }
 
 .center {
