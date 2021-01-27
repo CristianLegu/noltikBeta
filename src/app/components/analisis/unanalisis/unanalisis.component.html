@@ -24,7 +24,7 @@
 
             <mat-form-field *ngIf="idAnalisis != '0'" class="col-6">
                 <mat-label>Área</mat-label>
-                <input matInput formControlName="area" disabled>
+                <input matInput formControlName="area" disabled maxlength="100">
             </mat-form-field>
 
             <!--Cuando el análisis es nuevo, mostramos los inputs donde salen la lista   formControlName="medico"-->
@@ -40,7 +40,7 @@
 
             <mat-form-field *ngIf="idAnalisis == '0'" class="col-6">
                 <mat-label>Área</mat-label>
-                <input matInput value="{{areaM}}" formControlName="area">
+                <input matInput value="{{areaM}}" formControlName="area" maxlength="100">
             </mat-form-field>
 
         </div>
@@ -106,7 +106,7 @@
                     <div class="row" style="padding: 10px;">
                         <mat-form-field *ngIf="a.value.subtitulo == this.subtitulofinal" class="col-7">
                             <mat-label>Comentario General</mat-label>
-                            <textarea matInput formControlName="comentario"></textarea>
+                            <textarea matInput formControlName="comentario" maxlength="200"></textarea>
                         </mat-form-field>
 
                     </div>

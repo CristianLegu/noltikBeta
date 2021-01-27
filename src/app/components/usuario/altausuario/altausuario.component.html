@@ -26,7 +26,7 @@
             <div class="col-5">
                 <mat-form-field>
                     <mat-label>Nombre</mat-label>
-                    <input matInput formControlName="nombre" class="separacion">
+                    <input matInput formControlName="nombre" class="separacion" maxlength="100">
                     <mat-error *ngIf="altauser.hasError('required','nombre')">
                         Ingresar nombre
                     </mat-error>
@@ -37,7 +37,7 @@
             <div class="col-3">
                 <mat-form-field>
                     <mat-label>Usuario</mat-label>
-                    <input matInput formControlName="nombreusuario" pattern="[a-zA-Z ]*" maxlength="8">
+                    <input matInput formControlName="nombreusuario" pattern="[a-zA-Z ]*" minlength="4" maxlength="8">
                     <span matPrefix>{{prefijo}}</span>
                     <mat-error *ngIf="altauser.hasError('required','nombreUsuario')">
                         Ingresar un nombre de usuario
@@ -50,7 +50,7 @@
             <div class="col-5">
                 <mat-form-field>
                     <mat-label>Correo electrónico</mat-label>
-                    <input matInput formControlName="email" [errorStateMatcher]="matcherEmail">
+                    <input matInput formControlName="email" [errorStateMatcher]="matcherEmail" maxlength="50">
                     <mat-error *ngIf="altauser.hasError('email','email') 
                       && !altauser.hasError('required', 'email')">
                         Por favor, ingrese un correo valido
@@ -77,7 +77,7 @@
             <div class="col-5">
                 <mat-form-field *ngIf="ocultar">
                     <mat-label>Contraseña</mat-label>
-                    <input matInput formControlName="contrasena" type="password">
+                    <input matInput formControlName="contrasena" type="password" minlength="6">
                     <mat-hint>La contraseña debe ser minimo de 6 caracteres</mat-hint>
                     <!--<mat-error *ngIf="altauser.hasError('required','contrasena')">
                     Ingresar contraseña
