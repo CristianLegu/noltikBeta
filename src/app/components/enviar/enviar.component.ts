@@ -7,6 +7,7 @@ import { Analisis, jsonPDF } from "src/app/common/interface";
 import { EnviaMailService } from 'src/app/services/enviaMail/envia-mail.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/common/dialog/dialog.component';
+import { DatosLaboratorio } from "src/app/common/interface";
 
 @Component({
   selector: 'app-enviar',
@@ -28,7 +29,11 @@ export class EnviarComponent implements OnInit {
   alturaItems: number;
   load: boolean = false;
   mensaje: string;
-
+  membrete_cadena: string;
+  domicilio: string;
+  ciudad: string;
+  correo: string;
+  lab: DatosLaboratorio;
   constructor(
     private serviceA: AnalisisService,
     private activatedRoute: ActivatedRoute,
@@ -47,12 +52,21 @@ export class EnviarComponent implements OnInit {
     this.load = true;
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
-
+    this.serviceA.getDatoslaboratorio(this.jwt, this.prefix)
+    .then(ok => {
+      this.lab = ok.body;
+      console.log(this.lab);
+      //this.getImage(this.prefix);
+    })
+    .catch(error => {
+      // this.load = false;
+    });
     this.serviceA.getAnalisisSeleccionados(this.jwt, this.prefix, this.actID, this.actString)
       .then(ok => {
         this.createPDF(ok.body)
           .then(
             respuesta => {
+              
               this.enviarPDF(respuesta.toString());
             }
           );
@@ -1125,36 +1139,45 @@ export class EnviarComponent implements OnInit {
   }
 
   cabecera() {
-    this.doc.addImage(imgData, "JPEG", 10, 10, 40, 25);
 
+    // const imgData1 = this.retrievedImage;
+    this.doc.addImage(this.lab.imgByte, "JPEG", 10, 10, 40, 25);
+    //this.doc.addImage(this.retrievedImage, "JPEG", 10, 10, 40, 25);
+  
+    console.log(this.lab.imgByte);
     this.doc.setDrawColor(0, 0, 255);
     this.doc.line(5, 5, 205, 5);
 
     this.doc.setFont("helvetica");
     this.doc.setFontType("normal");
     this.doc.setFontSize(14);
-    this.doc.text(55, 16, "LABORATORIOS DE ANALISIS CLINICOS ESPINOSA");
-
-    this.doc.setFontSize(8);
+    //this.doc.text(55, 16, "LABORATORIOS DE ANALISIS CLINICOS ESPINOSA");
+    this.doc.text(60, 16, this.lab.nombre);
+    this.doc.setFontSize(10);
+    this.membrete_cadena = "Cedula de Especialidad: "+ this.lab.infoMembrete.cedulaEspecialidad + " Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
+    this.domicilio = "Domicilio: "+ this.lab.domicilio;
+    this.ciudad = "Ciudad: "+ this.lab.ciudad +" Estado: " + this.lab.estado;
+    this.correo = "Correo: "+ this.lab.email + " Telefono: "+ this.lab.telefonos;
+    
     this.doc.text(
-      61,
+      60,
       21,
-      "Suc. Centro, Calle Hidalgo No. 9 Int 1-A Tel. (469) 692 08 75 Pénjamo. Gto."
+      this.domicilio
     );
     this.doc.text(
       60,
       25,
-      "Suc. Arboledas, Prol. Insurgentes No. 100 Tel.(469) 692 21 95 Pénjamo. Gto."
+      this.ciudad
     );
     this.doc.text(
-      69,
+      60,
       29,
-      "Universidad de Guanajuato Ced. Profesional 1888051 SSA 1931"
+      this.correo
     );
     this.doc.text(
-      65,
+      60,
       33,
-      "Instituto de Hemopatología Ced. Especialidad 5554071 SSA Esp. 4564"
+      this.membrete_cadena
     );
 
     this.doc.line(5, 40, 205, 40);

@@ -200,3 +200,4 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
 }
+

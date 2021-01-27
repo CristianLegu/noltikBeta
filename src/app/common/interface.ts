@@ -1,3 +1,4 @@
+import { imgData } from '../globals';
 export interface Sexo {
   value: string;
   viewValue: string;
@@ -75,7 +76,18 @@ export interface Analisis {
   medico: string,
   json: JSONEstudio[]
 }
-
+export interface DatosLaboratorio{
+  id: number,
+  nombre: string,
+  imgByte: string,
+  domicilio: string,
+  ciudad: string,
+  estado: string,
+  telefonos: string,
+  email: string,
+  bodyMail: string,
+  infoMembrete: InfoMembrete
+}
 export interface Laboratorio{
   id: number,
   nombre: string,

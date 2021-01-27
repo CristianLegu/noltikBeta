@@ -80,7 +80,6 @@ export class LaboratoriosComponent implements OnInit {
     this.pref = localStorage.getItem("prefix");
     this.rol = localStorage.getItem("role");
 
-    //console.log(this.actRoute);
     this.labService.obtenerLab(this.jwt, this.pref, this.actRoute)
       .then(ok => {
         this.lab = ok.body;
@@ -91,22 +90,18 @@ export class LaboratoriosComponent implements OnInit {
           this.retrievedImage = logoGen;
         }
         this.fillForm(this.lab);
-        //this.getImage(this.pref);
         this.load = false;
       })
       .catch(error => {
-        console.log(error);
         if (error.status != 401) {
           this.openDialog(error.message);
         }
         this.load = false;
-        //this.router.navigate(["/medicos"]);
       })
   }
 
   guardar() {
     this.load = true;
-    //this.cargarimagen();
     this.labService.modificaLab(this.jwt, this.pref, this.actLab, this.selectedFile)
       .then(ok => {
         this.load = false;
@@ -153,15 +148,16 @@ export class LaboratoriosComponent implements OnInit {
     if (event.target.files[0].type.match(pattern)) {
       //Select File
       this.selectedFile = event.target.files[0];
-
-      let file = event.target.files[0];
-      let reader = new FileReader();
-      reader.onload = function (event) {
+      this.resizeImage(this.selectedFile, 300, 161).then(blob => {
         let img: any = document.getElementById('logo');
-        img.src = event.target.result;
-      }
-      reader.readAsDataURL(file);
-      this.fileName = this.selectedFile.name;
+        img.src = URL.createObjectURL(blob);
+        let file = new File([blob], event.target.files[0].name);
+        this.selectedFile = file;
+        this.fileName = file.name;
+
+      }, err => {
+        this.openDialog("Error: " + err)
+      });
     }
     else {
       let imagen: any = document.getElementById("file-upload");
@@ -175,23 +171,41 @@ export class LaboratoriosComponent implements OnInit {
 
   }
 
-  getImage(prefix: string) {
-    //Make a call to Sprinf Boot to get the Image Bytes.
-    this.http.get(ApiUrl + 'lab/' + prefix)
-      .subscribe(
-        res => {
-          console.log("Res image");
-          console.log(res)
+  resizeImage(file: File, maxWidth: number, maxHeight: number): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      let image = new Image();
+      image.src = URL.createObjectURL(file);
+      image.onload = () => {
+        let width = image.width;
+        let height = image.height;
 
-          this.retrieveResonse = res;
-          //console.log(this.retrieveResonse);
-          this.base64Data = this.retrieveResonse.body.imgByte;
-
-          //console.log(this.base64Data);
-
-          this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-
+        if (width <= maxWidth && height <= maxHeight) {
+          resolve(file);
         }
-      );
+
+        let newWidth;
+        let newHeight;
+
+        if (width > height) {
+          newHeight = height * (maxWidth / width);
+          newWidth = maxWidth;
+        } else {
+          newWidth = width * (maxHeight / height);
+          newHeight = maxHeight;
+        }
+
+        let canvas = document.createElement('canvas');
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+
+        let context = canvas.getContext('2d');
+
+        context.drawImage(image, 0, 0, newWidth, newHeight);
+
+        canvas.toBlob(resolve, file.type);
+      };
+      image.onerror = reject;
+    });
   }
+
 }
