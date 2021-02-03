@@ -65,6 +65,7 @@ import { MensajeComponent } from './components/mensaje/mensaje.component';
 import { LaboratoriosComponent } from './components/laboratorio/laboratorios/laboratorios.component';
 import { EnviarComponent } from './components/enviar/enviar.component';
 import { EnviaMailComponent } from './components/envia-mail/envia-mail.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,7 @@ import { EnviaMailComponent } from './components/envia-mail/envia-mail.component
     MensajeComponent,
     LaboratoriosComponent,
     EnviarComponent,
-    EnviaMailComponent
+    EnviaMailComponent,
   ],
   imports: [
     FontAwesomeModule,
@@ -123,7 +124,8 @@ import { EnviaMailComponent } from './components/envia-mail/envia-mail.component
     MatCheckboxModule,
     MatAutocompleteModule,
     RegistroModule,
-    ConfirmarModule
+    ConfirmarModule,
+    MatTooltipModule
   ],
   providers: [
     AuthService, AuthGuard, DatePipe,

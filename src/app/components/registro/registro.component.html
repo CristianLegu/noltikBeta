@@ -1,5 +1,5 @@
 <div class="container">
-    
+
     <div class="div_imagen">
         <img class="responsiveimagen" mat-card-image src="/assets/images/images/logo.webp" alt="Logo">
     </div>
@@ -7,19 +7,11 @@
     <mat-card class="card">
         <mat-card-content>
             <h2 class="title">Crea tu cuenta</h2>
-            <form class="registro" novalidate [formGroup]="registro">
+            <form class="row" novalidate [formGroup]="registro" autocomplete="off">
 
                 <h4 class="subtitle">Completa todos los campos</h4>
 
-                <mat-form-field appearance="outline" style="margin-top: 15px;">
-                    <mat-label>Nombre de usuario</mat-label>
-                    <input matInput formControlName="nombre">
-                    <mat-error *ngIf="registro.get('nombre').invalid">
-                        *Campo obligatorio
-                    </mat-error>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" style="margin-top: 15px;">
+                <mat-form-field class="col-8">
                     <mat-label>Nombre del laboratorio</mat-label>
                     <input matInput formControlName="nombreLab">
                     <mat-error *ngIf="registro.get('nombreLab').invalid">
@@ -27,7 +19,15 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline">
+                <mat-form-field class="col-8">
+                    <mat-label>Nombre del administrador</mat-label>
+                    <input matInput formControlName="nombre">
+                    <mat-error *ngIf="registro.get('nombre').invalid">
+                        *Campo obligatorio
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="col-4">
                     <mat-label>Email</mat-label>
                     <input matInput type="email" formControlName="emailuser">
                     <mat-error *ngIf="registro.get('emailuser').invalid">
@@ -36,22 +36,26 @@
                 </mat-form-field>
 
                 <div class="row">
-                    <div class="col-4">
-                        <mat-form-field hintLabel="Max 8 caracteres" appearance="outline">
+                    <div class="col-2">
+                        <mat-form-field hintLabel="Max 8 caracteres">
                             <mat-label>Prefijo</mat-label>
-                            <input matInput type="email" formControlName="prefijo" minlength="4" maxlength="8"
-                                 #input maxlength="8" placeholder="Prefijo único">
+                            <input matInput type="email" formControlName="prefijo" minlength="4" maxlength="8" #input
+                                maxlength="8" placeholder="Prefijo único" [(ngModel)]="prefix">
+                            <mat-icon matSuffix #tooltip="matTooltip"
+                                matTooltip="El prefijo es un identificador único de su laboratorio, el cuál deberán escribir antes del nombre de usuario, seguido de un guión bajo '_'. Ejemplo: labtest_usuario1"
+                                matTooltipPosition="above">
+                                help</mat-icon>
                             <mat-hint align="end">{{input.value?.length || 0}}/8</mat-hint>
                             <mat-error *ngIf="registro.get('prefijo').invalid">
                                 *Mínimo 4 caracteres
                             </mat-error>
                         </mat-form-field>
                     </div>
-
-                    <div class="col-6">
-                        <mat-form-field style="padding: 0px 0px 0px 10px;">
+                    <div class="col-3">
+                        <mat-form-field>
                             <mat-label>Usuario</mat-label>
-                            <span matPrefix>{{ prefix }}_&nbsp;</span>
+                            <span matPrefix #tooltip="matTooltip" matTooltip="Info about the action">{{ prefix
+                                }}_&nbsp;</span>
                             <input matInput formControlName="nombreusuario">
                             <mat-error *ngIf="registro.get('nombreusuario').invalid">
                                 *Campo obligatorio
@@ -62,28 +66,24 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-5">
-                        <mat-form-field appearance="outline">
+                    <div class="col-4">
+                        <mat-form-field>
                             <mat-label>Contraseña</mat-label>
                             <input matInput [type]="hide ? 'password' : 'text'" formControlName="contrasena">
-                            <button mat-icon-button matSuffix (click)="hide = !hide"
-                                [attr.aria-label]="'Hide contrasena'" [attr.aria-pressed]="hide">
-                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                            </button>
                             <mat-error *ngIf="registro.get('contrasena').invalid">
                                 *La contraseña debe contener mínimo 6 caracteres
                             </mat-error>
                         </mat-form-field>
                     </div>
 
-                    <div class="col-5">
-                        <mat-form-field appearance="outline">
+                    <div class="col-4">
+                        <mat-form-field>
                             <mat-label>Repetir Contraseña</mat-label>
-                            <input matInput [type]="hide2 ? 'password' : 'text'" [(ngModel)]="password2"
+                            <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="password2"
                                 [ngModelOptions]="{standalone: true}">
-                            <button mat-icon-button matSuffix (click)="hide2 = !hide2"
-                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide2">
-                                <mat-icon>{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                             </button>
                             <mat-error *ngIf="noMatch">
                                 *Contraseñas no coinciden
