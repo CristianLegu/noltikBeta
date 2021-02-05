@@ -14,7 +14,7 @@
         </mat-toolbar-row>
     </mat-toolbar>
 
-    <form class="form" [formGroup]="altaAnalisis">
+    <form class="form" [formGroup]="altaAnalisis" autocomplete="off">
         <div class="row">
             <!--Cuando el analisis ya está en la BD, mostramos estos inputs-->
             <mat-form-field *ngIf="idAnalisis != '0'" class="col-7">

@@ -3,17 +3,16 @@
         <mat-card-content>
             <form class="example-form" novalidate [formGroup]="logon">
                 <div class="div_imagen">
-
                     <img class="responsiveimagen" mat-card-image src="https://lablace.com/ZLOGOS/noltik.png" alt="Logo">
                 </div>
                 <mat-form-field class="center " appearance="outline">
                     <mat-label>Usuario</mat-label>
-                    <input matInput formControlName="username">
+                    <input matInput formControlName="username" (keyup.enter)="login()">
                 </mat-form-field>
 
                 <mat-form-field class="center" appearance="outline">
                     <mat-label>Contraseña</mat-label>
-                    <input matInput type="password" formControlName="password">
+                    <input matInput type="password" formControlName="password" (keyup.enter)="login()">
                 </mat-form-field>
 
                 <mat-card-actions class="center">
@@ -23,15 +22,18 @@
                 </mat-card-actions>
 
             </form>
-            <mat-card-actions class="center">
+            <div class="center">
+                ¿Aún no tienes una cuenta?
+                <button mat-button color="accent" routerLink="/registrar" type="submit">
+                    Regístrate
+                </button>
+            </div>
+            <mat-card-actions class="center" style="margin-bottom: 15px;">
                 <!--<form novalidate (ngSubmit)="login()" [formGroup]="logon">-->
                 <button mat-button color="accent" routerLink="/recuperar-cuenta" type="submit">¿Olvidaste tu
                     contraseña?</button>
                 <!--</form>-->
             </mat-card-actions>
-            <!-- <mat-card-actions class=" center ">
-                <button mat-button color="accent " routerLink="/registro " type="submit ">¿No tienes cuenta? ¡Crea una!</button>
-            </mat-card-actions>-->
         </mat-card-content>
     </mat-card>
     <div class='loading' *ngIf="loading ">

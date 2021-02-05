@@ -10,8 +10,6 @@ import { DialogeliminarComponent } from '../../../common/dialogeliminar/dialogel
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
-
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -48,6 +46,8 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
   usuario: Usuario;
   mensajeBienvenida: string;
   selected: string;
+  hide = true;
+  hide2 = true;
 
   //Prefijo a mostrar
   prefijo: string;
@@ -57,7 +57,8 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
   ocultar: boolean = true;
 
   dataEliminar: DialogDataEliminar = { id: '', jwt: '', prefix: '', mensaje: '', tipo: '' };
-  valida = [Validators.required, Validators.minLength(6)];
+  regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*.?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,50}$/;
+  valida = [Validators.required, Validators.minLength(8), Validators.pattern(this.regex)];
 
   habilitaNU: boolean = false;
   rol: string;
@@ -71,18 +72,18 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private snackBar: MatSnackBar,
     private authService: AuthService,
-     
+
   ) {
 
     this.actRoute = this.activatedRoute.snapshot.params['id'];
 
     if (this.actRoute != '0') {
-      this.valida = [Validators.minLength(6)];
+      this.valida = [Validators.minLength(8)];
     }
     //FormGroup
     this.altauser = this.fb.group({
       nombre: ['', [Validators.required]],
-      nombreusuario: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(8)]],
+      nombreusuario: ['', [Validators.required, Validators.minLength(4)]],
       contrasena: ['', this.valida],
       confirmcontrasena: [''],
       email: ['', [Validators.required, Validators.email]],
@@ -114,7 +115,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-     
+
     this.load = true;
     this.jwt = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
@@ -184,7 +185,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
   }
 
   guardar() {
-     
+
     this.load = true;
     if (this.altauser.valid) {
 
@@ -249,7 +250,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
   }
 
   eliminar() {
-     
+
     this.load = true;
     this.openDialogEliminar();
   }
@@ -276,7 +277,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
 
   openDialog(mensaje: string, status?: string): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: '350px',
+      width: '400px',
       data: { mensaje: mensaje }
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -312,7 +313,7 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
   }
 
   ruta() {
-     
+
     this.altauser.patchValue({
       nombre: '',
       nombreusuario: '',
