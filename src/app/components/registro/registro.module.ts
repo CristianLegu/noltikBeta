@@ -14,6 +14,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { RegistroComponent } from './registro.component';
 import { RegistroRoutingModule } from './registro-routing.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [RegistroComponent],
@@ -33,6 +34,7 @@ import { RegistroRoutingModule } from './registro-routing.module';
     //RecaptchaModule,
     MatDividerModule,
     MatSnackBarModule,
+    MatTooltipModule
   ],
   /*providers: [
     {

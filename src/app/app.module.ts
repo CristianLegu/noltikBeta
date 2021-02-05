@@ -66,6 +66,7 @@ import { LaboratoriosComponent } from './components/laboratorio/laboratorios/lab
 import { EnviarComponent } from './components/enviar/enviar.component';
 import { EnviaMailComponent } from './components/envia-mail/envia-mail.component';
 import { ReenvioTokenComponent } from './components/reenvio-token/reenvio-token.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -125,7 +126,8 @@ import { ReenvioTokenComponent } from './components/reenvio-token/reenvio-token.
     MatCheckboxModule,
     MatAutocompleteModule,
     RegistroModule,
-    ConfirmarModule
+    ConfirmarModule,
+    MatTooltipModule
   ],
   providers: [
     AuthService, AuthGuard, DatePipe,

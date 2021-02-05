@@ -33,7 +33,7 @@ const APP_ROUTES: Routes = [
     { path: 'reenvio-token', component: ReenvioTokenComponent },
     { path: 'pass-restablecida', component: MensajeComponent },
     { path: 'enviar-mail', component: EnviaMailComponent },
-    { path: 'laboratorio', component: LaboratoriosComponent },
+    { path: 'laboratorio', component: LaboratoriosComponent, canActivate: [AuthGuard] },
     { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
     { path: 'usuarios/:id', component: AltausuarioComponent, canActivate: [AuthGuard] },
     { path: 'pacientes', component: PacientesComponent, canActivate: [AuthGuard] },

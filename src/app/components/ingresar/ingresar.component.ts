@@ -71,7 +71,7 @@ export class IngresarComponent implements OnInit, OnDestroy {
 
   openDialog(mensaje: string): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: "400px",
+      width: "450px",
       data: { mensaje: mensaje }
     });
 
