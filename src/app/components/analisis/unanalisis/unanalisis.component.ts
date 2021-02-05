@@ -12,7 +12,9 @@ import {
   FormBuilder,
   FormArray,
   FormControl,
-  FormGroup
+  FormGroup,
+  FormControlName,
+  Validators
 } from "@angular/forms";
 import { MedicosService } from "../../../services/medicos/medicos.service";
 import { EstudiosService } from "../../../services/estudios/estudios.service";
@@ -77,9 +79,11 @@ export class UnanalisisComponent implements OnInit {
   noBtn: boolean = false;
   btn: boolean = false;
 
-  altaAnalisis: FormGroup;
+  altaAnalisis: FormGroup ;
+
   fecha1: string = '';
   myDate = new Date();
+  
   analisisNuevo: Analisis = {
     analisis: "",
     area: "",
@@ -125,6 +129,7 @@ export class UnanalisisComponent implements OnInit {
   mensajeDialog: string;
 
   analisis: Analisis;
+  analisisString: string = "";
   analisisIn: Analisis;
 
   //Iconos
@@ -135,6 +140,8 @@ export class UnanalisisComponent implements OnInit {
   medico: string;
   estudio: string;
   idEstudio: number;
+
+  isDisabled: boolean = true;
 
   estudioI: EstudioPrueba;
 
@@ -174,7 +181,9 @@ export class UnanalisisComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.altaAnalisis.get('area').disable();
+
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
     this.rol = localStorage.getItem('role');
@@ -194,6 +203,7 @@ export class UnanalisisComponent implements OnInit {
           this.analisis = ok.body;
 
           let an = this.analisisMod(this.analisis);
+          this.analisisString = an.analisis;
 
           this.pasaValores(an);
           this.load = false;
@@ -270,6 +280,8 @@ export class UnanalisisComponent implements OnInit {
         })
       );
     });
+
+
 
   }
 

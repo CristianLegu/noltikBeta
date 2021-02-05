@@ -27,4 +27,16 @@ export class UserTokenService {
         })
     });
   }
+
+  reenvioRegistroToken(usuarioCorreo: string) {
+    return new Promise((ok, error) => {
+      this.http.get(ApiUrl + 'reenvio-registro',
+        {
+          params: { 'usuariocorreo': usuarioCorreo }
+        }
+      ).toPromise()
+        .then(response => ok(response))
+        .catch(e => error(e))
+    });
+  }
 }

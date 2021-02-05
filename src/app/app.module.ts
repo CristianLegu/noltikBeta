@@ -65,6 +65,7 @@ import { MensajeComponent } from './components/mensaje/mensaje.component';
 import { LaboratoriosComponent } from './components/laboratorio/laboratorios/laboratorios.component';
 import { EnviarComponent } from './components/enviar/enviar.component';
 import { EnviaMailComponent } from './components/envia-mail/envia-mail.component';
+import { ReenvioTokenComponent } from './components/reenvio-token/reenvio-token.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import { EnviaMailComponent } from './components/envia-mail/envia-mail.component
     MensajeComponent,
     LaboratoriosComponent,
     EnviarComponent,
-    EnviaMailComponent
+    EnviaMailComponent,
+    ReenvioTokenComponent
   ],
   imports: [
     FontAwesomeModule,
