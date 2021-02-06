@@ -68,6 +68,8 @@
 [class*="col-"] {
     float: left;
     padding: 0 0.5em;
+    margin-top: 10px;
+    margin-right: 10px;
 }
 .col-1 {
     width: 8.33%;
@@ -107,15 +109,22 @@
 }
 
 .buttonGuardar {
-    margin: 3em 5em;
+    margin: 5em 10em;
     width: 20%;
 }
 
 //Pantallas
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
+    .col-2 {
+        width: 35%;
+    }
     .col-3 {
-        width: 50%;
+        width: 40%;
+    }
+
+    .col-4 {
+        width: 60%;
     }
 
     .col-5 {
@@ -136,8 +145,15 @@
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
+    .col-2 {
+        width: 30%;
+    }
     .col-3 {
         width: 40%;
+    }
+
+    .col-4 {
+        width: 48%;
     }
 
     .col-5 {
@@ -158,12 +174,19 @@
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
+    .col-2 {
+        width: 20%;
+    }
     .col-3 {
         width: 30%;
     }
 
+    .col-4 {
+        width: 36%;
+    }
+
     .col-5 {
-        width: 40%;
+        width: 43%;
     }
     .col-7 {
         width: 55%;
@@ -182,15 +205,22 @@
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
+    .col-2 {
+        width: 15%;
+    }
     .col-3 {
         width: 20%;
     }
 
+    .col-4 {
+        width: 26%;
+    }
+
     .col-5 {
-        width: 30%;
+        width: 33%;
     }
     .col-7 {
-        width: 40%;
+        width: 45%;
     }
 
     .buttonTR {
@@ -204,6 +234,9 @@
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
+    .col-2 {
+        width: 14%;
+    }
     .col-3 {
         width: 20%;
     }

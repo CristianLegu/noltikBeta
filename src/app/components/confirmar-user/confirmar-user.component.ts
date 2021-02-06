@@ -26,7 +26,7 @@ export class ConfirmarUserComponent implements OnInit {
     private userC: FormBuilder,
     private dialog: MatDialog,
     private router: Router,
-    private _snackBar: MatSnackBar,
+    private _snackBar: MatSnackBar
   ) {
     //this.actRoute = this.activatedRoute.snapshot.params["token"];
     this.confUser = this.userC.group({

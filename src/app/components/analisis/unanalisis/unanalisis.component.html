@@ -5,6 +5,7 @@
                 <a mat-flat-button (click)="backListA()" style="background: whitesmoke;">
                     <i class="material-icons">keyboard_backspace</i>
                 </a>
+                <span>{{analisisString}}</span>
             </span>
             <span class="space"></span>
             <span *ngIf="idAnalisis != '0' && UserPerm">
@@ -14,7 +15,7 @@
         </mat-toolbar-row>
     </mat-toolbar>
 
-    <form class="form" [formGroup]="altaAnalisis">
+    <form class="form" [formGroup]="altaAnalisis" autocomplete="off">
         <div class="row">
             <!--Cuando el analisis ya está en la BD, mostramos estos inputs-->
             <mat-form-field *ngIf="idAnalisis != '0'" class="col-7">
@@ -24,7 +25,7 @@
 
             <mat-form-field *ngIf="idAnalisis != '0'" class="col-6">
                 <mat-label>Área</mat-label>
-                <input matInput formControlName="area" disabled>
+                <input matInput formControlName="area" maxlength="100">
             </mat-form-field>
 
             <!--Cuando el análisis es nuevo, mostramos los inputs donde salen la lista   formControlName="medico"-->
@@ -40,7 +41,7 @@
 
             <mat-form-field *ngIf="idAnalisis == '0'" class="col-6">
                 <mat-label>Área</mat-label>
-                <input matInput value="{{areaM}}" formControlName="area">
+                <input matInput value="{{areaM}}" formControlName="area" maxlength="100">
             </mat-form-field>
 
         </div>
@@ -59,9 +60,9 @@
                         </button> -->
 
                         <mat-icon color="warn" (click)="eliminarEstudio(i)">delete</mat-icon>
-                        <span class="cdk-visually-hidden">
+                        <!--span class="cdk-visually-hidden">
                             Example with a home icon with overlaid badge showing the number 15
-                        </span>
+                        </span-->
                     </p>
 
                     <h4>{{a.value.subtitulo}}</h4>
@@ -72,7 +73,7 @@
                                 <div class="row">
                                     <mat-form-field class="col-4">
                                         <mat-label>Prueba</mat-label>
-                                        <input matInput formControlName="prueba">
+                                        <input matInput formControlName="prueba"  [readonly]="true">
                                     </mat-form-field>
 
                                     <mat-form-field class="col-2">
@@ -82,17 +83,17 @@
 
                                     <mat-form-field class="col-1">
                                         <mat-label>Unidades</mat-label>
-                                        <input matInput formControlName="unidades">
+                                        <input matInput formControlName="unidades" [readonly]="true" >
                                     </mat-form-field>
 
                                     <mat-form-field class="col-1">
                                         <mat-label>Referencia</mat-label>
-                                        <input matInput formControlName="referencia">
+                                        <input matInput formControlName="referencia" [readonly]="true" >
                                     </mat-form-field>
 
                                     <mat-form-field class="col-4">
                                         <mat-label>Comentario </mat-label>
-                                        <input matInput formControlName="comentario">
+                                        <input matInput formControlName="comentario" >
                                     </mat-form-field>
 
                                 </div>
@@ -106,7 +107,7 @@
                     <div class="row" style="padding: 10px;">
                         <mat-form-field *ngIf="a.value.subtitulo == this.subtitulofinal" class="col-7">
                             <mat-label>Comentario General</mat-label>
-                            <textarea matInput formControlName="comentario"></textarea>
+                            <textarea matInput formControlName="comentario" maxlength="200"></textarea>
                         </mat-form-field>
 
                     </div>

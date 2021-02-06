@@ -50,7 +50,7 @@ export class RegistroComponent implements OnInit {
     this.registro = this.regs.group({
       nombreLab: ["", [Validators.required]],
       prefijo: ["", [Validators.required]],
-      contrasena: ["", [Validators.required, Validators.minLength(6)]],
+      contrasena: ["", [Validators.required, Validators.minLength(8)]],
       emailuser: ["", [Validators.required, Validators.email]],
       nombre: ["", [Validators.required]],
       nombreusuario: ["", [Validators.required]],
@@ -64,7 +64,6 @@ export class RegistroComponent implements OnInit {
   }
 
   guardar() {
-    console.log(this.registro);
     if (this.validaErrores()) {
 
       this.load = true;
@@ -74,8 +73,6 @@ export class RegistroComponent implements OnInit {
 
       this.registro.value.nombreusuario = this.user_aux;
 
-      console.log(this.registro);
-
       this.registroService.setRegistro(this.registro)
         .then(resp => {
           this.ok = resp;
@@ -83,11 +80,10 @@ export class RegistroComponent implements OnInit {
           this.mensaje = 'Registro creado con éxito. Se envió un correo a ' + this.registro.value.emailuser
             + '. Para poder iniciar, debes activar tu cuenta';
           this.load = false;
-          this.openDialog(this.mensaje);
+          this.openDialog(this.mensaje, this.ok.statusCodeValue);
 
         })
         .catch(err => {
-          console.log(err);
           this.mensaje = err.error.mensaje;
           this.openDialog(this.mensaje);
           this.load = false;
@@ -125,6 +121,17 @@ export class RegistroComponent implements OnInit {
       this.noMatch = true;
       return false;
     }
+
+    //Valida que la contraseña cumpla con los requisitos
+    let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*.?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
+    if (!this.registro.value.contrasena.match(regex)) {
+      this.mensajeSnack('La contraseña debe contener al menos 8 caracteres,' + '\n' +
+        'al menos una letra mayúscula, al menos una letra minúscula,' +
+        'al menos un número, al menos 1 caracter especial y no contener espacios en blanco.');
+      this.noMatch = true;
+      return false;
+    }
+
     //Valida que el captcha esté correcto
     /*if (this.recaptcha == null) {
       this.mensajeSnack('El Captcha es obligatorio');
@@ -136,13 +143,15 @@ export class RegistroComponent implements OnInit {
   }
 
   //Dialog
-  openDialog(mensaje: string): void {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: '350px',
+      width: '400px',
       data: { mensaje: mensaje }
     });
     dialogRef.afterClosed().subscribe(() => {
-      this.router.navigate(["/ingresar"]);
+      if (status === 200) {
+        this.router.navigate(["/ingresar"]);
+      }
     });
   }
 
@@ -150,7 +159,7 @@ export class RegistroComponent implements OnInit {
   mensajeSnack(msj: String) {
 
     this._snackBar.open('' + msj, 'Aceptar', {
-      duration: 3000
+      duration: 15000
     });
   }
 
@@ -189,7 +198,7 @@ export class RegistroComponent implements OnInit {
     var pattern = /image-*/;
     var reader = new FileReader();
     this.fileName = file.name;
-    console.log(file);
+    //console.log(file);
     if (!file.type.match(pattern)) {
       alert('invalid format');
       return;
@@ -200,7 +209,7 @@ export class RegistroComponent implements OnInit {
   _handleReaderLoaded(e) {
     let reader = e.target;
     this.imageSrc = reader.result;
-    console.log(this.imageSrc)
+    //console.log(this.imageSrc)
   }
 
 }

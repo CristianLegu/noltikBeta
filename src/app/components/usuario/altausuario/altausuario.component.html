@@ -20,85 +20,86 @@
 
     </mat-toolbar>
 
-    <form class="form" novalidate [formGroup]="altauser">
+    <form class="form" novalidate [formGroup]="altauser" autocomplete="off">
         <div class="row">
             <!--Nombre-->
-            <div class="col-5">
-                <mat-form-field>
-                    <mat-label>Nombre</mat-label>
-                    <input matInput formControlName="nombre" class="separacion">
-                    <mat-error *ngIf="altauser.hasError('required','nombre')">
-                        Ingresar nombre
-                    </mat-error>
-                </mat-form-field>
-            </div>
-
-            <!--Usuario-->
-            <div class="col-3">
-                <mat-form-field>
-                    <mat-label>Usuario</mat-label>
-                    <input matInput formControlName="nombreusuario" pattern="[a-zA-Z ]*" maxlength="8">
-                    <span matPrefix>{{prefijo}}</span>
-                    <mat-error *ngIf="altauser.hasError('required','nombreUsuario')">
-                        Ingresar un nombre de usuario
-                    </mat-error>
-                    <mat-hint *ngIf="actRoute == '0'">El usuario debe ser mínimo de 6 caracteres</mat-hint>
-                </mat-form-field>
-            </div>
+            <mat-form-field class="col-5">
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="nombre" class="separacion" maxlength="100">
+                <mat-error *ngIf="altauser.hasError('required','nombre')">
+                    Ingresar nombre
+                </mat-error>
+            </mat-form-field>
 
             <!--EMAIL-->
-            <div class="col-5">
-                <mat-form-field>
-                    <mat-label>Correo electrónico</mat-label>
-                    <input matInput formControlName="email" [errorStateMatcher]="matcherEmail">
-                    <mat-error *ngIf="altauser.hasError('email','email') 
-                      && !altauser.hasError('required', 'email')">
-                        Por favor, ingrese un correo valido
-                    </mat-error>
-                    <mat-error *ngIf="altauser.hasError('required','email')">
-                        El correo es <strong>obligatorio</strong>
-                    </mat-error>
-                </mat-form-field>
-            </div>
+            <mat-form-field class="col-4">
+                <mat-label>Correo electrónico</mat-label>
+                <input matInput formControlName="email" [errorStateMatcher]="matcherEmail" maxlength="50"
+                    minlength="15">
+                <mat-error *ngIf="altauser.hasError('email','email') 
+                                  && !altauser.hasError('required', 'email')">
+                    Por favor, ingrese un correo valido
+                </mat-error>
+                <mat-error *ngIf="altauser.hasError('required','email')">
+                    El correo es <strong>obligatorio</strong>
+                </mat-error>
+            </mat-form-field>
+
+            <!--Usuario-->
+            <mat-form-field class="col-4">
+                <mat-label>Usuario</mat-label>
+                <input matInput formControlName="nombreusuario" minlength="4">
+                <span matPrefix>{{prefijo}}</span>
+                <mat-error *ngIf="altauser.hasError('required','nombreusuario')">
+                    El campo Usuario es obligatorio, mínimo de 4 caracteres
+                </mat-error>
+            </mat-form-field>
 
             <!--Rol-->
-            <div class="col-3">
-                <mat-form-field>
-                    <mat-label>Rol</mat-label>
-                    <mat-select formControlName="rol" [(value)]="selected">
-                        <mat-option *ngFor="let rol of roles" [value]="rol.value">
-                            {{rol.viewValue}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
+            <mat-form-field class="col-2">
+                <mat-label>Rol</mat-label>
+                <mat-select formControlName="rol" [(value)]="selected">
+                    <mat-option *ngFor="let rol of roles" [value]="rol.value">
+                        {{rol.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
 
             <!--Contraseña-->
-            <div class="col-5">
-                <mat-form-field *ngIf="ocultar">
-                    <mat-label>Contraseña</mat-label>
-                    <input matInput formControlName="contrasena" type="password">
-                    <mat-hint>La contraseña debe ser minimo de 6 caracteres</mat-hint>
-                    <!--<mat-error *ngIf="altauser.hasError('required','contrasena')">
+            <mat-form-field *ngIf="ocultar" class="col-3">
+                <mat-label>Contraseña</mat-label>
+                <input matInput formControlName="contrasena" [type]="hide ? 'password' : 'text'" minlength="6">
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="altauser.get('contrasena').invalid">
+                    La contraseña debe contener al menos 8 caracteres,
+                    al menos una letra mayúscula, al menos una letra minúscula,
+                    al menos un número, al menos 1 caracter especial y no contener
+                    espacios en blanco.
+                </mat-error>
+                <!--<mat-error *ngIf="altauser.hasError('required','contrasena')">
                     Ingresar contraseña
                 </mat-error>-->
-                </mat-form-field>
-            </div>
+            </mat-form-field>
 
             <!--Contraseña 2-->
-            <div class="col-5">
-                <mat-form-field *ngIf="ocultar">
-                    <mat-label>Repetir contraseña</mat-label>
-                    <!--<input matInput formControlName="confirmcontrasena" [errorStateMatcher]="matcher">
+            <mat-form-field *ngIf="ocultar" class="col-3">
+                <mat-label>Confirma contraseña</mat-label>
+                <!--<input matInput formControlName="confirmcontrasena" [errorStateMatcher]="matcher">
                 <mat-error *ngIf="altauser.hasError('notSame','confirmcontrasena')">
                     Las contraseñas no coinciden
                 </mat-error>-->
-                    <input matInput formControlName="confirmcontrasena" type="password">
-                    <mat-error *ngIf="altauser.hasError('notSame','confirmcontrasena')">
-                        Las contraseñas no coinciden
-                    </mat-error>
-                </mat-form-field>
-            </div>
+                <input matInput formControlName="confirmcontrasena" [type]="hide2 ? 'password' : 'text'">
+                <button mat-icon-button matSuffix (click)="hide2 = !hide2" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide2">
+                    <mat-icon>{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="altauser.hasError('notSame','confirmcontrasena')">
+                    Las contraseñas no coinciden
+                </mat-error>
+            </mat-form-field>
         </div>
 
         <button mat-raised-button color="primary" (click)="guardar()" class="buttonGuardar">

@@ -1178,7 +1178,7 @@ export class EnviarComponent implements OnInit {
 
   openDialog(mensaje: string): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: "350px",
+      width: "450px",
       data: { mensaje: mensaje }
     });
 

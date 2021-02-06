@@ -18,27 +18,27 @@
 
     </mat-toolbar>
 
-    <form class="form" novalidate [formGroup]="altapac">
+    <form class="form" novalidate [formGroup]="altapac" autocomplete="off">
         <div class="row">
 
             <mat-form-field class="col-7">
                 <mat-label>Nombre Completo</mat-label>
-                <input matInput formControlName="nombre" class="separacion">
+                <input matInput formControlName="nombre" class="separacion" maxlength="100">
             </mat-form-field>
 
             <mat-form-field class="col-8">
                 <mat-label>Dirección</mat-label>
-                <input matInput formControlName="direccion">
+                <input matInput formControlName="direccion" maxlength="100">
             </mat-form-field>
 
             <mat-form-field class="col-5">
                 <mat-label>Ciudad</mat-label>
-                <input matInput formControlName="ciudad">
+                <input matInput formControlName="ciudad" maxlength="50">
             </mat-form-field>
 
             <mat-form-field class="col-5">
                 <mat-label>Estado</mat-label>
-                <input matInput formControlName="estado">
+                <input matInput formControlName="estado" maxlength="45">
             </mat-form-field>
 
             <mat-form-field class="col-3">
@@ -64,12 +64,12 @@
 
             <mat-form-field class="col-3">
                 <mat-label>Tipo de sangre</mat-label>
-                <input matInput formControlName="tiposangre">
+                <input matInput formControlName="tiposangre" maxlength="15">
             </mat-form-field>
 
             <mat-form-field class="col-5">
                 <mat-label>Correo electrónico</mat-label>
-                <input matInput formControlName="email">
+                <input matInput formControlName="email" maxlength="50">
             </mat-form-field>
         </div>
 
@@ -100,7 +100,7 @@
 
             <mat-form-field class="col-5">
                 <mat-label>RFC</mat-label>
-                <input matInput formControlName="rfc">
+                <input matInput formControlName="rfc" maxlength="13">
                 <mat-icon matSuffix></mat-icon>
             </mat-form-field>
             <mat-form-field class="col-5">

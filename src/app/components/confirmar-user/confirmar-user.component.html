@@ -10,8 +10,8 @@
                 </div>
                 <form novalidate (ngSubmit)="checkUser()">
                     <mat-form-field class="center " appearance="outline" [formGroup]="confUser">
-                        <mat-label>Usuario</mat-label>
-                        <input matInput formControlName="user" required>
+                        <mat-label>Usuario o correo electrónico.</mat-label>
+                        <input matInput formControlName="user" required autocomplete="off" maxlength="45">
                     </mat-form-field>
 
                     <mat-card-actions class="center">
