@@ -94,7 +94,7 @@ export class ImprimirComponent implements OnInit {
           .catch(error => {
             // this.load = false;
           });
-      }
+      } 
       this.decision = result;
       //  this.downloadPDF(this.decision);
       this.serviceA.getAnalisisSeleccionados(this.jwt, this.prefix, this.actID, this.actString)
@@ -138,10 +138,12 @@ export class ImprimirComponent implements OnInit {
   cabecera() {
 
     // const imgData1 = this.retrievedImage;
+    if (this.lab.imgByte != null){
     this.doc.addImage(this.lab.imgByte, "JPEG", 10, 10, 40, 25);
     //this.doc.addImage(this.retrievedImage, "JPEG", 10, 10, 40, 25);
   
     console.log(this.lab.imgByte);
+  }
     this.doc.setDrawColor(0, 0, 255);
     this.doc.line(5, 5, 205, 5);
 
@@ -1144,13 +1146,61 @@ export class ImprimirComponent implements OnInit {
                 );
               }
 
-              if (y.comentario != null) {
+               if (y.comentario != null) {
                 this.sangria = 155;
+                var length_comenta = y.comentario.toString().length;
+                var vl_length_aux = 0;
+                var vl_length_aux2 = 0;
+                if (length_comenta >= 36){
+                 
+                  var vl_cont = 0;
+                  var vl_salir = "";
+                  do { 
+                    if(vl_cont == 0){
+                       vl_cont = 1;
+                         this.doc.text(
+                  y.comentario.toString().substr(0,36),
+                  this.sangria,
+                  this.alturaItems
+                );
+     
+                  this.alturaItems = this.alturaItems + 3;
+                 vl_length_aux = 36;
+                    }
+                    else{    
+                      vl_length_aux2 = vl_length_aux + 36;
+                      if (vl_length_aux2 <= length_comenta){ 
+                      this.doc.text(
+                                    y.comentario.toString().substr(vl_length_aux,36),
+                                    this.sangria,
+                                    this.alturaItems);
+                                    vl_length_aux = vl_length_aux + 36;
+                                    
+                      }
+                      else{  
+                        vl_length_aux2 = length_comenta - vl_length_aux;  
+                      this.doc.text( 
+                                    y.comentario.toString().substr(vl_length_aux,vl_length_aux2),
+                                    this.sangria,
+                                    this.alturaItems);
+                                    vl_salir = 'X';
+                      }
+                      
+                       this.alturaItems = this.alturaItems + 3;
+                    }
+                  }
+                  while (vl_salir == '') {
+                    
+                  }
+
+                }
+                else{
                 this.doc.text(
                   y.comentario.toString(),
                   this.sangria,
                   this.alturaItems
                 );
+                }
               }
             });
           });

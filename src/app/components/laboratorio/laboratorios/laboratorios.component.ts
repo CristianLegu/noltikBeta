@@ -83,6 +83,7 @@ export class LaboratoriosComponent implements OnInit {
     this.labService.obtenerLab(this.jwt, this.pref, this.actRoute)
       .then(ok => {
         this.lab = ok.body;
+        console.log(this.lab);
         this.base64Data = this.lab.imgByte;
         if (this.base64Data != null) {
           this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;

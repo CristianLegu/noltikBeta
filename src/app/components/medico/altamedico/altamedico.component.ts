@@ -6,6 +6,7 @@ import { Medico, DialogDataEliminar } from "src/app/common/interface";
 import { DialogComponent } from "src/app/common/dialog/dialog.component";
 import { DialogeliminarComponent } from "src/app/common/dialogeliminar/dialogeliminar.component";
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { MedicosService } from 'src/app/services/medicos/medicos.service';
 import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -45,6 +46,7 @@ export class AltamedicoComponent implements OnInit {
     private medicoService: MedicosService,
     private dialog: MatDialog,
     private authService: AuthService,
+    private snackBar: MatSnackBar,
     private sidenav: SidenavComponent = new SidenavComponent(router, authService)
   ) {
     this.actRoute = this.activateRoute.snapshot.params["id"];
@@ -114,6 +116,7 @@ export class AltamedicoComponent implements OnInit {
         });
     }
     else {
+      if (this.altaMedico.valid) {
       this.medicoService.crearMedico(this.jwt, this.pref, this.altaMedico)
         .then(ok => {
           this.load = false;
@@ -126,6 +129,13 @@ export class AltamedicoComponent implements OnInit {
           this.mensaje = err.error.mensaje;
           this.openDialog(this.mensaje);
         });
+      }else {
+        this.load = false;
+        this.openSnackBar(
+          "Favor de llenar los campos obligatiorios",
+          "Aceptar"
+        );
+      }
     }
 
   }
@@ -224,6 +234,11 @@ export class AltamedicoComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogeliminarComponent, {
       width: "350px",
       data: { mensaje: this.dataEliminar.mensaje, datos: this.dataEliminar }
+    });
+  }
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000
     });
   }
 

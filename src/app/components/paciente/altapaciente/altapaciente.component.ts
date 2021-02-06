@@ -205,7 +205,6 @@ export class AltapacienteComponent implements OnInit {
   }
 
   guardar() {
-
     this.load = true;
     if (this.actRoute != "0") {
       this.altapaciente
