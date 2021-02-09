@@ -10,8 +10,6 @@ import { Router } from '@angular/router';
 import { RegistroService } from 'src/app/services/registro/registro.service';
 
 
-
-
 @Component({
   selector: 'app-registro',
   templateUrl: './registro.component.html',
@@ -133,10 +131,10 @@ export class RegistroComponent implements OnInit {
     }
 
     //Valida que el captcha esté correcto
-    /*if (this.recaptcha == null) {
+    if (this.recaptcha == null) {
       this.mensajeSnack('El Captcha es obligatorio');
       return false;
-    }*/
+    }
 
     //En caso de que todo esté Ok, retorna true
     return true;
@@ -165,51 +163,49 @@ export class RegistroComponent implements OnInit {
 
 
   OnChange(source: string, $event) {
-    //console.log(this.password2);
-    //console.log('Captcha: ' + this.recaptcha);
 
-    /*if (source == 'captcha') {
-      this.captcha = true;
-    }*/
-    //Si se recibe el evento del checkbox
-    // else {
-    if ($event.checked == true) {
-      this.aceptaTerminos = true;
-    }
-    else {
+    //Si el evento es porque caducó el captcha
+    if ($event === null) {
+      this.captcha = false;
       this.aceptaTerminos = false;
     }
-    //}
+    //Si el evento es por click en los términos o captcha
+    else {
+      if (source == 'captcha') {
+        this.registroService.validaCaptcha(this.recaptcha).then(resp => {
+          console.log(resp);
+          this.ok = resp;
+          if (this.ok.success === true) {
+            this.captcha = true;
+          }
+          else {
+            this.captcha = false;
+          }
+        }).catch(err => {
+          console.warn(err);
+          this.mensajeSnack('Error en el captcha');
+          this.captcha = false;
+        })
+      }
+      else {
+        //Si se recibe el evento del checkbox
+        if ($event.checked == true) {
+          this.aceptaTerminos = true;
+        }
+        else {
+          this.aceptaTerminos = false;
+        }
+      }
+    }
 
     //Validar que se cumpla todo para habilitar botón de guardar
-    if (this.aceptaTerminos) {
+    if (this.aceptaTerminos && this.captcha) {
       this.isAllOk = false;
     }
     else {
       this.isAllOk = true;
     }
 
-  }
-
-  //Proceso para imagen
-  private imageSrc: string = '';
-  handleInputChange(e) {
-    var file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-    var pattern = /image-*/;
-    var reader = new FileReader();
-    this.fileName = file.name;
-    //console.log(file);
-    if (!file.type.match(pattern)) {
-      alert('invalid format');
-      return;
-    }
-    reader.onload = this._handleReaderLoaded.bind(this);
-    reader.readAsDataURL(file);
-  }
-  _handleReaderLoaded(e) {
-    let reader = e.target;
-    this.imageSrc = reader.result;
-    //console.log(this.imageSrc)
   }
 
 }
