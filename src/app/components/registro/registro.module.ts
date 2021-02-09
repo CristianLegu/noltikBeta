@@ -15,7 +15,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RegistroComponent } from './registro.component';
 import { RegistroRoutingModule } from './registro-routing.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 
 @NgModule({
   declarations: [RegistroComponent],
@@ -33,12 +32,10 @@ import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
     MatIconModule,
     //RecaptchaFormsModule,
     //RecaptchaModule,
-    RecaptchaV3Module,
     MatDividerModule,
     MatSnackBarModule,
     MatTooltipModule
   ],
-  providers: [{ provide: RECAPTCHA_V3_SITE_KEY, useValue: "6LdC_08aAAAAAHaSUZ1-QfspfhQ7jHERVcygEHqm" }],
   /*providers: [
     {
       provide: RECAPTCHA_SETTINGS,

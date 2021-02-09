@@ -3,10 +3,13 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+
+
 import { DialogComponent } from 'src/app/common/dialog/dialog.component';
 import { Router } from '@angular/router';
 import { RegistroService } from 'src/app/services/registro/registro.service';
-import { ReCaptchaV3Service } from 'ng-recaptcha';
+
+
 
 
 @Component({
@@ -42,7 +45,6 @@ export class RegistroComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private _snackBar: MatSnackBar,
-    private recaptchaV3Service: ReCaptchaV3Service,
   ) {
 
     this.registro = this.regs.group({
@@ -62,9 +64,7 @@ export class RegistroComponent implements OnInit {
   }
 
   guardar() {
-    this.recaptchaV3Service.execute('importantAction')
-      .subscribe((token) => console.log(token));
-    /*if (this.validaErrores()) {
+    if (this.validaErrores()) {
 
       this.load = true;
       //Concatenar prefijo y usuario
@@ -89,7 +89,7 @@ export class RegistroComponent implements OnInit {
           this.load = false;
         });
 
-    }*/
+    }
   }
 
   /*get telefonos() {

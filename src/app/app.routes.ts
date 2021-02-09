@@ -48,9 +48,9 @@ const APP_ROUTES: Routes = [
     { path: 'pacientes/:id/analisis/imprimir/:an', component: ImprimirComponent, canActivate: [AuthGuard] },
     { path: 'pacientes/:id/analisis/enviar/:an', component: EnviarComponent, canActivate: [AuthGuard] },
 
-    //{ path: 'home', component: HomeComponent },
+    { path: 'home', component: HomeComponent },
     //Ruta por defecto
-    { path: '**', pathMatch: 'full', redirectTo: 'ingresar' }
+    { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ];
 
 
