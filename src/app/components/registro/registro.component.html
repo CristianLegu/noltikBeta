@@ -113,6 +113,8 @@
                 <!--<re-captcha (resolved)="OnChange('captcha', $event)" class="center" [(ngModel)]="recaptcha"
                     [ngModelOptions]="{standalone: true}">
                 </re-captcha>-->
+                <h3>Normal mode</h3>
+                <re-captcha></re-captcha>
 
                 <mat-card-actions class="center">
                     <form novalidate (ngSubmit)="guardar()" [formGroup]="registro">
