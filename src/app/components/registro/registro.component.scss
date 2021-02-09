@@ -69,7 +69,7 @@ input[type="file"] {
 .loading {
   animation: fade-in 0.5s ease-out;
   width: 100%;
-  height: 250vh;
+  height: 100%;
   position: absolute;
   display: flex;
   justify-content: center;
@@ -172,7 +172,7 @@ input[type="file"] {
     margin-bottom: 0em;
   }
   .loading {
-    height: 350vh;
+    height: 100%;
   }
 }
 
@@ -199,7 +199,7 @@ input[type="file"] {
     margin-bottom: 0em;
   }
   .loading {
-    height: 250vh;
+    height: 100%;
   }
 }
 
@@ -215,7 +215,7 @@ input[type="file"] {
     margin-right: 20%;
   }
   .loading {
-    height: 250vh;
+    height: 100%;
   }
 }
 
@@ -242,7 +242,7 @@ input[type="file"] {
   }
 
   .loading {
-    height: 250vh;
+    height: 100%;
   }
 }
 
@@ -269,7 +269,7 @@ input[type="file"] {
   }
 
   .loading {
-    height: auto;
+    height: 100%;
   }
 }
 
