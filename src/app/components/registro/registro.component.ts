@@ -171,21 +171,8 @@ export class RegistroComponent implements OnInit {
     }
     //Si el evento es por click en los términos o captcha
     else {
-      if (source == 'captcha') {
-        this.registroService.validaCaptcha(this.recaptcha).then(resp => {
-          console.log(resp);
-          this.ok = resp;
-          if (this.ok.success === true) {
-            this.captcha = true;
-          }
-          else {
-            this.captcha = false;
-          }
-        }).catch(err => {
-          console.warn(err);
-          this.mensajeSnack('Error en el captcha');
-          this.captcha = false;
-        })
+      if (source == 'captcha' && this.recaptcha != null) {
+        this.captcha = true;
       }
       else {
         //Si se recibe el evento del checkbox

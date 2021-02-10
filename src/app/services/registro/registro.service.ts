@@ -37,8 +37,10 @@ export class RegistroService {
     return new Promise((ok, error) => {
       this.http.post(apiGoogle,
         {
-          secret: '6LfiSlEaAAAAANcHc00zMYGDsJXFbdNvLaZg4zds',
-          response: token
+          params: {
+            secret: '6LfiSlEaAAAAANcHc00zMYGDsJXFbdNvLaZg4zds',
+            response: token
+          }
         }
       )
         .toPromise()

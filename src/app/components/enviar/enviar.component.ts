@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import * as jsPDF from "jspdf";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AnalisisService } from "../../services/analisis/analisis.service";
-import { imgData } from "../../globals";
 import { Analisis, jsonPDF } from "src/app/common/interface";
 import { EnviaMailService } from 'src/app/services/enviaMail/envia-mail.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -53,21 +52,21 @@ export class EnviarComponent implements OnInit {
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
     this.serviceA.getDatoslaboratorio(this.jwt, this.prefix)
-    .then(ok => {
-      this.lab = ok.body;
-      console.log(this.lab);
-      //this.getImage(this.prefix);
-    })
-    .catch(error => {
-      // this.load = false;
-    });
+      .then(ok => {
+        this.lab = ok.body;
+        console.log(this.lab);
+        //this.getImage(this.prefix);
+      })
+      .catch(error => {
+        // this.load = false;
+      });
     this.serviceA.getAnalisisSeleccionados(this.jwt, this.prefix, this.actID, this.actString)
       .then(ok => {
         console.log(ok);
         this.createPDF(ok.body)
           .then(
             respuesta => {
-              
+
               this.enviarPDF(respuesta.toString());
             }
           );
@@ -1044,55 +1043,55 @@ export class EnviarComponent implements OnInit {
                 var length_comenta = y.comentario.toString().length;
                 var vl_length_aux = 0;
                 var vl_length_aux2 = 0;
-                if (length_comenta >= 36){
-                 
+                if (length_comenta >= 36) {
+
                   var vl_cont = 0;
                   var vl_salir = "";
-                  do { 
-                    if(vl_cont == 0){
-                       vl_cont = 1;
-                         this.doc.text(
-                  y.comentario.toString().substr(0,36),
-                  this.sangria,
-                  this.alturaItems
-                );
-     
-                  this.alturaItems = this.alturaItems + 3;
-                 vl_length_aux = 36;
-                    }
-                    else{   
-                      vl_length_aux2 = vl_length_aux + 36;
-                      if (vl_length_aux2 <= length_comenta){  
+                  do {
+                    if (vl_cont == 0) {
+                      vl_cont = 1;
                       this.doc.text(
-                                    y.comentario.toString().substr(vl_length_aux,36),
-                                    this.sangria,
-                                    this.alturaItems);
-                                    vl_length_aux = vl_length_aux + 36;
-                                    
+                        y.comentario.toString().substr(0, 36),
+                        this.sangria,
+                        this.alturaItems
+                      );
+
+                      this.alturaItems = this.alturaItems + 3;
+                      vl_length_aux = 36;
+                    }
+                    else {
+                      vl_length_aux2 = vl_length_aux + 36;
+                      if (vl_length_aux2 <= length_comenta) {
+                        this.doc.text(
+                          y.comentario.toString().substr(vl_length_aux, 36),
+                          this.sangria,
+                          this.alturaItems);
+                        vl_length_aux = vl_length_aux + 36;
+
                       }
-                      else{  
-                        vl_length_aux2 = length_comenta - vl_length_aux;  
-                      this.doc.text( 
-                                    y.comentario.toString().substr(vl_length_aux,vl_length_aux2),
-                                    this.sangria,
-                                    this.alturaItems);
-                                    vl_salir = 'X';
+                      else {
+                        vl_length_aux2 = length_comenta - vl_length_aux;
+                        this.doc.text(
+                          y.comentario.toString().substr(vl_length_aux, vl_length_aux2),
+                          this.sangria,
+                          this.alturaItems);
+                        vl_salir = 'X';
                       }
-                      
-                       this.alturaItems = this.alturaItems + 3;
+
+                      this.alturaItems = this.alturaItems + 3;
                     }
                   }
                   while (vl_salir == '') {
-                    
+
                   }
 
                 }
-                else{
-                this.doc.text(
-                  y.comentario.toString(),
-                  this.sangria,
-                  this.alturaItems
-                );
+                else {
+                  this.doc.text(
+                    y.comentario.toString(),
+                    this.sangria,
+                    this.alturaItems
+                  );
                 }
               }
             });
@@ -1189,12 +1188,10 @@ export class EnviarComponent implements OnInit {
 
   cabecera() {
     console.log(this.lab);
-if (this.lab.imgByte != null){
-    // const imgData1 = this.retrievedImage;
-    this.doc.addImage(this.lab.imgByte, "JPEG", 10, 10, 40, 25);
-    //this.doc.addImage(this.retrievedImage, "JPEG", 10, 10, 40, 25);
-}
-  
+    if (this.lab.imgByte != null) {
+      this.doc.addImage(this.lab.imgByte, "JPEG", 10, 10, 40, 25);
+    }
+
     this.doc.setDrawColor(0, 0, 255);
     this.doc.line(5, 5, 205, 5);
 
@@ -1204,11 +1201,11 @@ if (this.lab.imgByte != null){
     //this.doc.text(55, 16, "LABORATORIOS DE ANALISIS CLINICOS ESPINOSA");
     this.doc.text(60, 16, this.lab.nombre);
     this.doc.setFontSize(10);
-    this.membrete_cadena = "Cedula de Especialidad: "+ this.lab.infoMembrete.cedulaEspecialidad + " Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
-    this.domicilio = "Domicilio: "+ this.lab.domicilio;
-    this.ciudad = "Ciudad: "+ this.lab.ciudad +" Estado: " + this.lab.estado;
-    this.correo = "Correo: "+ this.lab.email + " Telefono: "+ this.lab.telefonos;
-    
+    this.membrete_cadena = "Cedula de Especialidad: " + this.lab.infoMembrete.cedulaEspecialidad + " Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
+    this.domicilio = "Domicilio: " + this.lab.domicilio;
+    this.ciudad = "Ciudad: " + this.lab.ciudad + " Estado: " + this.lab.estado;
+    this.correo = "Correo: " + this.lab.email + " Telefono: " + this.lab.telefonos;
+
     this.doc.text(
       60,
       21,
@@ -1231,7 +1228,7 @@ if (this.lab.imgByte != null){
     );
 
     this.doc.line(5, 40, 205, 40);
-  
+
   }
 
   getFormatoFecha(fecha: string) {

@@ -1,13 +1,10 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-// import { ServicesService } from '../services/logon/services.service';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogComponent } from "../../common/dialog/dialog.component";
 import { AuthService } from "../../services/auth/auth.service";
 import { Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
-import { startWith, tap } from 'rxjs/operators';
 
 @Component({
   selector: "app-ingresar",
@@ -33,7 +30,6 @@ export class IngresarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     //this.ngAfterViewInit();
-
     if (this.token != null) {
       this.router.navigateByUrl("/pacientes");
     }
@@ -86,11 +82,5 @@ export class IngresarComponent implements OnInit, OnDestroy {
 
   goContra() {
     this.router.navigateByUrl('/contrasena');
-  }
-
-  ngAfterViewInit() {
-    /*setTimeout(() => {
-      this.logout()
-    });*/
   }
 }

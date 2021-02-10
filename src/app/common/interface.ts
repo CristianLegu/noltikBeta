@@ -1,4 +1,3 @@
-import { imgData } from '../globals';
 export interface Sexo {
   value: string;
   viewValue: string;

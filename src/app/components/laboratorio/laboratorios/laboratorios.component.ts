@@ -6,9 +6,9 @@ import { DialogDataEliminar, Laboratorio } from "src/app/common/interface";
 import { DialogComponent } from "src/app/common/dialog/dialog.component";
 import { MatDialog } from '@angular/material/dialog';
 import { LaboratorioService } from '../../../services/laboratorio/laboratorio.service';
-import { ApiUrl, logoGen } from '../../../globals';
 import { HttpClient } from '@angular/common/http';
 import { InfoMembrete } from '../../../common/interface';
+import { logoGen } from "src/app/globals";
 
 @Component({
   selector: 'app-laboratorios',

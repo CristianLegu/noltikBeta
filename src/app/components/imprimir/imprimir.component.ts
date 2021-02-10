@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import * as jsPDF from "jspdf";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AnalisisService } from "../../services/analisis/analisis.service";
-import { imgData } from '../../globals';
 import { HttpClient } from '@angular/common/http';
 
 import { Analisis } from "src/app/common/interface";
@@ -136,8 +135,6 @@ export class ImprimirComponent implements OnInit {
   }
 
   cabecera() {
-
-    // const imgData1 = this.retrievedImage;
     if (this.lab.imgByte != null){
     this.doc.addImage(this.lab.imgByte, "JPEG", 10, 10, 40, 25);
     //this.doc.addImage(this.retrievedImage, "JPEG", 10, 10, 40, 25);
