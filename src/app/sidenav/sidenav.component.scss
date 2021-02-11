@@ -27,7 +27,7 @@ mat-sidenav-content {
 // Extra small devices (portrait phones, less than 576px)
 @media (max-width: 575.98px) {
   .container {
-    min-height: 480px;
+    min-height: 560px;
   }
 }
 
@@ -41,21 +41,21 @@ mat-sidenav-content {
 // Medium devices (tablets, 768px and up)
 @media (min-width: 768px) {
   .container {
-    min-height: 500px;
+    min-height: 550px;
   }
 }
 
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) {
   .container {
-    min-height: 500px;
+    min-height: 560px;
   }
 }
 
 // Extra large devices (large desktops, 1200px and up)
 @media (min-width: 1200px) {
   .container {
-    min-height: 520px;
+    min-height: 600px;
   }
 }
 
