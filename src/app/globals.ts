@@ -1,6 +1,6 @@
 
-let hostApiUrl = 'https://noltik-api-main-ey47zdfuufjxiw.herokuapp.com/noltik_api/v1/';
-//let hostApiUrl = 'https://noltik.com:8080/noltik_api/v1/';
+//let hostApiUrl = 'https://noltik-api-main-ey47zdfuufjxiw.herokuapp.com/noltik_api/v1/';
+let hostApiUrl = 'https://api.noltik.com/noltik_api/v1/';
 export const ApiUrl = hostApiUrl;
 
 //Imagen que muestra en caso de que no exista un logo del laboratorio
