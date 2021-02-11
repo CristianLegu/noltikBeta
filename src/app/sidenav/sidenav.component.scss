@@ -23,10 +23,18 @@ mat-sidenav-content {
   height: auto;
 }
 
+//Size display
+// Extra small devices (portrait phones, less than 576px)
+@media (max-width: 575.98px) {
+  .container {
+    min-height: 480px;
+  }
+}
+
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) {
   .container {
-    min-height: 400px;
+    min-height: 570px;
   }
 }
 
@@ -40,40 +48,20 @@ mat-sidenav-content {
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) {
   .container {
-    min-height: 600px;
+    min-height: 500px;
   }
 }
 
 // Extra large devices (large desktops, 1200px and up)
 @media (min-width: 1200px) {
   .container {
-    min-height: 550px;
+    min-height: 520px;
   }
 }
 
-@media (max-width: 575.98px) {
+// Extra large devices (large desktops)
+@media (min-width: 1400px) {
   .container {
-    min-height: 750px;
-  }
-}
-
-// Small devices (landscape phones, less than 768px)
-@media (max-width: 767.98px) {
-  .container {
-    min-height: 750px;
-  }
-}
-
-// Medium devices (tablets, less than 992px)
-@media (max-width: 991.98px) {
-  .container {
-    min-height: 750px;
-  }
-}
-
-// Large devices (desktops, less than 1200px)
-@media (max-width: 1199.98px) {
-  .container {
-    min-height: 1100px;
+    min-height: 950px;
   }
 }
