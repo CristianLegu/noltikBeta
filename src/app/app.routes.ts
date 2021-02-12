@@ -16,7 +16,6 @@ import { UnanalisisComponent } from './components/analisis/unanalisis/unanalisis
 import { AuthGuard } from './services/auth/auth.guard';
 import { RegistroComponent } from './components/registro/registro.component';
 import { ConfirmarComponent } from './components/confirmar/confirmar.component';
-import { HomeComponent } from './components/home/home.component';
 import { ContrasenaComponent } from './components/contrasena/contrasena.component';
 import { ConfirmarUserComponent } from './components/confirmar-user/confirmar-user.component';
 import { MensajeComponent } from './components/mensaje/mensaje.component';

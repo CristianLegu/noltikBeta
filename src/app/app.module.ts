@@ -58,7 +58,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { RegistroModule } from './components/registro/registro.module';
 //Módulo confirmar
 import { ConfirmarModule } from './components/confirmar/confirmar.module';
-import { HomeComponent } from './components/home/home.component';
 import { ContrasenaComponent } from './components/contrasena/contrasena.component';
 import { ConfirmarUserComponent } from './components/confirmar-user/confirmar-user.component';
 import { MensajeComponent } from './components/mensaje/mensaje.component';
@@ -87,7 +86,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     EstudiosComponent,
     UnanalisisComponent,
     DialogmembreteComponent,
-    HomeComponent,
     ContrasenaComponent,
     ConfirmarUserComponent,
     MensajeComponent,
