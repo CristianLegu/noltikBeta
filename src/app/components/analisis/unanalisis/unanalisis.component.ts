@@ -27,6 +27,7 @@ import { DialogeliminarComponent } from "../../../common/dialogeliminar/dialogel
 import { DialogComponent } from "../../../common/dialog/dialog.component";
 import * as moment from 'moment-timezone';
 import { DatePipe } from '@angular/common';
+import { AuthService } from "src/app/services/auth/auth.service";
 
 export interface NombreMedico {
   nombre: string;
@@ -79,11 +80,11 @@ export class UnanalisisComponent implements OnInit {
   noBtn: boolean = false;
   btn: boolean = false;
 
-  altaAnalisis: FormGroup ;
+  altaAnalisis: FormGroup;
 
   fecha1: string = '';
   myDate = new Date();
-  
+
   analisisNuevo: Analisis = {
     analisis: "",
     area: "",
@@ -161,6 +162,7 @@ export class UnanalisisComponent implements OnInit {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private datePipe: DatePipe,
+    private authService: AuthService,
   ) {
     this.fecha1 = this.datePipe.transform(this.myDate, 'yyyy-MM-dd') + "  00:00:00";
 
@@ -187,6 +189,11 @@ export class UnanalisisComponent implements OnInit {
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
     this.rol = localStorage.getItem('role');
+
+    if (this.prefix.length == 0) {
+      this.openDialog('Error al procesar datos', 401);
+      return;
+    }
 
     this.timeZone = moment.tz.guess();
     this.load = true;
@@ -744,14 +751,22 @@ export class UnanalisisComponent implements OnInit {
     });
   }
 
-  openDialog(m: string) {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: "350px",
-      data: { mensaje: m }
+      width: '400px',
+      data: { mensaje: mensaje }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      //this.router.navigate(["/analisis"]);
-    });
+    if (status == 401) {
+      dialogRef.afterClosed().subscribe(result => {
+        this.authService.logout();
+        this.router.navigate(["/ingresar"]);
+      });
+    } else {
+
+      dialogRef.afterClosed().subscribe(result => {
+        //this.router.navigate(["/pacientes"]);
+      });
+    }
   }
 }

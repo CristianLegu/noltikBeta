@@ -42,7 +42,7 @@
                             <input matInput type="email" formControlName="prefijo" minlength="4" maxlength="8" #input
                                 maxlength="8" placeholder="Prefijo único" [(ngModel)]="prefix">
                             <mat-icon matSuffix #tooltip="matTooltip"
-                                matTooltip="El prefijo es un identificador único de su laboratorio, el cuál deberán escribir antes del nombre de usuario, seguido de un guión bajo '_'. Ejemplo: labtest_usuario1"
+                                matTooltip="El prefijo es un identificador único de su laboratorio, el cual deberán escribir antes del nombre de usuario, seguido de un guion bajo '_'. Ejemplo: labtest_usuario1"
                                 matTooltipPosition="above">
                                 help</mat-icon>
                             <mat-hint align="end">{{input.value?.length || 0}}/8</mat-hint>

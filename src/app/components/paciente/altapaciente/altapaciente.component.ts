@@ -87,6 +87,11 @@ export class AltapacienteComponent implements OnInit {
     this.load = true;
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
+    if (this.prefix.length == 0) {
+      this.openDialog('Error al procesar datos', 401);
+      return;
+    }
+
     if (this.actRoute != "0") {
 
       //Valida Rol
@@ -106,7 +111,7 @@ export class AltapacienteComponent implements OnInit {
         .catch(error => {
           this.load = false;
           this.mensaje = error.error.mensaje;//error.message;
-          this.openDialog();
+          this.openDialog(this.mensaje);
         });
     } else {
       this.load = false;
@@ -212,11 +217,11 @@ export class AltapacienteComponent implements OnInit {
         .then(ok => {
           this.load = false;
           this.mensaje = ok.mensaje;//"El paciente se actualizó correctamente";
-          this.openDialog();
+          this.openDialog(this.mensaje);
         })
         .catch(error => {
           this.mensaje = error.error.mensaje;//error.error.message;
-          this.openDialog();
+          this.openDialog(this.mensaje);
           this.load = false;
         });
     } else {
@@ -226,12 +231,12 @@ export class AltapacienteComponent implements OnInit {
           .then(ok => {
             this.mensaje = ok.mensaje;//"El paciente se creó correctamente";
             this.load = false;
-            this.openDialog();
+            this.openDialog(this.mensaje);
           })
           .catch(err => {
             this.load = false;
             this.mensaje = err.error.mensaje;//err.error.message;
-            this.openDialog();
+            this.openDialog(this.mensaje);
           });
       } else {
         this.load = false;
@@ -264,15 +269,23 @@ export class AltapacienteComponent implements OnInit {
     });
   }
 
-  openDialog(): void {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: "350px",
-      data: { mensaje: this.mensaje }
+      width: '400px',
+      data: { mensaje: mensaje }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.router.navigate(["/pacientes"]);
-    });
+    if (status == 401) {
+      dialogRef.afterClosed().subscribe(result => {
+        this.authService.logout();
+        this.router.navigate(["/ingresar"]);
+      });
+    } else {
+
+      dialogRef.afterClosed().subscribe(result => {
+        this.router.navigate(["/pacientes"]);
+      });
+    }
   }
 
   ruta() {

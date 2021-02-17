@@ -120,6 +120,11 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
     this.jwt = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
 
+    if (this.prefix.length == 0) {
+      this.openDialog('Error al procesar datos', '401');
+      return;
+    }
+
     //Valida que sea un usuario válido
     if (this.actRoute != '0') {
 
@@ -280,6 +285,12 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
       width: '400px',
       data: { mensaje: mensaje }
     });
+    if (status == '401') {
+      dialogRef.afterClosed().subscribe(result => {
+        this.authService.logout();
+        this.router.navigate(["/ingresar"]);
+      });
+    }
     dialogRef.afterClosed().subscribe(result => {
       if (status != "409") {
         this.router.navigate(["/usuarios"]);

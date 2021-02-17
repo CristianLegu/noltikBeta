@@ -76,6 +76,11 @@ export class AltamedicoComponent implements OnInit {
     this.pref = localStorage.getItem("prefix");
     this.rol = localStorage.getItem("role");
 
+    if (this.pref.length == 0) {
+      this.openDialog('Error al procesar datos', 401);
+      return;
+    }
+
     if (this.actRoute != '0') {
       this.medicoService.obtenerMedico(this.jwt, this.pref, this.actRoute)
         .then(ok => {
@@ -117,19 +122,19 @@ export class AltamedicoComponent implements OnInit {
     }
     else {
       if (this.altaMedico.valid) {
-      this.medicoService.crearMedico(this.jwt, this.pref, this.altaMedico)
-        .then(ok => {
-          this.load = false;
-          this.mensaje = ok.mensaje;
-          this.openDialog(this.mensaje);
-          this.ruta();
-        })
-        .catch(err => {
-          this.load = false;
-          this.mensaje = err.error.mensaje;
-          this.openDialog(this.mensaje);
-        });
-      }else {
+        this.medicoService.crearMedico(this.jwt, this.pref, this.altaMedico)
+          .then(ok => {
+            this.load = false;
+            this.mensaje = ok.mensaje;
+            this.openDialog(this.mensaje);
+            this.ruta();
+          })
+          .catch(err => {
+            this.load = false;
+            this.mensaje = err.error.mensaje;
+            this.openDialog(this.mensaje);
+          });
+      } else {
         this.load = false;
         this.openSnackBar(
           "Favor de llenar los campos obligatiorios",
@@ -172,15 +177,23 @@ export class AltamedicoComponent implements OnInit {
     }
   }
 
-  openDialog(mensaje: string): void {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: "400px",
+      width: '400px',
       data: { mensaje: mensaje }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      //this.router.navigate(["/noltik/medicos"]);
-    });
+    if (status == 401) {
+      dialogRef.afterClosed().subscribe(result => {
+        this.authService.logout();
+        this.router.navigate(["/ingresar"]);
+      });
+    } else {
+
+      dialogRef.afterClosed().subscribe(result => {
+        this.router.navigate(["/medicos"]);
+      });
+    }
   }
 
   //Pasa los valores al form de médico

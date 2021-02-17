@@ -62,6 +62,11 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
 
+    if (this.prefix.length == 0) {
+      this.openDialog('Error al procesar datos', 401);
+      return;
+    }
+
     this.altapaciente
       .getPaciente(this.token, this.prefix, this.actRoute)
       .then(ok => {
@@ -75,7 +80,7 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
       .catch(error => {
         this.load = false;
         this.mensaje = error.error.mensaje;//error.message;
-        this.openDialog();
+        this.openDialog(this.mensaje);
       });
 
     this.serviceA.obtenerTotal(this.token, this.prefix, this.actRoute)
@@ -89,26 +94,34 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
           .catch(error => {
             this.load = false;
             this.mensaje = error.error.mensaje;
-            this.openDialog();
+            this.openDialog(this.mensaje);
           })
       })
       .catch(error => {
         this.load = false;
         this.mensaje = error.error.mensaje;
-        this.openDialog();
+        this.openDialog(this.mensaje);
       });
 
   }
 
-  openDialog() {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: "350px",
-      data: { mensaje: this.mensaje }
+      width: '400px',
+      data: { mensaje: mensaje }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.router.navigate(["/pacientes"]);
-    });
+    if (status == 401) {
+      dialogRef.afterClosed().subscribe(result => {
+        this.authService.logout();
+        this.router.navigate(["/ingresar"]);
+      });
+    } else {
+
+      dialogRef.afterClosed().subscribe(result => {
+        this.router.navigate(["/pacientes"]);
+      });
+    }
   }
 
   handlePage(e: PageEvent) {

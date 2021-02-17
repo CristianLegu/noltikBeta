@@ -49,6 +49,12 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
+
+    if (this.prefix.length == 0) {
+      this.openDialog('Error al procesar datos', 401);
+      return;
+    }
+
     this.nombre = '';
     this.service.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
@@ -86,6 +92,7 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
   }
 
   handlePage(e: PageEvent) {
+
     this.load = true;
     this.page_size = e.pageSize;
     this.page_number = e.pageIndex;
@@ -107,7 +114,6 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
   }
 
   buscar(nombre: string) {
-
 
     this.paginator.pageIndex = 0;
 

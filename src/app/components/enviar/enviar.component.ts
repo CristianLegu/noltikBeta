@@ -7,6 +7,7 @@ import { EnviaMailService } from 'src/app/services/enviaMail/envia-mail.service'
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/common/dialog/dialog.component';
 import { DatosLaboratorio } from "src/app/common/interface";
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-enviar',
@@ -38,7 +39,8 @@ export class EnviarComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private enviaService: EnviaMailService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService,
 
   ) {
     this.actString = this.activatedRoute.snapshot.params["an"];
@@ -51,6 +53,10 @@ export class EnviarComponent implements OnInit {
     this.load = true;
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
+    if (this.prefix.length == 0) {
+      this.openDialog('Error al procesar datos', 401);
+      return;
+    }
     this.serviceA.getDatoslaboratorio(this.jwt, this.prefix)
       .then(ok => {
         this.lab = ok.body;
@@ -1175,11 +1181,17 @@ export class EnviarComponent implements OnInit {
 
   }
 
-  openDialog(mensaje: string): void {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: "450px",
       data: { mensaje: mensaje }
     });
+    if (status == 401) {
+      dialogRef.afterClosed().subscribe(result => {
+        this.authService.logout();
+        this.router.navigate(["/ingresar"]);
+      });
+    }
 
     dialogRef.afterClosed().subscribe(result => {
       this.router.navigate(["/pacientes/" + this.actID + "/analisis"]);
