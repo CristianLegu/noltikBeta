@@ -35,7 +35,7 @@ export class AltamedicoComponent implements OnInit {
 
   //Storage
   jwt: string;
-  pref: string;
+  pref: string = "";
   rol: string;
 
   constructor(
@@ -91,11 +91,14 @@ export class AltamedicoComponent implements OnInit {
           this.load = false;
         })
         .catch(error => {
-          if (error.status != 401) {
-            this.openDialog(error.message);
-          }
           this.load = false;
-          this.router.navigate(["/medicos"]);
+          if (error.status == 401) {
+            this.mensaje = 'Sin autorización';
+          }
+          else {
+            this.mensaje = error.error.mensaje;//error.message;
+          }
+          this.openDialog(this.mensaje, error.status);
         })
     }
     else {
@@ -115,9 +118,14 @@ export class AltamedicoComponent implements OnInit {
           this.openDialog(this.mensaje);
           this.ruta();
         }).catch(error => {
-          this.mensaje = error.error.mensaje;//error.error.message;
-          this.openDialog(this.mensaje);
           this.load = false;
+          if (error.status == 401) {
+            this.mensaje = 'Sin autorización';
+          }
+          else {
+            this.mensaje = error.error.mensaje;//error.message;
+          }
+          this.openDialog(this.mensaje, error.status);
         });
     }
     else {
@@ -131,8 +139,13 @@ export class AltamedicoComponent implements OnInit {
           })
           .catch(err => {
             this.load = false;
-            this.mensaje = err.error.mensaje;
-            this.openDialog(this.mensaje);
+            if (err.status == 401) {
+              this.mensaje = 'Sin autorización';
+            }
+            else {
+              this.mensaje = err.error.mensaje;//error.message;
+            }
+            this.openDialog(this.mensaje, err.status);
           });
       } else {
         this.load = false;

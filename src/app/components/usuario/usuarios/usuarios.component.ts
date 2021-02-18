@@ -24,7 +24,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
   dataSource: Usuario[] = [];
   displayedColumns: string[] = ['id', 'usuario'];
   token: string;
-  prefix: string;
+  prefix: string = "";
   load: boolean = false;
   faSearch = faSearch;
   faSync = faSync;
@@ -50,6 +50,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
+
     if (this.prefix.length == 0) {
       this.openDialog('Error al procesar datos', 401);
       return;
@@ -68,9 +69,14 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
           })
           .catch(err => {
             let mensaje: string;
-            mensaje = err.error.mensaje;
-            this.openDialog(mensaje);
             this.load = false;
+            if (err.status == 401) {
+              mensaje = 'Sin autorización';
+            }
+            else {
+              mensaje = err.error.mensaje;//error.message;
+            }
+            this.openDialog(mensaje, err.status);
           });
 
       })

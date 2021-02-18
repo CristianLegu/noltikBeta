@@ -28,7 +28,7 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
   page_number: number = 0;
   displayedColumns: string[] = ['analisis', 'medico', 'fecha', 'imprimir'];
   token: string;
-  prefix: string;
+  prefix: string = "";
   load: boolean = false;
   actRoute: number;
   dataSource: Analisis[] = [];
@@ -79,8 +79,13 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
       })
       .catch(error => {
         this.load = false;
-        this.mensaje = error.error.mensaje;//error.message;
-        this.openDialog(this.mensaje);
+        if (error.status == 401) {
+          this.mensaje = 'Sin autorización';
+        }
+        else {
+          this.mensaje = error.error.mensaje;//error.message;
+        }
+        this.openDialog(this.mensaje, error.status);
       });
 
     this.serviceA.obtenerTotal(this.token, this.prefix, this.actRoute)
@@ -93,14 +98,24 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
           })
           .catch(error => {
             this.load = false;
-            this.mensaje = error.error.mensaje;
-            this.openDialog(this.mensaje);
+            if (error.status == 401) {
+              this.mensaje = 'Sin autorización';
+            }
+            else {
+              this.mensaje = error.error.mensaje;//error.message;
+            }
+            this.openDialog(this.mensaje, error.status);
           })
       })
       .catch(error => {
         this.load = false;
-        this.mensaje = error.error.mensaje;
-        this.openDialog(this.mensaje);
+        if (error.status == 401) {
+          this.mensaje = 'Sin autorización';
+        }
+        else {
+          this.mensaje = error.error.mensaje;//error.message;
+        }
+        this.openDialog(this.mensaje, error.status);
       });
 
   }

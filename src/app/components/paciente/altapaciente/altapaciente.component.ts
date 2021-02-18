@@ -26,7 +26,7 @@ export class AltapacienteComponent implements OnInit {
 
   actRoute: string;
   jwt: string;
-  prefix: string;
+  prefix: string = "";
   mensajeBienvenida: string;
   paciente: Patient;
   load: boolean = false;
@@ -110,8 +110,13 @@ export class AltapacienteComponent implements OnInit {
         })
         .catch(error => {
           this.load = false;
-          this.mensaje = error.error.mensaje;//error.message;
-          this.openDialog(this.mensaje);
+          if (error.status == 401) {
+            this.mensaje = 'Sin autorización';
+          }
+          else {
+            this.mensaje = error.error.mensaje;//error.message;
+          }
+          this.openDialog(this.mensaje, error.status);
         });
     } else {
       this.load = false;
@@ -220,9 +225,14 @@ export class AltapacienteComponent implements OnInit {
           this.openDialog(this.mensaje);
         })
         .catch(error => {
-          this.mensaje = error.error.mensaje;//error.error.message;
-          this.openDialog(this.mensaje);
           this.load = false;
+          if (error.status == 401) {
+            this.mensaje = 'Sin autorización';
+          }
+          else {
+            this.mensaje = error.error.mensaje;//error.message;
+          }
+          this.openDialog(this.mensaje, error.status);
         });
     } else {
       if (this.altapac.valid) {
@@ -235,8 +245,13 @@ export class AltapacienteComponent implements OnInit {
           })
           .catch(err => {
             this.load = false;
-            this.mensaje = err.error.mensaje;//err.error.message;
-            this.openDialog(this.mensaje);
+            if (err.status == 401) {
+              this.mensaje = 'Sin autorización';
+            }
+            else {
+              this.mensaje = err.error.mensaje;//error.message;
+            }
+            this.openDialog(this.mensaje, err.status);
           });
       } else {
         this.load = false;

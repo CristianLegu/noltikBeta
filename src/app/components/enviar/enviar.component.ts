@@ -17,7 +17,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class EnviarComponent implements OnInit {
 
   jwt: string;
-  prefix: string;
+  prefix: string = "";
   actID: number;
   actString: string;
   actRoute: Array<string> = [];
@@ -64,7 +64,14 @@ export class EnviarComponent implements OnInit {
         //this.getImage(this.prefix);
       })
       .catch(error => {
-        // this.load = false;
+        this.load = false;
+        if (error.status == 401) {
+          this.mensaje = 'Sin autorización';
+        }
+        else {
+          this.mensaje = error.error.mensaje;//error.message;
+        }
+        this.openDialog(this.mensaje, error.status);
       });
     this.serviceA.getAnalisisSeleccionados(this.jwt, this.prefix, this.actID, this.actString)
       .then(ok => {
@@ -78,8 +85,13 @@ export class EnviarComponent implements OnInit {
           );
       }).catch(error => {
         this.load = false;
-        console.log(error);
-        this.openDialog(error);
+        if (error.status == 401) {
+          this.mensaje = 'Sin autorización';
+        }
+        else {
+          this.mensaje = error.error.mensaje;//error.message;
+        }
+        this.openDialog(this.mensaje, error.status);
       });
 
     this.router.navigate(["/pacientes/" + this.actID + "/analisis"]);

@@ -25,7 +25,7 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
   dataSource: Patient[] = [];
   displayedColumns: string[] = ['id', 'nombre', 'analisis'];
   token: string;
-  prefix: string;
+  prefix: string = "";
   load: boolean = false;
   faSearch = faSearch;
   faSync = faSync;
@@ -67,9 +67,13 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
           })
           .catch(err => {
             this.load = false;
-            console.log(err);
-            this.mensaje = err.message;//err.error.message;
-            this.openDialog(this.mensaje);
+            if (err.status == 401) {
+              this.mensaje = 'Sin autorización';
+            }
+            else {
+              this.mensaje = err.error.mensaje;//error.message;
+            }
+            this.openDialog(this.mensaje, err.status);
           });
       })
       .catch(error => {
@@ -129,16 +133,26 @@ export class PacientesComponent extends MatPaginatorIntl implements OnInit {
             this.dataSource = ok.body;
             this.load = false;
           })
-          .catch(err => {
+          .catch(error => {
             this.load = false;
-            this.mensaje = err.error.mensaje;//err.error.message;
-            this.openDialog(this.mensaje);
+            if (error.status == 401) {
+              this.mensaje = 'Sin autorización';
+            }
+            else {
+              this.mensaje = error.error.mensaje;//error.message;
+            }
+            this.openDialog(this.mensaje, error.status);
           })
       })
       .catch(error => {
         this.load = false;
-        this.mensaje = error.error.mensaje;//error.error.message;
-        this.openDialog(this.mensaje);
+        if (error.status == 401) {
+          this.mensaje = 'Sin autorización';
+        }
+        else {
+          this.mensaje = error.error.mensaje;//error.message;
+        }
+        this.openDialog(this.mensaje, error.status);
       });
   }
 

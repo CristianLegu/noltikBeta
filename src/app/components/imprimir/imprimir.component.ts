@@ -9,8 +9,6 @@ import { DialogmembreteComponent } from "src/app/common/dialogmembrete/dialogmem
 import { MatDialog } from '@angular/material/dialog';
 import { DatosLaboratorio } from "src/app/common/interface";
 
-let hostApiUrl = 'http://localhost:8080/noltik_api/v1/';
-export const ApiUrl = hostApiUrl;
 @Component({
   selector: "app-imprimir",
   templateUrl: "./imprimir.component.html",
@@ -95,7 +93,14 @@ export class ImprimirComponent implements OnInit {
             //this.getImage(this.prefix);
           })
           .catch(error => {
-            // this.load = false;
+            this.load = false;
+            if (error.status == 401) {
+              this.mensaje = 'Sin autorización';
+            }
+            else {
+              this.mensaje = error.error.mensaje;//error.message;
+            }
+            this.openDialog();
           });
       }
       this.decision = result;
@@ -154,10 +159,29 @@ export class ImprimirComponent implements OnInit {
     //this.doc.text(55, 16, "LABORATORIOS DE ANALISIS CLINICOS ESPINOSA");
     this.doc.text(60, 16, this.lab.nombre);
     this.doc.setFontSize(10);
-    this.membrete_cadena = "Cedula de Especialidad: " + this.lab.infoMembrete.cedulaEspecialidad + " Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
-    this.domicilio = "Domicilio: " + this.lab.domicilio;
-    this.ciudad = "Ciudad: " + this.lab.ciudad + " Estado: " + this.lab.estado;
-    this.correo = "Correo: " + this.lab.email + " Telefono: " + this.lab.telefonos;
+    //No mostrará los campos en caso de que estén vacíos
+    if (this.lab.infoMembrete.cedulaEspecialidad != "") {
+      this.membrete_cadena = "Cedula de Especialidad: " + this.lab.infoMembrete.cedulaEspecialidad;
+    }
+    if (this.lab.infoMembrete.cedulaProfesional != "") {
+      this.membrete_cadena = this.membrete_cadena + " Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
+    }
+    if (this.lab.domicilio != null) {
+      this.domicilio = "Domicilio: " + this.lab.domicilio;
+    }
+    if (this.lab.ciudad != null) {
+      this.ciudad = "Ciudad: " + this.lab.ciudad;
+    }
+    if (this.lab.estado != null) {
+      this.ciudad = this.ciudad + " Estado: " + this.lab.estado;
+    }
+    if (this.lab.email != null) {
+      this.correo = "Correo: " + this.lab.email;
+    }
+    if (this.lab.telefonos.length != 0) {
+      this.correo = this.correo + " Telefono: " + this.lab.telefonos
+    }
+
 
     this.doc.text(
       60,

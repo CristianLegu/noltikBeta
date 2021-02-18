@@ -34,7 +34,7 @@ export class EstudioComponent implements OnInit {
 
   actRoute: string;
   jwt: string;
-  prefix: string;
+  prefix: string = "";
   mensajeBienvenida: string;
   load: boolean = false;
   estudio: Estudio;
