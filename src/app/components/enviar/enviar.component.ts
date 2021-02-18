@@ -29,10 +29,10 @@ export class EnviarComponent implements OnInit {
   alturaItems: number;
   load: boolean = false;
   mensaje: string;
-  membrete_cadena: string;
-  domicilio: string;
-  ciudad: string;
-  correo: string;
+  membrete_cadena: string = "";
+  domicilio: string = "";
+  ciudad: string = "";
+  correo: string = "";
   lab: DatosLaboratorio;
   constructor(
     private serviceA: AnalisisService,
@@ -1211,12 +1211,11 @@ export class EnviarComponent implements OnInit {
   }
 
   cabecera() {
-    console.log(this.lab);
     if (this.lab.imgByte != null) {
       this.doc.addImage(this.lab.imgByte, "JPEG", 10, 10, 40, 25);
     }
 
-    this.doc.setDrawColor(0, 0, 255);
+    this.doc.setDrawColor(45, 76, 130);
     this.doc.line(5, 5, 205, 5);
 
     this.doc.setFont("helvetica");
@@ -1225,10 +1224,48 @@ export class EnviarComponent implements OnInit {
     //this.doc.text(55, 16, "LABORATORIOS DE ANALISIS CLINICOS ESPINOSA");
     this.doc.text(60, 16, this.lab.nombre);
     this.doc.setFontSize(10);
-    this.membrete_cadena = "Cedula de Especialidad: " + this.lab.infoMembrete.cedulaEspecialidad + " Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
-    this.domicilio = "Domicilio: " + this.lab.domicilio;
-    this.ciudad = "Ciudad: " + this.lab.ciudad + " Estado: " + this.lab.estado;
-    this.correo = "Correo: " + this.lab.email + " Telefono: " + this.lab.telefonos;
+    //No mostrará los campos en caso de que estén vacíos
+    //Cédula profesional y especialidad
+    if (this.lab.infoMembrete.cedulaEspecialidad != "") {
+      this.membrete_cadena = "Cedula de Especialidad: " + this.lab.infoMembrete.cedulaEspecialidad;
+    }
+    if (this.lab.infoMembrete.cedulaProfesional != "") {
+      if (this.membrete_cadena.length == 0) {
+        this.membrete_cadena = "Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
+      }
+      else {
+        this.membrete_cadena = this.membrete_cadena + " Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
+      }
+    }
+    //Domicilio
+    if (this.lab.domicilio != "") {
+      this.domicilio = "Domicilio: " + this.lab.domicilio;
+    }
+    //Ciudad y Estado
+    if (this.lab.ciudad != "") {
+      this.ciudad = "Ciudad: " + this.lab.ciudad;
+    }
+    if (this.lab.estado != "") {
+      if (this.ciudad.length == 0) {
+        this.ciudad = "Estado: " + this.lab.estado;
+      }
+      else {
+        this.ciudad = this.ciudad + " Estado: " + this.lab.estado;
+      }
+    }
+    //Correo y teléfono
+    if (this.lab.email != "") {
+      this.correo = "Correo: " + this.lab.email;
+    }
+    if (this.lab.telefonos != "") {
+      if (this.correo.length == 0) {
+        this.correo = "Telefono: " + this.lab.telefonos;
+      }
+      else {
+        this.correo = this.correo + " Telefono: " + this.lab.telefonos;
+      }
+    }
+
 
     this.doc.text(
       60,

@@ -26,10 +26,10 @@ export class ImprimirComponent implements OnInit {
   doc = new jsPDF();
   mensaje: string = "¿Desea que el reporte tenga membrete?";
   decision: string;
-  membrete_cadena: string;
-  domicilio: string;
-  ciudad: string;
-  correo: string;
+  membrete_cadena: string = "";
+  domicilio: string = "";
+  ciudad: string = "";
+  correo: string = "";
   lab: DatosLaboratorio;
   sangria: number;
   altura: number;
@@ -47,7 +47,6 @@ export class ImprimirComponent implements OnInit {
     private router: Router,
     private http: HttpClient
   ) {
-    console.log(this.activatedRoute);
     this.actString = this.activatedRoute.snapshot.params["an"];
     this.actID = this.activatedRoute.snapshot.params["id"];
   }
@@ -89,13 +88,11 @@ export class ImprimirComponent implements OnInit {
         this.serviceA.getDatoslaboratorio(this.jwt, this.prefix)
           .then(ok => {
             this.lab = ok.body;
-            console.log(this.lab);
-            //this.getImage(this.prefix);
           })
           .catch(error => {
             this.load = false;
             if (error.status == 401) {
-              this.mensaje = 'Sin autorización';
+              this.router.navigate(["/ingresar"]);
             }
             else {
               this.mensaje = error.error.mensaje;//error.message;
@@ -115,9 +112,7 @@ export class ImprimirComponent implements OnInit {
               }
             );
         }).catch(error => {
-          // this.load = false;
-          // console.log(error);
-          // this.openDialog(error);
+          this.router.navigate(["/ingresar"]);
         });
       this.router.navigate(["/pacientes/" + this.actID + "/analisis"]);
     });
@@ -139,18 +134,14 @@ export class ImprimirComponent implements OnInit {
     dd = fecha.substring(8, 10);
 
     fecha = dd.concat("-", mm, "-", yyyy);
-    console.log(fecha);
     return fecha;
   }
 
   cabecera() {
     if (this.lab.imgByte != null) {
       this.doc.addImage(this.lab.imgByte, "JPEG", 10, 10, 40, 25);
-      //this.doc.addImage(this.retrievedImage, "JPEG", 10, 10, 40, 25);
-
-      console.log(this.lab.imgByte);
     }
-    this.doc.setDrawColor(0, 0, 255);
+    this.doc.setDrawColor(45, 76, 130);
     this.doc.line(5, 5, 205, 5);
 
     this.doc.setFont("helvetica");
@@ -160,26 +151,45 @@ export class ImprimirComponent implements OnInit {
     this.doc.text(60, 16, this.lab.nombre);
     this.doc.setFontSize(10);
     //No mostrará los campos en caso de que estén vacíos
+    //Cédula profesional y especialidad
     if (this.lab.infoMembrete.cedulaEspecialidad != "") {
       this.membrete_cadena = "Cedula de Especialidad: " + this.lab.infoMembrete.cedulaEspecialidad;
     }
     if (this.lab.infoMembrete.cedulaProfesional != "") {
-      this.membrete_cadena = this.membrete_cadena + " Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
+      if (this.membrete_cadena.length == 0) {
+        this.membrete_cadena = "Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
+      }
+      else {
+        this.membrete_cadena = this.membrete_cadena + " Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
+      }
     }
-    if (this.lab.domicilio != null) {
+    //Domicilio
+    if (this.lab.domicilio != "") {
       this.domicilio = "Domicilio: " + this.lab.domicilio;
     }
-    if (this.lab.ciudad != null) {
+    //Ciudad y Estado
+    if (this.lab.ciudad != "") {
       this.ciudad = "Ciudad: " + this.lab.ciudad;
     }
-    if (this.lab.estado != null) {
-      this.ciudad = this.ciudad + " Estado: " + this.lab.estado;
+    if (this.lab.estado != "") {
+      if (this.ciudad.length == 0) {
+        this.ciudad = "Estado: " + this.lab.estado;
+      }
+      else {
+        this.ciudad = this.ciudad + " Estado: " + this.lab.estado;
+      }
     }
-    if (this.lab.email != null) {
+    //Correo y teléfono
+    if (this.lab.email != "") {
       this.correo = "Correo: " + this.lab.email;
     }
-    if (this.lab.telefonos.length != 0) {
-      this.correo = this.correo + " Telefono: " + this.lab.telefonos
+    if (this.lab.telefonos != "") {
+      if (this.correo.length == 0) {
+        this.correo = "Telefono: " + this.lab.telefonos;
+      }
+      else {
+        this.correo = this.correo + " Telefono: " + this.lab.telefonos;
+      }
     }
 
 
