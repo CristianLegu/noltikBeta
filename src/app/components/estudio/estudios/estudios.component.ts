@@ -28,7 +28,7 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
   faSync = faSync;
   faSearch = faSearch;
   token: string;
-  prefix: string;
+  prefix: string = "";
   load: boolean = false;
   nombre: string;
   mensaje: string;
@@ -49,6 +49,11 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
+    
+    if (this.prefix.length == 0) {
+      this.openDialog('Error al procesar datos', 401);
+      return;
+    }
     this.nombre = '';
     this.estudiosServices.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
@@ -164,7 +169,7 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
 
   openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: '350px',
+      width: '400px',
       data: { mensaje: mensaje }
     });
 

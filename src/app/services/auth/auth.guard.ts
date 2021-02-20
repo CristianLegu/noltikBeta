@@ -9,8 +9,12 @@ import { AuthService } from './auth.service';
 export class AuthGuard implements CanActivate {
 
   token: string;
+  prefix: string;
+  rol: string;
   constructor(private authService: AuthService, private router: Router) {
     this.token = localStorage.getItem('token');
+    this.prefix = localStorage.getItem('prefix');
+    this.rol = localStorage.getItem('role');
 
   }
 
@@ -19,11 +23,13 @@ export class AuthGuard implements CanActivate {
     return this.authService.isLoggedIn.pipe(
       take(1),
       map((isLoggedIn: boolean) => {
-        if (!isLoggedIn && this.token == null) {
-          this.router.navigate(['/ingresar']);
-          return false;
+        if (!isLoggedIn) {
+          if (this.token.length == 0 || this.prefix.length == 0 || this.rol.length == 0) {
+            this.router.navigate(['/ingresar']);
+            return false;
+          }
         }
-        
+
         this.authService.carga();
         return true;
       })

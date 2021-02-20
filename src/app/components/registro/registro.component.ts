@@ -10,8 +10,6 @@ import { Router } from '@angular/router';
 import { RegistroService } from 'src/app/services/registro/registro.service';
 
 
-
-
 @Component({
   selector: 'app-registro',
   templateUrl: './registro.component.html',
@@ -50,7 +48,7 @@ export class RegistroComponent implements OnInit {
     this.registro = this.regs.group({
       nombreLab: ["", [Validators.required]],
       prefijo: ["", [Validators.required]],
-      contrasena: ["", [Validators.required, Validators.minLength(6)]],
+      contrasena: ["", [Validators.required, Validators.minLength(8)]],
       emailuser: ["", [Validators.required, Validators.email]],
       nombre: ["", [Validators.required]],
       nombreusuario: ["", [Validators.required]],
@@ -64,7 +62,6 @@ export class RegistroComponent implements OnInit {
   }
 
   guardar() {
-    console.log(this.registro);
     if (this.validaErrores()) {
 
       this.load = true;
@@ -74,8 +71,6 @@ export class RegistroComponent implements OnInit {
 
       this.registro.value.nombreusuario = this.user_aux;
 
-      console.log(this.registro);
-
       this.registroService.setRegistro(this.registro)
         .then(resp => {
           this.ok = resp;
@@ -83,11 +78,10 @@ export class RegistroComponent implements OnInit {
           this.mensaje = 'Registro creado con éxito. Se envió un correo a ' + this.registro.value.emailuser
             + '. Para poder iniciar, debes activar tu cuenta';
           this.load = false;
-          this.openDialog(this.mensaje);
+          this.openDialog(this.mensaje, this.ok.statusCodeValue);
 
         })
         .catch(err => {
-          console.log(err);
           this.mensaje = err.error.mensaje;
           this.openDialog(this.mensaje);
           this.load = false;
@@ -125,24 +119,37 @@ export class RegistroComponent implements OnInit {
       this.noMatch = true;
       return false;
     }
+
+    //Valida que la contraseña cumpla con los requisitos
+    let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*.?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
+    if (!this.registro.value.contrasena.match(regex)) {
+      this.mensajeSnack('La contraseña debe contener al menos 8 caracteres,' + '\n' +
+        'al menos una letra mayúscula, al menos una letra minúscula,' +
+        'al menos un número, al menos 1 caracter especial y no contener espacios en blanco.');
+      this.noMatch = true;
+      return false;
+    }
+
     //Valida que el captcha esté correcto
-    /*if (this.recaptcha == null) {
+    if (this.recaptcha == null) {
       this.mensajeSnack('El Captcha es obligatorio');
       return false;
-    }*/
+    }
 
     //En caso de que todo esté Ok, retorna true
     return true;
   }
 
   //Dialog
-  openDialog(mensaje: string): void {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: '350px',
+      width: '400px',
       data: { mensaje: mensaje }
     });
     dialogRef.afterClosed().subscribe(() => {
-      this.router.navigate(["/ingresar"]);
+      if (status === 200) {
+        this.router.navigate(["/ingresar"]);
+      }
     });
   }
 
@@ -150,57 +157,42 @@ export class RegistroComponent implements OnInit {
   mensajeSnack(msj: String) {
 
     this._snackBar.open('' + msj, 'Aceptar', {
-      duration: 3000
+      duration: 15000
     });
   }
 
 
   OnChange(source: string, $event) {
-    //console.log(this.password2);
-    //console.log('Captcha: ' + this.recaptcha);
 
-    /*if (source == 'captcha') {
-      this.captcha = true;
-    }*/
-    //Si se recibe el evento del checkbox
-    // else {
-    if ($event.checked == true) {
-      this.aceptaTerminos = true;
-    }
-    else {
+    //Si el evento es porque caducó el captcha
+    if ($event === null) {
+      this.captcha = false;
       this.aceptaTerminos = false;
     }
-    //}
+    //Si el evento es por click en los términos o captcha
+    else {
+      if (source == 'captcha' && this.recaptcha != null) {
+        this.captcha = true;
+      }
+      else {
+        //Si se recibe el evento del checkbox
+        if ($event.checked == true) {
+          this.aceptaTerminos = true;
+        }
+        else {
+          this.aceptaTerminos = false;
+        }
+      }
+    }
 
     //Validar que se cumpla todo para habilitar botón de guardar
-    if (this.aceptaTerminos) {
+    if (this.aceptaTerminos && this.captcha) {
       this.isAllOk = false;
     }
     else {
       this.isAllOk = true;
     }
 
-  }
-
-  //Proceso para imagen
-  private imageSrc: string = '';
-  handleInputChange(e) {
-    var file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-    var pattern = /image-*/;
-    var reader = new FileReader();
-    this.fileName = file.name;
-    console.log(file);
-    if (!file.type.match(pattern)) {
-      alert('invalid format');
-      return;
-    }
-    reader.onload = this._handleReaderLoaded.bind(this);
-    reader.readAsDataURL(file);
-  }
-  _handleReaderLoaded(e) {
-    let reader = e.target;
-    this.imageSrc = reader.result;
-    console.log(this.imageSrc)
   }
 
 }

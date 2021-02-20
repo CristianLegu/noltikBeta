@@ -23,7 +23,7 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
   dataSource: Medico[] = [];
   displayedColumns: string[] = ['id', 'nombre', 'area'];
   token: string;
-  prefix: string;
+  prefix: string = "";
   load: boolean = false;
   faSearch = faSearch;
   faSync = faSync;
@@ -45,6 +45,12 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
+
+    if (this.prefix.length == 0) {
+      this.openDialog('Error al procesar datos', 401);
+      return;
+    }
+
     this.nombre = '';
     this.serviceM.obtenerTotal(this.token, this.prefix, this.nombre)
       .then(ok => {
@@ -57,8 +63,13 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
           .catch((err => {
             let mensaje: string;
             this.load = false;
-            mensaje = err.error.mensaje;//err.error.message;
-            this.openDialog(mensaje);
+            if (err.status == 401) {
+              mensaje = 'Sin autorización';
+            }
+            else {
+              mensaje = err.error.mensaje;//error.message;
+            }
+            this.openDialog(mensaje, err.status);
           }))
       })
       .catch(err => {
@@ -122,15 +133,25 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
           .catch(err => {
             let mensaje: string;
             this.load = false;
-            mensaje = err.error.mensaje; //err.error.message;
-            this.openDialog(mensaje);
+            if (err.status == 401) {
+              mensaje = 'Sin autorización';
+            }
+            else {
+              mensaje = err.error.mensaje;//error.message;
+            }
+            this.openDialog(mensaje, err.status);
           });
       })
       .catch(error => {
         let mensaje: string;
         this.load = false;
-        mensaje = error.error.mensaje;  //error.error.message;
-        this.openDialog(mensaje);
+        if (error.status == 401) {
+          mensaje = 'Sin autorización';
+        }
+        else {
+          mensaje = error.error.mensaje;//error.message;
+        }
+        this.openDialog(mensaje, error.status);
       });
   }
 
@@ -152,15 +173,25 @@ export class MedicosComponent extends MatPaginatorIntl implements OnInit {
           .catch(err => {
             let mensaje: string;
             this.load = false;
-            mensaje = err.error.mensaje;
-            this.openDialog(mensaje);
+            if (err.status == 401) {
+              mensaje = 'Sin autorización';
+            }
+            else {
+              mensaje = err.error.mensaje;//error.message;
+            }
+            this.openDialog(mensaje, err.status);
           })
       })
       .catch(error => {
         let mensaje: string;
         this.load = false;
-        mensaje = error.error.mensaje;
-        this.openDialog(mensaje);
+        if (error.status == 401) {
+          mensaje = 'Sin autorización';
+        }
+        else {
+          mensaje = error.error.mensaje;//error.message;
+        }
+        this.openDialog(mensaje, error.status);
       })
       ;
   }

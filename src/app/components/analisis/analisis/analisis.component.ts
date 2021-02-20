@@ -28,7 +28,7 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
   page_number: number = 0;
   displayedColumns: string[] = ['analisis', 'medico', 'fecha', 'imprimir'];
   token: string;
-  prefix: string;
+  prefix: string = "";
   load: boolean = false;
   actRoute: number;
   dataSource: Analisis[] = [];
@@ -62,6 +62,11 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
 
+    if (this.prefix.length == 0) {
+      this.openDialog('Error al procesar datos', 401);
+      return;
+    }
+
     this.altapaciente
       .getPaciente(this.token, this.prefix, this.actRoute)
       .then(ok => {
@@ -74,8 +79,13 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
       })
       .catch(error => {
         this.load = false;
-        this.mensaje = error.error.mensaje;//error.message;
-        this.openDialog();
+        if (error.status == 401) {
+          this.mensaje = 'Sin autorización';
+        }
+        else {
+          this.mensaje = error.error.mensaje;//error.message;
+        }
+        this.openDialog(this.mensaje, error.status);
       });
 
     this.serviceA.obtenerTotal(this.token, this.prefix, this.actRoute)
@@ -88,27 +98,45 @@ export class AnalisisComponent extends MatPaginatorIntl implements OnInit {
           })
           .catch(error => {
             this.load = false;
-            this.mensaje = error.error.mensaje;
-            this.openDialog();
+            if (error.status == 401) {
+              this.mensaje = 'Sin autorización';
+            }
+            else {
+              this.mensaje = error.error.mensaje;//error.message;
+            }
+            this.openDialog(this.mensaje, error.status);
           })
       })
       .catch(error => {
         this.load = false;
-        this.mensaje = error.error.mensaje;
-        this.openDialog();
+        if (error.status == 401) {
+          this.mensaje = 'Sin autorización';
+        }
+        else {
+          this.mensaje = error.error.mensaje;//error.message;
+        }
+        this.openDialog(this.mensaje, error.status);
       });
 
   }
 
-  openDialog() {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: "350px",
-      data: { mensaje: this.mensaje }
+      width: '400px',
+      data: { mensaje: mensaje }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.router.navigate(["/pacientes"]);
-    });
+    if (status == 401) {
+      dialogRef.afterClosed().subscribe(result => {
+        this.authService.logout();
+        this.router.navigate(["/ingresar"]);
+      });
+    } else {
+
+      dialogRef.afterClosed().subscribe(result => {
+        this.router.navigate(["/pacientes"]);
+      });
+    }
   }
 
   handlePage(e: PageEvent) {

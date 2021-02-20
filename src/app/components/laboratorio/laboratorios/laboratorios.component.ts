@@ -6,9 +6,10 @@ import { DialogDataEliminar, Laboratorio } from "src/app/common/interface";
 import { DialogComponent } from "src/app/common/dialog/dialog.component";
 import { MatDialog } from '@angular/material/dialog';
 import { LaboratorioService } from '../../../services/laboratorio/laboratorio.service';
-import { ApiUrl, logoGen } from '../../../globals';
 import { HttpClient } from '@angular/common/http';
 import { InfoMembrete } from '../../../common/interface';
+import { logoGen } from "src/app/globals";
+import { AuthService } from "src/app/services/auth/auth.service";
 
 @Component({
   selector: 'app-laboratorios',
@@ -39,7 +40,7 @@ export class LaboratoriosComponent implements OnInit {
 
   //Storage
   jwt: string;
-  pref: string;
+  pref: string = "";
   rol: string;
   constructor(
     private activateRoute: ActivatedRoute,
@@ -49,6 +50,7 @@ export class LaboratoriosComponent implements OnInit {
     private dialog: MatDialog,
     private labService: LaboratorioService,
     private http: HttpClient,
+    private authService: AuthService,
   ) {
     this.actRoute = this.activateRoute.snapshot.params["id"];
   }
@@ -79,10 +81,15 @@ export class LaboratoriosComponent implements OnInit {
     this.jwt = localStorage.getItem("token");
     this.pref = localStorage.getItem("prefix");
     this.rol = localStorage.getItem("role");
+    if (this.pref.length == 0) {
+      this.openDialog('Error al procesar datos', 401);
+      return;
+    }
 
     this.labService.obtenerLab(this.jwt, this.pref, this.actRoute)
       .then(ok => {
         this.lab = ok.body;
+        console.log(this.lab);
         this.base64Data = this.lab.imgByte;
         if (this.base64Data != null) {
           this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
@@ -93,11 +100,15 @@ export class LaboratoriosComponent implements OnInit {
         this.load = false;
       })
       .catch(error => {
-        if (error.status != 401) {
-          this.openDialog(error.message);
-        }
         this.load = false;
-      })
+        if (error.status == 401) {
+          this.mensaje = 'Sin autorización';
+        }
+        else {
+          this.mensaje = error.error.mensaje;//error.message;
+        }
+        this.openDialog(this.mensaje, error.status);
+      });
   }
 
   guardar() {
@@ -109,9 +120,14 @@ export class LaboratoriosComponent implements OnInit {
         this.openDialog(this.mensaje);
         this.selectedFile = null;
       }).catch(error => {
-        this.mensaje = error.error.mensaje;
-        this.openDialog(this.mensaje);
         this.load = false;
+        if (error.status == 401) {
+          this.mensaje = 'Sin autorización';
+        }
+        else {
+          this.mensaje = error.error.mensaje;//error.message;
+        }
+        this.openDialog(this.mensaje, error.status);
       });
   }
 
@@ -133,14 +149,21 @@ export class LaboratoriosComponent implements OnInit {
   }
 
 
-  openDialog(mensaje: string): void {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: "350px",
+      width: '400px',
       data: { mensaje: mensaje }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-    });
+    if (status == 401) {
+      dialogRef.afterClosed().subscribe(result => {
+        this.authService.logout();
+        this.router.navigate(["/ingresar"]);
+      });
+    } else {
+      dialogRef.afterClosed().subscribe(result => {
+      });
+    }
   }
 
   public onFileChanged(event) {

@@ -24,7 +24,7 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
   dataSource: Usuario[] = [];
   displayedColumns: string[] = ['id', 'usuario'];
   token: string;
-  prefix: string;
+  prefix: string = "";
   load: boolean = false;
   faSearch = faSearch;
   faSync = faSync;
@@ -50,6 +50,11 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
     this.load = true;
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
+
+    if (this.prefix.length == 0) {
+      this.openDialog('Error al procesar datos', 401);
+      return;
+    }
     this.nombre = '';
 
     this.service.obtenerTotal(this.token, this.prefix, this.nombre)
@@ -64,9 +69,14 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
           })
           .catch(err => {
             let mensaje: string;
-            mensaje = err.error.mensaje;
-            this.openDialog(mensaje);
             this.load = false;
+            if (err.status == 401) {
+              mensaje = 'Sin autorización';
+            }
+            else {
+              mensaje = err.error.mensaje;//error.message;
+            }
+            this.openDialog(mensaje, err.status);
           });
 
       })
@@ -166,15 +176,23 @@ export class UsuariosComponent extends MatPaginatorIntl implements OnInit {
 
   pageSizeOptions = [10, 30, 50, 100, 500, 1000];
 
-  openDialog(mensaje: string): void {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: '350px',
+      width: '400px',
       data: { mensaje: mensaje }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.router.navigate(["/"]);
-    });
+    if (status == 401) {
+      dialogRef.afterClosed().subscribe(result => {
+        this.authService.logout();
+        this.router.navigate(["/ingresar"]);
+      });
+    } else {
+
+      dialogRef.afterClosed().subscribe(result => {
+        this.router.navigate(["/usuarios"]);
+      });
+    }
   }
 
 

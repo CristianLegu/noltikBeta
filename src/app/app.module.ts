@@ -58,13 +58,14 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { RegistroModule } from './components/registro/registro.module';
 //Módulo confirmar
 import { ConfirmarModule } from './components/confirmar/confirmar.module';
-import { HomeComponent } from './components/home/home.component';
 import { ContrasenaComponent } from './components/contrasena/contrasena.component';
 import { ConfirmarUserComponent } from './components/confirmar-user/confirmar-user.component';
 import { MensajeComponent } from './components/mensaje/mensaje.component';
 import { LaboratoriosComponent } from './components/laboratorio/laboratorios/laboratorios.component';
 import { EnviarComponent } from './components/enviar/enviar.component';
 import { EnviaMailComponent } from './components/envia-mail/envia-mail.component';
+import { ReenvioTokenComponent } from './components/reenvio-token/reenvio-token.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -85,13 +86,13 @@ import { EnviaMailComponent } from './components/envia-mail/envia-mail.component
     EstudiosComponent,
     UnanalisisComponent,
     DialogmembreteComponent,
-    HomeComponent,
     ContrasenaComponent,
     ConfirmarUserComponent,
     MensajeComponent,
     LaboratoriosComponent,
     EnviarComponent,
-    EnviaMailComponent
+    EnviaMailComponent,
+    ReenvioTokenComponent
   ],
   imports: [
     FontAwesomeModule,
@@ -123,7 +124,8 @@ import { EnviaMailComponent } from './components/envia-mail/envia-mail.component
     MatCheckboxModule,
     MatAutocompleteModule,
     RegistroModule,
-    ConfirmarModule
+    ConfirmarModule,
+    MatTooltipModule
   ],
   providers: [
     AuthService, AuthGuard, DatePipe,

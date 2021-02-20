@@ -18,27 +18,27 @@
 
     </mat-toolbar>
 
-    <form class="form" novalidate [formGroup]="altapac">
+    <form class="form" novalidate [formGroup]="altapac" autocomplete="off">
         <div class="row">
 
             <mat-form-field class="col-7">
                 <mat-label>Nombre Completo</mat-label>
-                <input matInput formControlName="nombre" class="separacion">
+                <input matInput formControlName="nombre" class="separacion" maxlength="100">
             </mat-form-field>
 
             <mat-form-field class="col-8">
                 <mat-label>Dirección</mat-label>
-                <input matInput formControlName="direccion">
+                <input matInput formControlName="direccion" maxlength="100">
             </mat-form-field>
 
             <mat-form-field class="col-5">
                 <mat-label>Ciudad</mat-label>
-                <input matInput formControlName="ciudad">
+                <input matInput formControlName="ciudad" maxlength="50">
             </mat-form-field>
 
             <mat-form-field class="col-5">
                 <mat-label>Estado</mat-label>
-                <input matInput formControlName="estado">
+                <input matInput formControlName="estado" maxlength="45">
             </mat-form-field>
 
             <mat-form-field class="col-3">
@@ -46,7 +46,7 @@
                 <input matInput #postalCode formControlName="codigopostal" maxlength="5">
             </mat-form-field>
 
-            <mat-form-field class="col-3">
+            <mat-form-field class="col-3" (click)="picker.open()">
                 <mat-label>Fecha de Nacimiento</mat-label>
                 <input matInput [matDatepicker]="picker" placeholder="Fecha de nacimiento" formControlName="nacimiento"
                     disabled>
@@ -63,19 +63,20 @@
                 </mat-select>
             </mat-form-field>
 
-            <mat-form-field class="col-3">
+            <mat-form-field class="col-2">
                 <mat-label>Tipo de sangre</mat-label>
-                <input matInput formControlName="tiposangre">
+                <input matInput formControlName="tiposangre" maxlength="15">
             </mat-form-field>
 
             <mat-form-field class="col-5">
                 <mat-label>Correo electrónico</mat-label>
-                <input matInput formControlName="email">
+                <input matInput formControlName="email" maxlength="50">
             </mat-form-field>
         </div>
 
 
-        <button mat-raised-button [disabled]="buttonTel !== true" class="buttonTR" (click)="agregarTel()" color="accent">
+        <button mat-raised-button [disabled]="buttonTel !== true" class="buttonTR" (click)="agregarTel()"
+            color="accent">
             <fa-icon [icon]="faPlusSquare"></fa-icon>
             Agregar Teléfono
         </button>
@@ -86,7 +87,8 @@
                 <mat-form-field class="col-12">
                     <mat-label>Teléfono {{i + 1}}</mat-label>
                     <input type="tel" matInput [formControlName]="i">
-                    <button mat-button *ngIf="i>0" matSuffix mat-icon-button aria-label="Eliminar" (click)="quitarTel(i)">
+                    <button mat-button *ngIf="i>0" matSuffix mat-icon-button aria-label="Eliminar"
+                        (click)="quitarTel(i)">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </mat-form-field>
@@ -101,7 +103,7 @@
 
             <mat-form-field class="col-5">
                 <mat-label>RFC</mat-label>
-                <input matInput formControlName="rfc">
+                <input matInput formControlName="rfc" maxlength="13">
                 <mat-icon matSuffix></mat-icon>
             </mat-form-field>
             <mat-form-field class="col-5">

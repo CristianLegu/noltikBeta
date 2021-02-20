@@ -1,0 +1,38 @@
+<div class="container">
+    <mat-card class="card">
+        <mat-card-content>
+            <form class="example-form">
+                <div class="div_imagen">
+                    <img class="responsiveimagen" mat-card-image src="https://lablace.com/ZLOGOS/noltik.png" alt="Logo">
+                </div>
+                <div class="center">
+                    <h2>Solicitud de activación de cuenta</h2>
+                </div>
+                <mat-card-content>
+                    <p class="center">
+                        Ingresa tu correo o nombre de usuario para realizar la validación de tu cuenta y activar el
+                        acceso a
+                        Noltik!
+                    </p>
+                    <mat-card-actions>
+                        <!-- class="center"-->
+                        <form novalidate (ngSubmit)="reenviaCorreoUser()">
+                            <mat-form-field class="center " appearance="outline" [formGroup]="usuarioForm">
+                                <mat-label>Usuario o correo electrónico.</mat-label>
+                                <input matInput formControlName="usuarioCorreo" required autocomplete="off"
+                                    maxlength="45">
+                            </mat-form-field>
+                            <mat-card-actions class="center">
+                                <button mat-raised-button color="primary">Enviar correo</button>
+                            </mat-card-actions>
+                        </form>
+                    </mat-card-actions>
+                </mat-card-content>
+            </form>
+        </mat-card-content>
+    </mat-card>
+
+    <div class='loading' *ngIf="loading">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>

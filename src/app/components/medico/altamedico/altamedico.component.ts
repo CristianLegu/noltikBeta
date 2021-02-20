@@ -6,6 +6,7 @@ import { Medico, DialogDataEliminar } from "src/app/common/interface";
 import { DialogComponent } from "src/app/common/dialog/dialog.component";
 import { DialogeliminarComponent } from "src/app/common/dialogeliminar/dialogeliminar.component";
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { MedicosService } from 'src/app/services/medicos/medicos.service';
 import { SidenavComponent } from 'src/app/sidenav/sidenav.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -34,7 +35,7 @@ export class AltamedicoComponent implements OnInit {
 
   //Storage
   jwt: string;
-  pref: string;
+  pref: string = "";
   rol: string;
 
   constructor(
@@ -45,6 +46,7 @@ export class AltamedicoComponent implements OnInit {
     private medicoService: MedicosService,
     private dialog: MatDialog,
     private authService: AuthService,
+    private snackBar: MatSnackBar,
     private sidenav: SidenavComponent = new SidenavComponent(router, authService)
   ) {
     this.actRoute = this.activateRoute.snapshot.params["id"];
@@ -74,6 +76,11 @@ export class AltamedicoComponent implements OnInit {
     this.pref = localStorage.getItem("prefix");
     this.rol = localStorage.getItem("role");
 
+    if (this.pref.length == 0) {
+      this.openDialog('Error al procesar datos', 401);
+      return;
+    }
+
     if (this.actRoute != '0') {
       this.medicoService.obtenerMedico(this.jwt, this.pref, this.actRoute)
         .then(ok => {
@@ -84,11 +91,14 @@ export class AltamedicoComponent implements OnInit {
           this.load = false;
         })
         .catch(error => {
-          if (error.status != 401) {
-            this.openDialog(error.message);
-          }
           this.load = false;
-          this.router.navigate(["/medicos"]);
+          if (error.status == 401) {
+            this.mensaje = 'Sin autorización';
+          }
+          else {
+            this.mensaje = error.error.mensaje;//error.message;
+          }
+          this.openDialog(this.mensaje, error.status);
         })
     }
     else {
@@ -108,24 +118,42 @@ export class AltamedicoComponent implements OnInit {
           this.openDialog(this.mensaje);
           this.ruta();
         }).catch(error => {
-          this.mensaje = error.error.mensaje;//error.error.message;
-          this.openDialog(this.mensaje);
           this.load = false;
+          if (error.status == 401) {
+            this.mensaje = 'Sin autorización';
+          }
+          else {
+            this.mensaje = error.error.mensaje;//error.message;
+          }
+          this.openDialog(this.mensaje, error.status);
         });
     }
     else {
-      this.medicoService.crearMedico(this.jwt, this.pref, this.altaMedico)
-        .then(ok => {
-          this.load = false;
-          this.mensaje = ok.mensaje;
-          this.openDialog(this.mensaje);
-          this.ruta();
-        })
-        .catch(err => {
-          this.load = false;
-          this.mensaje = err.error.mensaje;
-          this.openDialog(this.mensaje);
-        });
+      if (this.altaMedico.valid) {
+        this.medicoService.crearMedico(this.jwt, this.pref, this.altaMedico)
+          .then(ok => {
+            this.load = false;
+            this.mensaje = ok.mensaje;
+            this.openDialog(this.mensaje);
+            this.ruta();
+          })
+          .catch(err => {
+            this.load = false;
+            if (err.status == 401) {
+              this.mensaje = 'Sin autorización';
+            }
+            else {
+              this.mensaje = err.error.mensaje;//error.message;
+            }
+            this.openDialog(this.mensaje, err.status);
+          });
+      } else {
+        this.load = false;
+        this.openSnackBar(
+          "Favor de llenar los campos obligatiorios",
+          "Aceptar"
+        );
+      }
     }
 
   }
@@ -162,15 +190,23 @@ export class AltamedicoComponent implements OnInit {
     }
   }
 
-  openDialog(mensaje: string): void {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: "350px",
+      width: '400px',
       data: { mensaje: mensaje }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      //this.router.navigate(["/noltik/medicos"]);
-    });
+    if (status == 401) {
+      dialogRef.afterClosed().subscribe(result => {
+        this.authService.logout();
+        this.router.navigate(["/ingresar"]);
+      });
+    } else {
+
+      dialogRef.afterClosed().subscribe(result => {
+        this.router.navigate(["/medicos"]);
+      });
+    }
   }
 
   //Pasa los valores al form de médico
@@ -224,6 +260,11 @@ export class AltamedicoComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogeliminarComponent, {
       width: "350px",
       data: { mensaje: this.dataEliminar.mensaje, datos: this.dataEliminar }
+    });
+  }
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000
     });
   }
 

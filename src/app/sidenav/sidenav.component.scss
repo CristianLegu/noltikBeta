@@ -20,4 +20,48 @@ mat-sidenav-content {
   bottom: 0;
   left: 0;
   right: 0;
+  height: auto;
+}
+
+//Size display
+// Extra small devices (portrait phones, less than 576px)
+@media (max-width: 575.98px) {
+  .container {
+    min-height: 560px;
+  }
+}
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+  .container {
+    min-height: 570px;
+  }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+  .container {
+    min-height: 550px;
+  }
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+  .container {
+    min-height: 560px;
+  }
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+  .container {
+    min-height: 600px;
+  }
+}
+
+// Extra large devices (large desktops)
+@media (min-width: 1400px) {
+  .container {
+    min-height: 950px;
+  }
 }

@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import * as jsPDF from "jspdf";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AnalisisService } from "../../services/analisis/analisis.service";
-import { imgData } from "../../globals";
 import { Analisis, jsonPDF } from "src/app/common/interface";
 import { EnviaMailService } from 'src/app/services/enviaMail/envia-mail.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/common/dialog/dialog.component';
 import { DatosLaboratorio } from "src/app/common/interface";
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-enviar',
@@ -17,7 +17,7 @@ import { DatosLaboratorio } from "src/app/common/interface";
 export class EnviarComponent implements OnInit {
 
   jwt: string;
-  prefix: string;
+  prefix: string = "";
   actID: number;
   actString: string;
   actRoute: Array<string> = [];
@@ -29,17 +29,18 @@ export class EnviarComponent implements OnInit {
   alturaItems: number;
   load: boolean = false;
   mensaje: string;
-  membrete_cadena: string;
-  domicilio: string;
-  ciudad: string;
-  correo: string;
+  membrete_cadena: string = "";
+  domicilio: string = "";
+  ciudad: string = "";
+  correo: string = "";
   lab: DatosLaboratorio;
   constructor(
     private serviceA: AnalisisService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private enviaService: EnviaMailService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService,
 
   ) {
     this.actString = this.activatedRoute.snapshot.params["an"];
@@ -52,28 +53,45 @@ export class EnviarComponent implements OnInit {
     this.load = true;
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
+    if (this.prefix.length == 0) {
+      this.openDialog('Error al procesar datos', 401);
+      return;
+    }
     this.serviceA.getDatoslaboratorio(this.jwt, this.prefix)
-    .then(ok => {
-      this.lab = ok.body;
-      console.log(this.lab);
-      //this.getImage(this.prefix);
-    })
-    .catch(error => {
-      // this.load = false;
-    });
+      .then(ok => {
+        this.lab = ok.body;
+        console.log(this.lab);
+        //this.getImage(this.prefix);
+      })
+      .catch(error => {
+        this.load = false;
+        if (error.status == 401) {
+          this.mensaje = 'Sin autorización';
+        }
+        else {
+          this.mensaje = error.error.mensaje;//error.message;
+        }
+        this.openDialog(this.mensaje, error.status);
+      });
     this.serviceA.getAnalisisSeleccionados(this.jwt, this.prefix, this.actID, this.actString)
       .then(ok => {
+        console.log(ok);
         this.createPDF(ok.body)
           .then(
             respuesta => {
-              
+
               this.enviarPDF(respuesta.toString());
             }
           );
       }).catch(error => {
         this.load = false;
-        console.log(error);
-        this.openDialog(error);
+        if (error.status == 401) {
+          this.mensaje = 'Sin autorización';
+        }
+        else {
+          this.mensaje = error.error.mensaje;//error.message;
+        }
+        this.openDialog(this.mensaje, error.status);
       });
 
     this.router.navigate(["/pacientes/" + this.actID + "/analisis"]);
@@ -1040,11 +1058,59 @@ export class EnviarComponent implements OnInit {
 
               if (y.comentario != null) {
                 this.sangria = 155;
-                this.doc.text(
-                  y.comentario.toString(),
-                  this.sangria,
-                  this.alturaItems
-                );
+                var length_comenta = y.comentario.toString().length;
+                var vl_length_aux = 0;
+                var vl_length_aux2 = 0;
+                if (length_comenta >= 36) {
+
+                  var vl_cont = 0;
+                  var vl_salir = "";
+                  do {
+                    if (vl_cont == 0) {
+                      vl_cont = 1;
+                      this.doc.text(
+                        y.comentario.toString().substr(0, 36),
+                        this.sangria,
+                        this.alturaItems
+                      );
+
+                      this.alturaItems = this.alturaItems + 3;
+                      vl_length_aux = 36;
+                    }
+                    else {
+                      vl_length_aux2 = vl_length_aux + 36;
+                      if (vl_length_aux2 <= length_comenta) {
+                        this.doc.text(
+                          y.comentario.toString().substr(vl_length_aux, 36),
+                          this.sangria,
+                          this.alturaItems);
+                        vl_length_aux = vl_length_aux + 36;
+
+                      }
+                      else {
+                        vl_length_aux2 = length_comenta - vl_length_aux;
+                        this.doc.text(
+                          y.comentario.toString().substr(vl_length_aux, vl_length_aux2),
+                          this.sangria,
+                          this.alturaItems);
+                        vl_salir = 'X';
+                      }
+
+                      this.alturaItems = this.alturaItems + 3;
+                    }
+                  }
+                  while (vl_salir == '') {
+
+                  }
+
+                }
+                else {
+                  this.doc.text(
+                    y.comentario.toString(),
+                    this.sangria,
+                    this.alturaItems
+                  );
+                }
               }
             });
           });
@@ -1115,7 +1181,7 @@ export class EnviarComponent implements OnInit {
       .then(ok => {
         console.log(ok);
         this.load = false;
-        this.mensaje = "Se envió un correo al paciente";
+        this.mensaje = "Se envió un correo al paciente, favor de validar la bandeja de Spam";
         this.openDialog(this.mensaje);
       })
       .catch(err => {
@@ -1127,11 +1193,17 @@ export class EnviarComponent implements OnInit {
 
   }
 
-  openDialog(mensaje: string): void {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: "350px",
+      width: "450px",
       data: { mensaje: mensaje }
     });
+    if (status == 401) {
+      dialogRef.afterClosed().subscribe(result => {
+        this.authService.logout();
+        this.router.navigate(["/ingresar"]);
+      });
+    }
 
     dialogRef.afterClosed().subscribe(result => {
       this.router.navigate(["/pacientes/" + this.actID + "/analisis"]);
@@ -1139,13 +1211,11 @@ export class EnviarComponent implements OnInit {
   }
 
   cabecera() {
+    if (this.lab.imgByte != null) {
+      this.doc.addImage(this.lab.imgByte, "JPEG", 10, 10, 40, 25);
+    }
 
-    // const imgData1 = this.retrievedImage;
-    this.doc.addImage(this.lab.imgByte, "JPEG", 10, 10, 40, 25);
-    //this.doc.addImage(this.retrievedImage, "JPEG", 10, 10, 40, 25);
-  
-    console.log(this.lab.imgByte);
-    this.doc.setDrawColor(0, 0, 255);
+    this.doc.setDrawColor(45, 76, 130);
     this.doc.line(5, 5, 205, 5);
 
     this.doc.setFont("helvetica");
@@ -1154,11 +1224,49 @@ export class EnviarComponent implements OnInit {
     //this.doc.text(55, 16, "LABORATORIOS DE ANALISIS CLINICOS ESPINOSA");
     this.doc.text(60, 16, this.lab.nombre);
     this.doc.setFontSize(10);
-    this.membrete_cadena = "Cedula de Especialidad: "+ this.lab.infoMembrete.cedulaEspecialidad + " Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
-    this.domicilio = "Domicilio: "+ this.lab.domicilio;
-    this.ciudad = "Ciudad: "+ this.lab.ciudad +" Estado: " + this.lab.estado;
-    this.correo = "Correo: "+ this.lab.email + " Telefono: "+ this.lab.telefonos;
-    
+    //No mostrará los campos en caso de que estén vacíos
+    //Cédula profesional y especialidad
+    if (this.lab.infoMembrete.cedulaEspecialidad != "") {
+      this.membrete_cadena = "Cedula de Especialidad: " + this.lab.infoMembrete.cedulaEspecialidad;
+    }
+    if (this.lab.infoMembrete.cedulaProfesional != "") {
+      if (this.membrete_cadena.length == 0) {
+        this.membrete_cadena = "Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
+      }
+      else {
+        this.membrete_cadena = this.membrete_cadena + " Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
+      }
+    }
+    //Domicilio
+    if (this.lab.domicilio != "") {
+      this.domicilio = "Domicilio: " + this.lab.domicilio;
+    }
+    //Ciudad y Estado
+    if (this.lab.ciudad != "") {
+      this.ciudad = "Ciudad: " + this.lab.ciudad;
+    }
+    if (this.lab.estado != "") {
+      if (this.ciudad.length == 0) {
+        this.ciudad = "Estado: " + this.lab.estado;
+      }
+      else {
+        this.ciudad = this.ciudad + " Estado: " + this.lab.estado;
+      }
+    }
+    //Correo y teléfono
+    if (this.lab.email != "") {
+      this.correo = "Correo: " + this.lab.email;
+    }
+    if (this.lab.telefonos != "") {
+      if (this.correo.length == 0) {
+        this.correo = "Telefono: " + this.lab.telefonos;
+      }
+      else {
+        this.correo = this.correo + " Telefono: " + this.lab.telefonos;
+      }
+    }
+
+
     this.doc.text(
       60,
       21,
@@ -1181,6 +1289,7 @@ export class EnviarComponent implements OnInit {
     );
 
     this.doc.line(5, 40, 205, 40);
+
   }
 
   getFormatoFecha(fecha: string) {

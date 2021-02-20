@@ -19,38 +19,38 @@
 
     </mat-toolbar>
 
-    <form class="form" novalidate [formGroup]="altaMedico">
+    <form class="form" novalidate [formGroup]="altaMedico" autocomplete="off">
         <div class="row">
 
             <mat-form-field class="col-7">
                 <mat-label>Nombre Completo</mat-label>
-                <input matInput formControlName="nombre">
+                <input matInput formControlName="nombre" required>
             </mat-form-field>
 
             <mat-form-field class="col-7">
                 <mat-label>Area</mat-label>
-                <input matInput formControlName="area" class="separacion">
+                <input matInput formControlName="area" class="separacion" required>
             </mat-form-field>
 
 
             <mat-form-field class="col-5">
                 <mat-label>Dirección</mat-label>
-                <input matInput formControlName="domicilio">
+                <input matInput formControlName="domicilio" maxlength="150">
             </mat-form-field>
 
             <mat-form-field class="col-5">
                 <mat-label>Ciudad</mat-label>
-                <input matInput formControlName="ciudad">
+                <input matInput formControlName="ciudad" maxlength="100">
             </mat-form-field>
 
             <mat-form-field class="col-4">
                 <mat-label>Estado</mat-label>
-                <input matInput #postalCode formControlName="estado">
+                <input matInput #postalCode formControlName="estado" maxlength="40">
             </mat-form-field>
 
             <mat-form-field class="col-4">
                 <mat-label>Correo electrónico</mat-label>
-                <input matInput formControlName="email">
+                <input matInput formControlName="email" maxlength="50">
             </mat-form-field>
         </div>
 

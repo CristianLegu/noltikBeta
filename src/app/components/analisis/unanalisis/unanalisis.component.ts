@@ -12,7 +12,9 @@ import {
   FormBuilder,
   FormArray,
   FormControl,
-  FormGroup
+  FormGroup,
+  FormControlName,
+  Validators
 } from "@angular/forms";
 import { MedicosService } from "../../../services/medicos/medicos.service";
 import { EstudiosService } from "../../../services/estudios/estudios.service";
@@ -25,6 +27,7 @@ import { DialogeliminarComponent } from "../../../common/dialogeliminar/dialogel
 import { DialogComponent } from "../../../common/dialog/dialog.component";
 import * as moment from 'moment-timezone';
 import { DatePipe } from '@angular/common';
+import { AuthService } from "src/app/services/auth/auth.service";
 
 export interface NombreMedico {
   nombre: string;
@@ -78,8 +81,10 @@ export class UnanalisisComponent implements OnInit {
   btn: boolean = false;
 
   altaAnalisis: FormGroup;
+
   fecha1: string = '';
   myDate = new Date();
+
   analisisNuevo: Analisis = {
     analisis: "",
     area: "",
@@ -119,12 +124,13 @@ export class UnanalisisComponent implements OnInit {
   fControlE = new FormControl();
 
   jwt: string;
-  prefix: string;
+  prefix: string = "";
   load: boolean = false;
   mensaje: string;
   mensajeDialog: string;
 
   analisis: Analisis;
+  analisisString: string = "";
   analisisIn: Analisis;
 
   //Iconos
@@ -135,6 +141,8 @@ export class UnanalisisComponent implements OnInit {
   medico: string;
   estudio: string;
   idEstudio: number;
+
+  isDisabled: boolean = true;
 
   estudioI: EstudioPrueba;
 
@@ -154,6 +162,7 @@ export class UnanalisisComponent implements OnInit {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private datePipe: DatePipe,
+    private authService: AuthService,
   ) {
     this.fecha1 = this.datePipe.transform(this.myDate, 'yyyy-MM-dd') + "  00:00:00";
 
@@ -174,10 +183,17 @@ export class UnanalisisComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.altaAnalisis.get('area').disable();
+
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
     this.rol = localStorage.getItem('role');
+
+    if (this.prefix.length == 0) {
+      this.openDialog('Error al procesar datos', 401);
+      return;
+    }
 
     this.timeZone = moment.tz.guess();
     this.load = true;
@@ -194,14 +210,20 @@ export class UnanalisisComponent implements OnInit {
           this.analisis = ok.body;
 
           let an = this.analisisMod(this.analisis);
+          this.analisisString = an.analisis;
 
           this.pasaValores(an);
           this.load = false;
         })
         .catch(error => {
           this.load = false;
-          this.mensajeDialog = error.error.mensaje;
-          this.openDialog(this.mensajeDialog);
+          if (error.status == 401) {
+            this.mensajeDialog = 'Sin autorización';
+          }
+          else {
+            this.mensajeDialog = error.error.mensaje;//error.message;
+          }
+          this.openDialog(this.mensajeDialog, error.status);
         });
     } else {
       this.mensaje = "Crear Análisis";
@@ -236,8 +258,13 @@ export class UnanalisisComponent implements OnInit {
       })
       .catch(error => {
         this.load = false;
-        this.mensajeDialog = error.error.mensaje;
-        this.openDialog(this.mensajeDialog);
+        if (error.status == 401) {
+          this.mensajeDialog = 'Sin autorización';
+        }
+        else {
+          this.mensajeDialog = error.error.mensaje;//error.message;
+        }
+        this.openDialog(this.mensajeDialog, error.status);
       });
   }
 
@@ -270,6 +297,8 @@ export class UnanalisisComponent implements OnInit {
         })
       );
     });
+
+
 
   }
 
@@ -358,14 +387,24 @@ export class UnanalisisComponent implements OnInit {
           })
           .catch(error => {
             this.load = false;
-            this.mensajeDialog = error.error.mensaje;
-            this.openDialog(this.mensajeDialog);
+            if (error.status == 401) {
+              this.mensajeDialog = 'Sin autorización';
+            }
+            else {
+              this.mensajeDialog = error.error.mensaje;//error.message;
+            }
+            this.openDialog(this.mensajeDialog, error.status);
           });
       })
       .catch(error => {
         this.load = false;
-        this.mensajeDialog = error.error.mensaje;
-        this.openDialog(this.mensajeDialog);
+        if (error.status == 401) {
+          this.mensajeDialog = 'Sin autorización';
+        }
+        else {
+          this.mensajeDialog = error.error.mensaje;//error.message;
+        }
+        this.openDialog(this.mensajeDialog, error.status);
       });
   }
   private estudios() {
@@ -397,14 +436,24 @@ export class UnanalisisComponent implements OnInit {
           })
           .catch(error => {
             this.load = false;
-            this.mensajeDialog = error.error.mensaje;
-            this.openDialog(this.mensajeDialog);
+            if (error.status == 401) {
+              this.mensajeDialog = 'Sin autorización';
+            }
+            else {
+              this.mensajeDialog = error.error.mensaje;//error.message;
+            }
+            this.openDialog(this.mensajeDialog, error.status);
           });
       })
       .catch(error => {
         this.load = false;
-        this.mensajeDialog = error.error.mensaje;
-        this.openDialog(this.mensajeDialog);
+        if (error.status == 401) {
+          this.mensajeDialog = 'Sin autorización';
+        }
+        else {
+          this.mensajeDialog = error.error.mensaje;//error.message;
+        }
+        this.openDialog(this.mensajeDialog, error.status);
       });
   }
 
@@ -448,8 +497,13 @@ export class UnanalisisComponent implements OnInit {
       })
       .catch(error => {
         this.load = false;
-        this.mensajeDialog = error.error.mensaje;
-        this.openDialog(this.mensajeDialog);
+        if (error.status == 401) {
+          this.mensajeDialog = 'Sin autorización';
+        }
+        else {
+          this.mensajeDialog = error.error.mensaje;//error.message;
+        }
+        this.openDialog(this.mensajeDialog, error.status);
       });
     /*
         this.serviceEstudio
@@ -579,8 +633,13 @@ export class UnanalisisComponent implements OnInit {
             })
             .catch(error => {
               this.load = false;
-              this.mensajeDialog = error.error.mensaje;
-              this.openDialog(this.mensajeDialog);
+              if (error.status == 401) {
+                this.mensajeDialog = 'Sin autorización';
+              }
+              else {
+                this.mensajeDialog = error.error.mensaje;//error.message;
+              }
+              this.openDialog(this.mensajeDialog, error.status);
             });
           // this.load = false;
         });
@@ -609,8 +668,13 @@ export class UnanalisisComponent implements OnInit {
           })
           .catch(error => {
             this.load = false;
-            this.mensajeDialog = error.error.mensaje;
-            this.openDialog(this.mensajeDialog);
+            if (error.status == 401) {
+              this.mensajeDialog = 'Sin autorización';
+            }
+            else {
+              this.mensajeDialog = error.error.mensaje;//error.message;
+            }
+            this.openDialog(this.mensajeDialog, error.status);
           });
       });
     }
@@ -732,14 +796,22 @@ export class UnanalisisComponent implements OnInit {
     });
   }
 
-  openDialog(m: string) {
+  openDialog(mensaje: string, status?: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: "350px",
-      data: { mensaje: m }
+      width: '400px',
+      data: { mensaje: mensaje }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      //this.router.navigate(["/analisis"]);
-    });
+    if (status == 401) {
+      dialogRef.afterClosed().subscribe(result => {
+        this.authService.logout();
+        this.router.navigate(["/ingresar"]);
+      });
+    } else {
+
+      dialogRef.afterClosed().subscribe(result => {
+        //this.router.navigate(["/pacientes"]);
+      });
+    }
   }
 }

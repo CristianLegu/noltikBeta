@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import * as jsPDF from "jspdf";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AnalisisService } from "../../services/analisis/analisis.service";
-import { imgData } from '../../globals';
 import { HttpClient } from '@angular/common/http';
 
 import { Analisis } from "src/app/common/interface";
@@ -10,8 +9,6 @@ import { DialogmembreteComponent } from "src/app/common/dialogmembrete/dialogmem
 import { MatDialog } from '@angular/material/dialog';
 import { DatosLaboratorio } from "src/app/common/interface";
 
-let hostApiUrl = 'http://localhost:8080/noltik_api/v1/';
-export const ApiUrl = hostApiUrl;
 @Component({
   selector: "app-imprimir",
   templateUrl: "./imprimir.component.html",
@@ -29,16 +26,16 @@ export class ImprimirComponent implements OnInit {
   doc = new jsPDF();
   mensaje: string = "¿Desea que el reporte tenga membrete?";
   decision: string;
-  membrete_cadena: string;
-  domicilio: string;
-  ciudad: string;
-  correo: string;
+  membrete_cadena: string = "";
+  domicilio: string = "";
+  ciudad: string = "";
+  correo: string = "";
   lab: DatosLaboratorio;
   sangria: number;
   altura: number;
   load: boolean = false;
   alturaItems: number;
-  
+
   //retrievedImage: string;
   //base64Data: any;
   //retrieveResonse: any;
@@ -50,7 +47,6 @@ export class ImprimirComponent implements OnInit {
     private router: Router,
     private http: HttpClient
   ) {
-    console.log(this.activatedRoute);
     this.actString = this.activatedRoute.snapshot.params["an"];
     this.actID = this.activatedRoute.snapshot.params["id"];
   }
@@ -58,6 +54,10 @@ export class ImprimirComponent implements OnInit {
   ngOnInit() {
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
+    if (this.prefix.length == 0) {
+      this.router.navigate(["/ingresar"]);
+      return;
+    }
     this.actRoute = JSON.parse("[" + this.actString + "]");
     /* for (var i = 0; i < this.actRoute.length; i++) {
        this.serviceA
@@ -88,11 +88,16 @@ export class ImprimirComponent implements OnInit {
         this.serviceA.getDatoslaboratorio(this.jwt, this.prefix)
           .then(ok => {
             this.lab = ok.body;
-            console.log(this.lab);
-            //this.getImage(this.prefix);
           })
           .catch(error => {
-            // this.load = false;
+            this.load = false;
+            if (error.status == 401) {
+              this.router.navigate(["/ingresar"]);
+            }
+            else {
+              this.mensaje = error.error.mensaje;//error.message;
+            }
+            this.openDialog();
           });
       }
       this.decision = result;
@@ -107,9 +112,7 @@ export class ImprimirComponent implements OnInit {
               }
             );
         }).catch(error => {
-          // this.load = false;
-          // console.log(error);
-          // this.openDialog(error);
+          this.router.navigate(["/ingresar"]);
         });
       this.router.navigate(["/pacientes/" + this.actID + "/analisis"]);
     });
@@ -131,18 +134,14 @@ export class ImprimirComponent implements OnInit {
     dd = fecha.substring(8, 10);
 
     fecha = dd.concat("-", mm, "-", yyyy);
-    console.log(fecha);
     return fecha;
   }
 
   cabecera() {
-
-    // const imgData1 = this.retrievedImage;
-    this.doc.addImage(this.lab.imgByte, "JPEG", 10, 10, 40, 25);
-    //this.doc.addImage(this.retrievedImage, "JPEG", 10, 10, 40, 25);
-  
-    console.log(this.lab.imgByte);
-    this.doc.setDrawColor(0, 0, 255);
+    if (this.lab.imgByte != null) {
+      this.doc.addImage(this.lab.imgByte, "JPEG", 10, 10, 40, 25);
+    }
+    this.doc.setDrawColor(45, 76, 130);
     this.doc.line(5, 5, 205, 5);
 
     this.doc.setFont("helvetica");
@@ -151,11 +150,49 @@ export class ImprimirComponent implements OnInit {
     //this.doc.text(55, 16, "LABORATORIOS DE ANALISIS CLINICOS ESPINOSA");
     this.doc.text(60, 16, this.lab.nombre);
     this.doc.setFontSize(10);
-    this.membrete_cadena = "Cedula de Especialidad: "+ this.lab.infoMembrete.cedulaEspecialidad + " Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
-    this.domicilio = "Domicilio: "+ this.lab.domicilio;
-    this.ciudad = "Ciudad: "+ this.lab.ciudad +" Estado: " + this.lab.estado;
-    this.correo = "Correo: "+ this.lab.email + " Telefono: "+ this.lab.telefonos;
-    
+    //No mostrará los campos en caso de que estén vacíos
+    //Cédula profesional y especialidad
+    if (this.lab.infoMembrete.cedulaEspecialidad != "") {
+      this.membrete_cadena = "Cedula de Especialidad: " + this.lab.infoMembrete.cedulaEspecialidad;
+    }
+    if (this.lab.infoMembrete.cedulaProfesional != "") {
+      if (this.membrete_cadena.length == 0) {
+        this.membrete_cadena = "Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
+      }
+      else {
+        this.membrete_cadena = this.membrete_cadena + " Cedula Profesional: " + this.lab.infoMembrete.cedulaProfesional;
+      }
+    }
+    //Domicilio
+    if (this.lab.domicilio != "") {
+      this.domicilio = "Domicilio: " + this.lab.domicilio;
+    }
+    //Ciudad y Estado
+    if (this.lab.ciudad != "") {
+      this.ciudad = "Ciudad: " + this.lab.ciudad;
+    }
+    if (this.lab.estado != "") {
+      if (this.ciudad.length == 0) {
+        this.ciudad = "Estado: " + this.lab.estado;
+      }
+      else {
+        this.ciudad = this.ciudad + " Estado: " + this.lab.estado;
+      }
+    }
+    //Correo y teléfono
+    if (this.lab.email != "") {
+      this.correo = "Correo: " + this.lab.email;
+    }
+    if (this.lab.telefonos != "") {
+      if (this.correo.length == 0) {
+        this.correo = "Telefono: " + this.lab.telefonos;
+      }
+      else {
+        this.correo = this.correo + " Telefono: " + this.lab.telefonos;
+      }
+    }
+
+
     this.doc.text(
       60,
       21,
@@ -180,7 +217,7 @@ export class ImprimirComponent implements OnInit {
     this.doc.line(5, 40, 205, 40);
   }
 
-  
+
 
   createPDF(analisis: Array<Analisis> = [], membrete: string) {
     return new Promise((ok, error) => {
@@ -1146,11 +1183,59 @@ export class ImprimirComponent implements OnInit {
 
               if (y.comentario != null) {
                 this.sangria = 155;
-                this.doc.text(
-                  y.comentario.toString(),
-                  this.sangria,
-                  this.alturaItems
-                );
+                var length_comenta = y.comentario.toString().length;
+                var vl_length_aux = 0;
+                var vl_length_aux2 = 0;
+                if (length_comenta >= 36) {
+
+                  var vl_cont = 0;
+                  var vl_salir = "";
+                  do {
+                    if (vl_cont == 0) {
+                      vl_cont = 1;
+                      this.doc.text(
+                        y.comentario.toString().substr(0, 36),
+                        this.sangria,
+                        this.alturaItems
+                      );
+
+                      this.alturaItems = this.alturaItems + 3;
+                      vl_length_aux = 36;
+                    }
+                    else {
+                      vl_length_aux2 = vl_length_aux + 36;
+                      if (vl_length_aux2 <= length_comenta) {
+                        this.doc.text(
+                          y.comentario.toString().substr(vl_length_aux, 36),
+                          this.sangria,
+                          this.alturaItems);
+                        vl_length_aux = vl_length_aux + 36;
+
+                      }
+                      else {
+                        vl_length_aux2 = length_comenta - vl_length_aux;
+                        this.doc.text(
+                          y.comentario.toString().substr(vl_length_aux, vl_length_aux2),
+                          this.sangria,
+                          this.alturaItems);
+                        vl_salir = 'X';
+                      }
+
+                      this.alturaItems = this.alturaItems + 3;
+                    }
+                  }
+                  while (vl_salir == '') {
+
+                  }
+
+                }
+                else {
+                  this.doc.text(
+                    y.comentario.toString(),
+                    this.sangria,
+                    this.alturaItems
+                  );
+                }
               }
             });
           });
@@ -1204,8 +1289,8 @@ export class ImprimirComponent implements OnInit {
       this.doc.setProperties({
         title: this.paciente + ".pdf"
       });
-     
-      
+
+
       this.doc.output("dataurlnewwindow");
 
     });

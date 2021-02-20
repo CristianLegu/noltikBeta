@@ -10,10 +10,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-//import { RecaptchaModule, RECAPTCHA_SETTINGS, RecaptchaSettings, RecaptchaFormsModule } from 'ng-recaptcha';
 
 import { RegistroComponent } from './registro.component';
 import { RegistroRoutingModule } from './registro-routing.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RecaptchaV3Module, RECAPTCHA_SETTINGS, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 
 @NgModule({
   declarations: [RegistroComponent],
@@ -29,18 +31,21 @@ import { RegistroRoutingModule } from './registro-routing.module';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     MatIconModule,
-    //RecaptchaFormsModule,
-    //RecaptchaModule,
+    RecaptchaFormsModule,
+    RecaptchaModule,
+    //RecaptchaV3Module,
     MatDividerModule,
     MatSnackBarModule,
+    MatTooltipModule
   ],
-  /*providers: [
+  //providers: [{ provide: RECAPTCHA_V3_SITE_KEY, useValue: "6LdC_08aAAAAAHaSUZ1-QfspfhQ7jHERVcygEHqm" }],
+  providers: [
     {
       provide: RECAPTCHA_SETTINGS,
       useValue: {
-        siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+        siteKey: '6LfiSlEaAAAAAGoaueDzBz1NMGFBt2dZqVfuc9F2',
       } as RecaptchaSettings,
     },
-  ],*/
+  ],
 })
 export class RegistroModule { }

@@ -19,6 +19,7 @@ export class LaboratorioService {
 
   //Obtener lab
   obtenerLab(jwt: string, prefix: string, id: any): Promise<any> {
+    console.log("");
     return new Promise((ok, error) => {
       this.http.get(ApiUrl + 'lab/' + prefix,
         {
@@ -33,6 +34,7 @@ export class LaboratorioService {
           error(err);
         })
     });
+    
   }
   //Modifica
   modificaLab(jwt: string, prefix: string, mod: FormGroup, file: File): Promise<any> {
@@ -43,7 +45,7 @@ export class LaboratorioService {
     }
     uploadImageData.append('laboratorio', JSON.stringify(mod.value));
     
-    //console.log(uploadImageData);
+  
     return new Promise((ok, error) => {
       this.http.put(ApiUrl + 'lab/' + prefix, uploadImageData,
         {
@@ -77,6 +79,7 @@ export class LaboratorioService {
   }*/
 
   getImage(prefix: string) {
+   
     //Make a call to Sprinf Boot to get the Image Bytes.
     this.http.get(ApiUrl + 'lab/' + prefix)
       .subscribe(
