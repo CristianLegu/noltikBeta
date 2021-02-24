@@ -50,6 +50,9 @@ export class IngresarComponent implements OnInit, OnDestroy {
       .login(this.logon.get("username").value, this.logon.get("password").value)
       .then(ok => {
         this.loading = false;
+        if (ok.mensajeCuentaSuspendida != "") {
+          this.openDialog(ok.mensajeCuentaSuspendida);
+        }
         this.router.navigateByUrl("/pacientes");
       })
       .catch(error => {
@@ -61,7 +64,6 @@ export class IngresarComponent implements OnInit, OnDestroy {
         else {
           this.openDialog(error.error.mensaje);
         }
-        console.log(error);
       });
   }
 
