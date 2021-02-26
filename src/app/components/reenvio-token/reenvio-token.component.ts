@@ -39,9 +39,9 @@ export class ReenvioTokenComponent implements OnInit {
 
   reenviaCorreoUser() {
 
-    console.log(this.usuarioForm);
+    //console.log(this.usuarioForm);
     this.loading = true;
-    console.log(this.loading)
+    //console.log(this.loading)
 /*
     this.userService.reenvioRegistroToken(this.usuarioForm.get('usuarioCorreo').value)
       .then(ok => {

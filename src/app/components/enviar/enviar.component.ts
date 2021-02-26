@@ -60,7 +60,7 @@ export class EnviarComponent implements OnInit {
     this.serviceA.getDatoslaboratorio(this.jwt, this.prefix)
       .then(ok => {
         this.lab = ok.body;
-        console.log(this.lab);
+        //console.log(this.lab);
         //this.getImage(this.prefix);
       })
       .catch(error => {
@@ -75,7 +75,7 @@ export class EnviarComponent implements OnInit {
       });
     this.serviceA.getAnalisisSeleccionados(this.jwt, this.prefix, this.actID, this.actString)
       .then(ok => {
-        console.log(ok);
+        //console.log(ok);
         this.createPDF(ok.body)
           .then(
             respuesta => {
@@ -1176,17 +1176,17 @@ export class EnviarComponent implements OnInit {
 
   enviarPDF(fileBase64: string) {
     let pdfBase64 = fileBase64.substr(51)
-    console.log(pdfBase64);
+    //console.log(pdfBase64);
     this.enviaService.enviaPDF(this.jwt, this.prefix, this.actID, pdfBase64)
       .then(ok => {
-        console.log(ok);
+        //console.log(ok);
         this.load = false;
         this.mensaje = "Se envió un correo al paciente, favor de validar la bandeja de Spam";
         this.openDialog(this.mensaje);
       })
       .catch(err => {
         this.load = false;
-        console.log(err);
+        //console.log(err);
         this.mensaje = err.error.mensaje;
         this.openDialog(this.mensaje);
       });

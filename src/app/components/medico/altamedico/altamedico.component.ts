@@ -76,7 +76,7 @@ export class AltamedicoComponent implements OnInit {
     this.pref = localStorage.getItem("prefix");
     this.rol = localStorage.getItem("role");
 
-    if (this.pref.length == 0) {
+    if (this.pref != null && this.pref.length == 0) {
       this.openDialog('Error al procesar datos', 401);
       return;
     }

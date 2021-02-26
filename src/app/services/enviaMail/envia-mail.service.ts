@@ -14,7 +14,7 @@ export class EnviaMailService {
     let pdf = {
       pdf: base64
     }
-    console.log(pdf);
+    //console.log(pdf);
     return new Promise((ok, error) => {
       this.http.post(ApiUrl + prefix + '/pacientes/' + idpaciente + '/enviar/', pdf,
         {
@@ -25,7 +25,7 @@ export class EnviaMailService {
         })
         .toPromise()
         .then(response => {
-          console.log(response);
+          //console.log(response);
           ok(response);
         })
         .catch(err => {

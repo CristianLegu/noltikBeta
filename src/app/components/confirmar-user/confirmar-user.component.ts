@@ -40,14 +40,14 @@ export class ConfirmarUserComponent implements OnInit {
     });
   }
   checkUser() {
-    console.log(this.confUser);
+    //console.log(this.confUser);
     
     if (this.confUser.valid) {
       this.loading = true;
       this.userService
         .setConfirma(this.confUser.get("user").value)
         .then(ok => {
-          console.log(ok);
+          //console.log(ok);
           this.loading = false;
           this.openDialog("Se ha enviado un correo de cambio de contraseña, favor de revisar la bandeja de entrada");
           //this.router.navigateByUrl("/enviar-mail");
@@ -61,7 +61,7 @@ export class ConfirmarUserComponent implements OnInit {
           else {
             this.openDialog(error.error.mensaje);
           }
-          console.log(error);
+          //console.log(error);
         });
     }
   }

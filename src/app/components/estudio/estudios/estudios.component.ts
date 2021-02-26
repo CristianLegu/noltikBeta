@@ -50,7 +50,7 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
     this.token = localStorage.getItem('token');
     this.prefix = localStorage.getItem('prefix');
     
-    if (this.prefix.length == 0) {
+    if (this.prefix != null && this.prefix.length == 0) {
       this.openDialog('Error al procesar datos', 401);
       return;
     }
@@ -66,7 +66,7 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
           .catch((err => {
             let mensaje: string;
             if (err.error.status === 401) {
-              mensaje = 'Sin autorización';
+              mensaje = 'Sesión expiró, debe de iniciar sesión nuevamente.';
             }
             else {
               mensaje = err.error.message;
@@ -77,11 +77,12 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
       })
       .catch(err => {
         let mensaje: string;
-        if (err.error.status === 401) {
-          mensaje = 'Sin autorización';
+        //console.log(err);
+        if (err.status === 401) {
+          mensaje = 'Sesión expiró, debe de iniciar sesión nuevamente.';
         }
         else {
-          mensaje = err.error.message;
+          mensaje = err.message;
         }
         this.load = false;
         this.openDialog(mensaje, err.error.status);

@@ -190,7 +190,7 @@ export class UnanalisisComponent implements OnInit {
     this.prefix = localStorage.getItem('prefix');
     this.rol = localStorage.getItem('role');
 
-    if (this.prefix.length == 0) {
+    if (this.prefix != null && this.prefix.length == 0) {
       this.openDialog('Error al procesar datos', 401);
       return;
     }
@@ -599,7 +599,7 @@ export class UnanalisisComponent implements OnInit {
     this.load = true;
     let response: string = "";
     if (this.idAnalisis == "0") {
-      console.log(this.analisis);
+      //console.log(this.analisis);
       let valor = <FormArray>this.altaAnalisis.controls.json;
       let total: number = 0;
 

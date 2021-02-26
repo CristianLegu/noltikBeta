@@ -18,7 +18,7 @@ export class ContrasenaService {
     let params = new HttpParams();
     params = params.append('token', jwt);
 
-    console.log(mod.value);
+    //console.log(mod.value);
 
     let uri = `${ApiUrl}usuarios/update-password`;//ApiUrl +  'usuarios/' +  'update-password';
     return new Promise((ok, error) => {

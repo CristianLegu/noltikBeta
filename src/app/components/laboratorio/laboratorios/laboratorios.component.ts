@@ -81,7 +81,7 @@ export class LaboratoriosComponent implements OnInit {
     this.jwt = localStorage.getItem("token");
     this.pref = localStorage.getItem("prefix");
     this.rol = localStorage.getItem("role");
-    if (this.pref.length == 0) {
+    if (this.pref != null && this.pref.length == 0) {
       this.openDialog('Error al procesar datos', 401);
       return;
     }
@@ -89,7 +89,7 @@ export class LaboratoriosComponent implements OnInit {
     this.labService.obtenerLab(this.jwt, this.pref, this.actRoute)
       .then(ok => {
         this.lab = ok.body;
-        console.log(this.lab);
+        //console.log(this.lab);
         this.base64Data = this.lab.imgByte;
         if (this.base64Data != null) {
           this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;

@@ -87,7 +87,7 @@ export class AltapacienteComponent implements OnInit {
     this.load = true;
     this.jwt = localStorage.getItem("token");
     this.prefix = localStorage.getItem('prefix');
-    if (this.prefix.length == 0) {
+    if (this.prefix != null && this.prefix.length == 0) {
       this.openDialog('Error al procesar datos', 401);
       return;
     }

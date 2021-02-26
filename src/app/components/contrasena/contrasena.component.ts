@@ -61,7 +61,7 @@ export class ContrasenaComponent implements OnInit {
           this.router.navigateByUrl("/pass-restablecida");
         })
         .catch(err => {
-          console.log(err);
+          //console.log(err);
           this.mensaje = err.error.mensaje;
           this.openDialog(this.mensaje);
           this.load = false;

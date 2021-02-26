@@ -19,7 +19,7 @@ export class LaboratorioService {
 
   //Obtener lab
   obtenerLab(jwt: string, prefix: string, id: any): Promise<any> {
-    console.log("");
+    //console.log("");
     return new Promise((ok, error) => {
       this.http.get(ApiUrl + 'lab/' + prefix,
         {
@@ -84,12 +84,12 @@ export class LaboratorioService {
     this.http.get(ApiUrl + 'lab/' + prefix)
       .subscribe(
         res => {
-          console.log(res)
+          //console.log(res)
           this.retrieveResonse = res;
-          console.log(this.retrieveResonse);
+          //console.log(this.retrieveResonse);
           this.base64Data = this.retrieveResonse.body.imgByte;
 
-          console.log(this.base64Data);
+          //console.log(this.base64Data);
 
           this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
 

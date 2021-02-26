@@ -19,7 +19,7 @@ export class UserTokenService {
         })
         .toPromise()
         .then(response => {
-          console.log(response);
+          //console.log(response);
           ok(response);
         })
         .catch(err => {

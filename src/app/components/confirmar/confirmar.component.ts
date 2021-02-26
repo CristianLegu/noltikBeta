@@ -32,7 +32,7 @@ export class ConfirmarComponent implements OnInit {
     if (this.actRoute != null) {
       this.confirmaService.setConfirma(this.actRoute)
         .then(resp => {
-          console.log(resp);
+          //console.log(resp);
           this.load = false;
           this.valido = true;
         })
