@@ -77,7 +77,7 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
       })
       .catch(err => {
         let mensaje: string;
-        //console.log(err);
+        console.log(err);
         if (err.status === 401) {
           mensaje = 'Sesión expiró, debe de iniciar sesión nuevamente.';
         }
@@ -85,7 +85,7 @@ export class EstudiosComponent extends MatPaginatorIntl implements OnInit {
           mensaje = err.message;
         }
         this.load = false;
-        this.openDialog(mensaje, err.error.status);
+        this.openDialog(mensaje, err.status);
       });
   }
 

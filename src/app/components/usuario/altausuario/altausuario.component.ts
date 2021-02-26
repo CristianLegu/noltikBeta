@@ -142,8 +142,8 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
         this.ocultar = false;
       }).catch(error => {
         this.load = false;
-        this.mensaje = error.error.message;
-        this.openDialog(this.mensaje);
+        this.mensaje = error.message;
+        this.openDialog('Sesión ha expirado, intenta acceder de nuevo', error.status);
       });
     }
     else {
@@ -290,12 +290,13 @@ export class AltausuarioComponent implements OnInit, OnDestroy {
         this.authService.logout();
         this.router.navigate(["/ingresar"]);
       });
+    } else {
+      dialogRef.afterClosed().subscribe(result => {
+        if (status != "409") {
+          this.router.navigate(["/usuarios"]);
+        }
+      });
     }
-    dialogRef.afterClosed().subscribe(result => {
-      if (status != "409") {
-        this.router.navigate(["/usuarios"]);
-      }
-    });
     /*
         if (this.altauser.get('nombreUsuario').touched) {
           this.authService.logout();

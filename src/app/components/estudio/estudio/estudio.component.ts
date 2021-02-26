@@ -93,14 +93,14 @@ export class EstudioComponent implements OnInit {
         })
         .catch(error => {
           let mensaje: string;
-          if (error.error.status === 401) {
+          if (error.status === 401) {
             mensaje = 'Sin autorización';
           }
           else {
-            mensaje = error.error.message;
+            mensaje = error.message;
           }
           this.load = false;
-          this.openDialog(mensaje, error.error.status);
+          this.openDialog(mensaje, error.status);
         });
     } else {
       this.mensajeBienvenida = "Dar de alta Estudio";
