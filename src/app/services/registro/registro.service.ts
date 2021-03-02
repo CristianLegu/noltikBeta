@@ -33,24 +33,7 @@ export class RegistroService {
   }
 
   validaCaptcha(token: String) {
-    let apiGoogle = 'https://www.google.com/recaptcha/api/siteverify';
-    return new Promise((ok, error) => {
-      this.http.post(apiGoogle,
-        {
-          params: {
-            secret: '6LfiSlEaAAAAANcHc00zMYGDsJXFbdNvLaZg4zds',
-            response: token
-          }
-        }
-      )
-        .toPromise()
-        .then(response => {
-          ok(response);
-        })
-        .catch(err => {
-          error(err);
-        })
-    });
+    
   }
 
 

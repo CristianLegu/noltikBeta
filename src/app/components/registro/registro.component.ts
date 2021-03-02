@@ -53,6 +53,7 @@ export class RegistroComponent implements OnInit {
       nombre: ["", [Validators.required]],
       nombreusuario: ["", [Validators.required]],
       rol: "ROLE_ADMIN",
+      token: "",
     });
 
   }
@@ -65,6 +66,9 @@ export class RegistroComponent implements OnInit {
     if (this.validaErrores()) {
 
       this.load = true;
+      this.registro.patchValue({
+        token: this.recaptcha
+      })
       //Concatenar prefijo y usuario
       this.prefijo_aux = this.registro.value.prefijo + '_';
       this.user_aux = this.prefijo_aux + this.registro.value.nombreusuario;
